@@ -1,6 +1,8 @@
 build site:
   image: node:6
   stage: build
+  before_script:
+    - bash prepare_ci.sh > /dev/null
   script:
     - npm install --progress=false
   artifacts:
