@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Newtelco Vacations</title>
+  <title>New Request</title>
 
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
   <link rel="stylesheet" href="semantic/dist/semantic.min.css">
@@ -22,36 +22,36 @@
   <meta name="theme-color" content="#ffffff">
 </head>
 <body>
-  <div class="wrapper">
-    <div class="loginwrapper">
-      <h2 class="ui centered massive image header">
-        <!-- <img src="img/ntlogo_square_white.png" class="image"> -->
-        <img src="img/vacation_header.png" class="image massive headerImage">
-        <br>
-        <span class="headerText">Newtelco Vacations</span>
-      </h2>
-
-      <form class="ui large form loginform">
-        <div class="ui stacked segment">
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="user icon"></i>
-              <input type="text" name="user" class="username" placeholder="Username">
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui left icon input">
-              <i class="lock icon"></i>
-              <input type="password" name="password" class="password" placeholder="Password">
-            </div>
-          </div>
-          <input type="submit" class="ui fluid large green submit button loginbtn" value="Login"></input>
+  <div class="ui fixed inverted menu">
+    <div class="ui container">
+      <span href="#" class="header item">
+        <img class="logo dashboardMenuImg" src="nt_vacation_white.png">
+        Newtelco Vacation
+      </span>
+      <a href="/dashboard" class="item">Home</a>
+      <div class="ui simple dropdown item">
+        Vacations <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href="/request">New Request</a>
+          <a class="item" href="/overview">My Vacations</a>
+          <div class="divider"></div>
+          <div class="header">Support</div>
+          <a class="item" href="mailto:ndomino@newtelco.de">@ndomino</a>
+          <a class="item" href="mailto:nhartmann@newtelco.de">@nhartmann</a>
         </div>
-        <div class="ui error message"></div>
-      </form>
-
+      </div>
     </div>
   </div>
-  <script src="/app.js"></script>
+  <div style="background: #fff" class="wrapper">
+      <div class="ui three column grid dashboardGrid">
+        <div class="two wide column"></div>
+        <div class="twelve wide column">
+
+        </div>
+        <div class="two wide column"></div>
+      </div>
+
+  </div>
+  <script src="/request.js"></script>
 </body>
 </html>

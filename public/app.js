@@ -1,9 +1,9 @@
-const CreateUser = document.querySelector('.CreateUser')
+const CreateUser = document.querySelector('.loginform')
 CreateUser.addEventListener('submit', (e) => {
     e.preventDefault()
     const username = CreateUser.querySelector('.username').value 
     const password = CreateUser.querySelector('.password').value 
-    post('/createUser', { username, password })
+    post('/login', { username, password })
 }) 
 
 function post(path, data) {
@@ -15,4 +15,8 @@ function post(path, data) {
         },
         body: JSON.stringify(data)
     })
+    .then(function(res) {
+        window.location = res.url
+    })
 }
+
