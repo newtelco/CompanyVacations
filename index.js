@@ -74,6 +74,12 @@ app.post('/login', function(req, res, next) {
 
 // Handle the different routes
 
+app.get('/logout', (req, res) => {
+  req.session.destroy()
+  req.logout()
+  return res.redirect('/')
+})
+
 app.get('/dashboard', (req, res) => {
   console.log('\nInside GET /dashboard callback')
   console.log(`User authenticated? ${req.isAuthenticated()}`)

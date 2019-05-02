@@ -9,6 +9,7 @@ build site:
     expire_in: 1 day
     paths:
       - node_modules
+      - public/semantic
 
 deploy:
   image: alpine
