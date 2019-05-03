@@ -25,7 +25,7 @@
   <div class="ui fixed inverted menu">
     <div class="ui container">
       <span href="#" class="header item">
-        <img class="logo dashboardMenuImg" src="nt_vacation_white.png">
+        <img class="logo dashboardMenuImg" src="img/island_icon_white.png">
         Newtelco Vacation
       </span>
       <a href="/dashboard" class="item">Home</a>
@@ -34,10 +34,16 @@
         <div class="menu">
           <a class="item" href="/request">New Request</a>
           <a class="item" href="/overview">My Vacations</a>
+          <a class="item" href="/admin">Administration</a>
           <div class="divider"></div>
           <div class="header">Support</div>
           <a class="item" href="mailto:ndomino@newtelco.de">@ndomino</a>
           <a class="item" href="mailto:nhartmann@newtelco.de">@nhartmann</a>
+        </div>
+      </div>
+      <div class="right menu">
+        <div class="item" style="float:right">
+          <a href="/logout">Logout</a>
         </div>
       </div>
     </div>
@@ -46,12 +52,138 @@
       <div class="ui three column grid dashboardGrid">
         <div class="two wide column"></div>
         <div class="twelve wide column">
-
+          <div class="formWrapper">
+            <h2>
+              New Vacation Request
+            </h2>
+            <form id="requestForm" class="ui  form">
+              <h4 class="ui horizontal divider header">
+                User Details
+              </h4>
+              <div class="field">
+                <label>Name</label>
+                <input name="name" type="text" value="Full Name">
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input name="email" type="text" value="Email Address">
+              </div>
+              <h4 class="ui horizontal divider header">
+                <i class="briefcase icon"></i>
+                History
+              </h4>
+              <div class="field">
+                <label>Rest Urlaub aus dem Vorjahr</label>
+                <span class="ui small green text">Left over days from last year</span>
+                <input name="restUrlaub-vorJahr" type="number" value="">
+              </div>
+              <div class="field">
+                <label>Jahresurlaub Insgesamt</label>
+                <input name="jahresUrlaub-insgesamt" type="text" value="">
+              </div>
+              <div class="field">
+                <label>Rest Jahresurlaub Insgesamt</label>
+                <input name="restUrlaub-insgesamt" type="number" value="">
+              </div>
+              <div class="field">
+                <label>Beantragt</label>
+                <input name="beantragt" type="number" value="">
+              </div>
+              <div class="field">
+                <label>Resturlaub [Year]</label>
+                <input name="resturlaub-left" type="number" value="">
+              </div>
+              <h4 class="ui horizontal divider header">
+                <i class="calendar alternate outline icon"></i>
+                Dates
+              </h4>
+              When would you like off?
+              <div class="ui calendar" id="fromCalendar">
+                <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  <input type="text" placeholder="From Date">
+                </div>
+              </div>
+              <div class="ui calendar" id="toCalendar">
+                <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  <input type="text" placeholder="To Date">
+                </div>
+              </div>
+              <div class="ui section divider"></div>
+              <!-- TODO: Pull Managers from Dropdown and let Admins edit choices -->
+              Please select an Approval Manager. <br>
+              This person will receive the email to approve your vacation request.
+              <select id="managerDropdown" class="ui search selection dropdown">
+                <option value="">Approval Manager</option>
+                <option value="jskribek@newtelco.de">Jens Skribek</option>
+                <option value="nhartmann@newtelco.de">Natascha Hartmann</option>
+                <div class="ui error message">
+                  <div class="header">Selection Required</div>
+                  <p>You must select a manager to approve your vacation request.</p>
+                </div>
+              </select>
+              <div class="ui section divider"></div>
+              <div class="field">
+                <label>Note</label>
+                <label class="sublabel">Optional note to manager</label>
+                <textarea rows="2"></textarea>
+              </div>
+              <div class="ui buttons">
+                <button style="width:initial" class="ui animated button">
+                  <div class="visible content">clear</div>
+                  <div class="hidden content">
+                    <i class="eraser icon"></i>
+                  </div>
+                </button>
+                <div class="or"></div>
+                <button style="width:initial" class="ui positive animated button">
+                  <div class="visible content">send</div>
+                  <div class="hidden content">
+                    <i class="paper plane icon"></i>
+                  </div>
+                </button>
+              </div>
+              <!-- <div class="ui submit animated button">
+                <div class="visible content">Send</div>
+                <div class="hidden content">
+                  <i class="mail icon"></i>
+                </div>
+              </div> -->
+              <div class="ui error message">
+                Please enter a valid value.
+              </div>
+            </form>
+          </div>
         </div>
         <div class="two wide column"></div>
       </div>
-
   </div>
+ <div id="confirmModal" class="ui basic modal">
+    <div class="ui icon huge header">
+      <i class="paper plane outline icon"></i>
+      Confirm Sending
+    </div>
+    <div class="content">
+      <p style="text-align: center; font-size: 1.3rem; width:75%; margin: 0 auto;">
+        Are you sure you want to submit this? <br><br>
+        A vacation request mail will be sent to your chosen manager, who will approve or deny it. You will receive a notification upon action.
+      </p><br>
+    </div>
+    <div style="text-align:center !important" class="ui center aligned">
+      <div class="actions">
+        <div class="ui red basic cancel inverted button">
+          <i class="trash can icon"></i>
+          Cancel
+        </div>
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon"></i>
+          Send
+        </div>
+      </div>
+    </div>
+  </div> 
+
   <script src="/request.js"></script>
 </body>
 </html>

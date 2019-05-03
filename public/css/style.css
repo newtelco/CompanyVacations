@@ -52,10 +52,57 @@ html {
 }
 
 .dashboardMenuImg {
-    width: 24px !important;
+    width: 32px !important;
     margin-right: 5px !important;
 }
 
 .ui.menu.fixed {
     background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);
+}
+
+.cal_placeholder {
+    /* background: linear-gradient(90deg, rgba(255, 79, 167, 0.7) 0%, rgba(114, 165, 224, 0.788) 100%); */
+    background: linear-gradient(90deg, #f8ff00 0%, #3ad59f 100%);
+    /* background-color: rgba(103, 178, 70, 0.6); */
+    border-radius: 8px;
+    border: 5px solid rgba(231, 189, 236, 0.932);
+    height:500px;
+    width: 800px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+/* New Request */
+
+.formWrapper {
+    width: 400px;
+    min-width: 200px;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+#requestForm {
+    display: inline-block;
+    text-align: left;
+    width: 70%;
+}
+
+#requestForm > .ui {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+#requestForm > .ui > .ui {
+    width: 100%;
+}
+
+.positive {
+    background-color: #67B246 !important;
+}
+
+.ui.small.green {
+    color: #67B246 !important;
 }

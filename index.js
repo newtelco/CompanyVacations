@@ -94,7 +94,7 @@ app.get('/request', (req, res) => {
   console.log('\nInside GET /request callback')
   console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
-    res.sendFile(__dirname + '/public/dashboard.html')
+    res.sendFile(__dirname + '/public/request.html')
   } else {
     return res.redirect('/')
   }
@@ -104,7 +104,7 @@ app.get('/overview', (req, res) => {
   console.log('\nInside GET /overview callback')
   console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
-    res.sendFile(__dirname + '/public/dashboard.html')
+    res.sendFile(__dirname + '/public/overview.html')
   } else {
     return res.redirect('/')
   }
