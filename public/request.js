@@ -14,6 +14,106 @@ $('#toCalendar').calendar({
     type: 'date'
   });
 
-  $('#railBtn').on('click', function() {
-      $('#confirmModal').modal('show');
-  })
+$('#submitBtn').on('click', function() {
+    $('#confirmModal').modal('show');
+})
+
+$('.ui.form')
+.form({
+fields: {
+    name: {
+    identifier: 'name',
+    rules: [
+        {
+        type   : 'empty',
+        prompt : 'Please enter your name'
+        }
+    ]
+    },
+    email: {
+    identifier: 'email',
+    rules: [
+        {
+        type   : 'email',
+        prompt : 'Please enter a valid email address'
+        }
+    ]
+    },
+    restUrlaubvorJahr: {
+    identifier: 'restUrlaub-vorJahr',
+    rules: [
+        {
+        type   : 'number',
+        prompt : 'Please enter vacation days left from last year'
+        }
+    ]
+    },
+    jahresUrlaubinsgesamt: {
+    identifier: 'jahresUrlaub-insgesamt',
+    rules: [
+        {
+        type   : 'number',
+        prompt : 'Please enter days available this year (Left over from last year + gained this year).'
+        }
+    ]
+    },
+    beantragt: {
+    identifier: 'beantragt',
+    rules: [
+        {
+        type   : 'number',
+        prompt : 'Please enter the amount of days requested.'
+        }
+    ]
+    },
+    restUrlaubleft: {
+    identifier: 'restUrlaub-left',
+    rules: [
+        {
+        type   : 'number',
+        prompt : 'You must agree to the terms and conditions'
+        }
+    ]
+    },
+    fromDate: {
+    identifier: 'fromDate',
+    rules: [
+        {
+        type   : 'empty',
+        prompt : 'Please enter date you want vacation FROM.'
+        }
+    ]
+    },
+    toDate: {
+    identifier: 'toDate',
+    rules: [
+        {
+        type   : 'empty',
+        prompt : 'Please enter date you want vacation TO.'
+        }
+    ]
+    },
+    manager: {
+    identifier: 'managerDropdown',
+    rules: [
+        {
+        type   : 'exactCount[1]',
+        prompt : 'You must select a manager to approve your vacation request.'
+        }
+    ]
+    }
+}
+});
+
+$('#clearBtn').on('click', function() {
+    $('#requestForm').form('clear');
+});
+
+/* 
+ * Get Form Values - https://fomantic-ui.com/behaviors/form.html
+ *
+ * var $form = $('#requestForm');
+ * allFields = $form.form('get values');
+ * console.log(allFields); 
+ * 
+ */

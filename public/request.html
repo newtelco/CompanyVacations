@@ -62,11 +62,11 @@
               </h4>
               <div class="field">
                 <label>Name</label>
-                <input name="name" type="text" value="Full Name">
+                <input name="name" type="text" placeholder="Full Name">
               </div>
               <div class="field">
                 <label>Email</label>
-                <input name="email" type="text" value="Email Address">
+                <input name="email" type="text" placeholder="Email Address">
               </div>
               <h4 class="ui horizontal divider header">
                 <i class="briefcase icon"></i>
@@ -75,7 +75,7 @@
               <div class="field">
                 <label>Rest Urlaub aus dem Vorjahr</label>
                 <span class="ui small green text">Left over days from last year</span>
-                <input name="restUrlaub-vorJahr" type="number" value="">
+                <input name="restUrlaub-vorJahr" type="text" value="">
               </div>
               <div class="field">
                 <label>Jahresurlaub Insgesamt</label>
@@ -83,15 +83,15 @@
               </div>
               <div class="field">
                 <label>Rest Jahresurlaub Insgesamt</label>
-                <input name="restUrlaub-insgesamt" type="number" value="">
+                <input name="restUrlaub-insgesamt" type="text" value="">
               </div>
               <div class="field">
                 <label>Beantragt</label>
-                <input name="beantragt" type="number" value="">
+                <input name="beantragt" type="text" value="">
               </div>
               <div class="field">
                 <label>Resturlaub [Year]</label>
-                <input name="resturlaub-left" type="number" value="">
+                <input name="resturlaub-left" type="text" value="">
               </div>
               <h4 class="ui horizontal divider header">
                 <i class="calendar alternate outline icon"></i>
@@ -101,13 +101,13 @@
               <div class="ui calendar" id="fromCalendar">
                 <div class="ui input left icon">
                   <i class="calendar icon"></i>
-                  <input type="text" placeholder="From Date">
+                  <input type="text" name="fromDate" placeholder="From Date">
                 </div>
               </div>
               <div class="ui calendar" id="toCalendar">
                 <div class="ui input left icon">
                   <i class="calendar icon"></i>
-                  <input type="text" placeholder="To Date">
+                  <input type="text" name="toDate" placeholder="To Date">
                 </div>
               </div>
               <div class="ui section divider"></div>
@@ -116,8 +116,8 @@
               This person will receive the email to approve your vacation request.
               <select id="managerDropdown" class="ui search selection dropdown">
                 <option value="">Approval Manager</option>
-                <option value="jskribek@newtelco.de">Jens Skribek</option>
                 <option value="nhartmann@newtelco.de">Natascha Hartmann</option>
+                <option value="jskribek@newtelco.de">Jens Skribek</option>
                 <div class="ui error message">
                   <div class="header">Selection Required</div>
                   <p>You must select a manager to approve your vacation request.</p>
@@ -127,29 +127,23 @@
               <div class="field">
                 <label>Note</label>
                 <label class="sublabel">Optional note to manager</label>
-                <textarea rows="2"></textarea>
+                <textarea name="note" rows="2"></textarea>
               </div>
               <div class="ui buttons">
-                <button style="width:initial" class="ui animated button">
+                <button id="clearBtn" style="width:initial" class="ui animated button">
                   <div class="visible content">clear</div>
                   <div class="hidden content">
                     <i class="eraser icon"></i>
                   </div>
                 </button>
                 <div class="or"></div>
-                <button style="width:initial" class="ui positive animated button">
+                <button id="submitBtn" style="width:initial" class="ui positive animated button">
                   <div class="visible content">send</div>
                   <div class="hidden content">
                     <i class="paper plane icon"></i>
                   </div>
                 </button>
               </div>
-              <!-- <div class="ui submit animated button">
-                <div class="visible content">Send</div>
-                <div class="hidden content">
-                  <i class="mail icon"></i>
-                </div>
-              </div> -->
               <div class="ui error message">
                 Please enter a valid value.
               </div>
