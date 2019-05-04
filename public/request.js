@@ -1,3 +1,21 @@
+
+// document.addEventListener("DOMContentLoaded", function() {
+//     // OverlayScrollbars(document.querySelectorAll('body'), {
+//     //     //className: "os-theme-thin-dark",
+//     //     overflowBehavior: {
+//     //         x : "hidden"
+//     //     }
+//     // });
+//     const ps = new PerfectScrollbar('body')
+// });
+
+// const ps = new PerfectScrollbar('#bodyDiv')
+
+const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
+    autoHide: false
+});
+
+
 $('#managerDropdown').dropdown({
     clearable: false,
     fullTextSearch: true,
@@ -14,7 +32,8 @@ $('#toCalendar').calendar({
     type: 'date'
   });
 
-$('#submitBtn').on('click', function() {
+$('#submitBtn').on('click', function(e) {
+    e.preventDefault()
     $('#confirmModal').modal('show')
 })
 
@@ -22,11 +41,12 @@ $('#modalSubmitBtn').on('click', function() {
 
     var $form = $('#requestForm')
     allFields = $form.form('get values')
-    console.log(allFields)
-    console.log(JSON.stringify(allFields))
+   // console.log(allFields)
+    // console.log(JSON.stringify(allFields))
 
     fetch('/vacation/submit', {
         method: 'POST',
+        credentials: 'include',
         body: JSON.stringify(allFields), 
         headers: new Headers({
             'Content-Type': 'application/json'
@@ -34,7 +54,18 @@ $('#modalSubmitBtn').on('click', function() {
     })
     .then(response => response.json())
     .then(data => {
-    // console.log(data) 
+        console.log(JSON.stringify(data))
+
+        $('body').toast({
+                title: 'Vacation Requested!',
+                message: 'Successfully requested vacation. You will be notified as soon as your manager responds.',
+                class : 'green',
+                position: 'bottom right',
+                displayTime: 5000,
+                className: {
+                    toast: 'ui message'
+                }
+            });
     })
     .catch(error => console.error(error))
 })
@@ -65,7 +96,7 @@ fields: {
     ]
     },
     restUrlaubvorJahr: {
-    identifier: 'restUrlaub-vorJahr',
+    identifier: 'resturlaubVorjahr',
     rules: [
         {
         type   : 'number',
@@ -74,7 +105,7 @@ fields: {
     ]
     },
     jahresUrlaubinsgesamt: {
-    identifier: 'jahresUrlaub-insgesamt',
+    identifier: 'jahresurlaubInsgesamt',
     rules: [
         {
         type   : 'number',
@@ -83,7 +114,7 @@ fields: {
     ]
     },
     restjahresUrlaubinsgesamt: {
-    identifier: 'restjahresUrlaub-insgesamt',
+    identifier: 'restjahresurlaubInsgesamt',
     rules: [
         {
         type   : 'number',
@@ -101,11 +132,11 @@ fields: {
     ]
     },
     restUrlaubleft: {
-    identifier: 'restUrlaub-left',
+    identifier: 'resturlaubJAHR',
     rules: [
         {
         type   : 'number',
-        prompt : 'You must agree to the terms and conditions'
+        prompt : 'Please enter the number of days now left for this year.'
         }
     ]
     },
@@ -128,7 +159,7 @@ fields: {
     ]
     },
     manager: {
-    identifier: 'managerDropdown',
+    identifier: 'manager',
     rules: [
         {
         type   : 'exactCount[1]',

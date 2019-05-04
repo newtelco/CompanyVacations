@@ -5,6 +5,8 @@ const bodyParser = require('body-parser')
 const passport = require('passport')
 const ldapstrategy = require('passport-ldapauth')
 const mysql = require('mysql')
+const { DateTime } = require('luxon')
+const uuid = require('uuid/v4')
 
 var connection = mysql.createConnection({
   host     : '127.0.0.1',
@@ -14,7 +16,7 @@ var connection = mysql.createConnection({
   port     : 3306
 })
 
-connection.connect(function(err) {
+connection.connect((err) => {
     if (err) throw err
     console.log('You are now connected...')
 })
@@ -45,11 +47,11 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(passport.initialize())
 app.use(passport.session())
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
@@ -70,8 +72,8 @@ app.get('/login', (req, res) => {
     res.send(`You got to the login page!\n`)
 })
 
-app.post('/login', function(req, res, next) {
-  passport.authenticate('ldapauth', {session: false}, function(err, user, info) {
+app.post('/login', (req, res, next) => {
+  passport.authenticate('ldapauth', {session: false}, (err, user, info) => {
     if (err) {
       return next(err); // will generate a 500 error
     }
@@ -79,7 +81,7 @@ app.post('/login', function(req, res, next) {
       console.log('\nRequest Login failed!')
       return res.send({ success : false, message : 'authentication failed' });
     }
-    req.login(user,function(err) {
+    req.login(user,(err) => {
         if (err) return next(err)
         console.log('Request Login successful')
         return res.redirect('dashboard')
@@ -113,6 +115,7 @@ app.get('/request', (req, res) => {
   }
 })
 
+
 app.get('/overview', (req, res) => {
   console.log('\nInside GET /overview callback')
   console.log(`User authenticated? ${req.isAuthenticated()}`)
@@ -123,16 +126,41 @@ app.get('/overview', (req, res) => {
   }
 })
 
-app.post('/vacation/submit', function (req, res) {
-  console.log(req.body)
-  var fieldData = JSON.parse(req.body)
 
-  connection.query('select * from vacations', function(error, results, fields) {
-    if (error) throw error
-    console.log(results)
-    console.log(fields)
-    // res.end(JSON.stringify(results))
-  })
+app.get('/admin', (req, res) => {
+  console.log('\nInside GET /admin callback')
+  console.log(`User authenticated? ${req.isAuthenticated()}`)
+  if(req.isAuthenticated()) {
+    res.sendFile(__dirname + '/public/admin.html')
+  } else {
+    return res.redirect('/')
+  }
+})
+
+app.post('/vacation/submit', (req, res) => {
+  user = req.user
+    if (req.isAuthenticated() == true) {
+
+      let newVaca = req.body
+
+      const approval_hash = uuid()
+      const submitted_datetime = DateTime.local().toFormat('kkkk-MM-dd HH:mm:ss')
+      const toDATE = DateTime.fromFormat(newVaca.toDate, 'LLLL d, yyyy').toISODate()
+      const fromDATE = DateTime.fromFormat(newVaca.fromDate, 'LLLL d, yyyy').toISODate()
+
+      newVaca['toDate'] = toDATE
+      newVaca['fromDate'] = fromDATE
+      newVaca['submitted_datetime'] = submitted_datetime
+      newVaca['approval_hash'] = approval_hash
+
+      connection.query('INSERT INTO vacations SET ?', newVaca, (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
 })
 
 app.listen(7555, () => {

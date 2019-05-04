@@ -6,22 +6,30 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
   <link rel="stylesheet" href="semantic/dist/semantic.min.css">
   <script src="semantic/dist/semantic.min.js"></script>
+  
+  <!-- <link rel="stylesheet" href="css/OverlayScrollbars.min.css">
+  <script src="js/OverlayScrollbars.min.js"></script> -->
+
+  <link rel="stylesheet" href="css/simplebar.min.css">
+  <script src="js/simplebar.min.js"></script>
+
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon_white/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon_white/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon_white/favicon-16x16.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="mask-icon" href="images/favicon/safari-pinned-tab.svg" color="#51bda3">
+  <link rel="mask-icon" href="images/favicon_white/safari-pinned-tab.svg" color="#51bda3">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <meta name="apple-mobile-web-app-title" content="Newtelco Vacations">
   <meta name="application-name" content="Newtelco Vacations">
   <meta name="msapplication-TileColor" content="#00aba9">
   <meta name="theme-color" content="#ffffff">
 </head>
-<body>
+<body id="bodyId">
+  <div id="bodyDiv">
   <div class="ui fixed inverted menu">
     <div class="ui container">
       <span href="#" class="header item">
@@ -56,7 +64,7 @@
             <h2>
               New Vacation Request
             </h2>
-            <form action="/vacation/submit" id="requestForm" class="ui form">
+            <form id="requestForm" class="ui form" autocomplete="off">
               <h4 class="ui horizontal divider header">
                 User Details
               </h4>
@@ -75,23 +83,23 @@
               <div class="field">
                 <label>Rest Urlaub aus dem Vorjahr</label>
                 <span class="ui small green text">Left over days from last year</span>
-                <input name="restUrlaub-vorJahr" type="text" value="">
+                <input name="resturlaubVorjahr" type="text" value="">
               </div>
               <div class="field">
                 <label>Jahresurlaub Insgesamt</label>
-                <input name="jahresUrlaub-insgesamt" type="text" value="">
+                <input name="jahresurlaubInsgesamt" type="text" value="">
               </div>
               <div class="field">
                 <label>Rest Jahresurlaub Insgesamt</label>
-                <input name="restjahresUrlaub-insgesamt" type="text" value="">
+                <input name="restjahresurlaubInsgesamt" type="text" value="">
               </div>
               <div class="field">
                 <label>Beantragt</label>
                 <input name="beantragt" type="text" value="">
               </div>
               <div class="field">
-                <label>Resturlaub [Year]</label>
-                <input name="resturlaub-left" type="text" value="">
+                <label id="resturlaubYEARlabel">Resturlaub [Year]</label>
+                <input name="resturlaubJAHR" type="text" value="">
               </div>
               <h4 class="ui horizontal divider header">
                 <i class="calendar alternate outline icon"></i>
@@ -101,20 +109,20 @@
               <div class="ui calendar" id="fromCalendar">
                 <div class="ui input left icon">
                   <i class="calendar icon"></i>
-                  <input type="text" name="fromDate" placeholder="From Date">
+                  <input autocomplete="false" name="fromDate" placeholder="From Date">
                 </div>
               </div>
               <div class="ui calendar" id="toCalendar">
                 <div class="ui input left icon">
                   <i class="calendar icon"></i>
-                  <input type="text" name="toDate" placeholder="To Date">
+                  <input autocomplete="false" name="toDate" placeholder="To Date">
                 </div>
               </div>
               <div class="ui section divider"></div>
               <!-- TODO: Pull Managers from Dropdown and let Admins edit choices -->
               Please select an Approval Manager. <br>
               This person will receive the email to approve your vacation request.
-              <select id="managerDropdown" class="ui search selection dropdown">
+              <select id="managerDropdown" name="manager" class="ui search selection dropdown">
                 <option value="">Approval Manager</option>
                 <option value="nhartmann@newtelco.de">Natascha Hartmann</option>
                 <option value="jskribek@newtelco.de">Jens Skribek</option>
@@ -179,5 +187,6 @@
   </div> 
 
   <script src="/request.js"></script>
+  </div>
 </body>
 </html>
