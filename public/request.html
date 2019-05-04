@@ -39,11 +39,9 @@
         <div class="menu">
           <a class="item" href="/request">New Request</a>
           <a class="item" href="/overview">My Vacations</a>
-          <a class="item" href="/admin">Administration</a>
-          <div class="divider"></div>
-          <div class="header">Support</div>
-          <a class="item" href="mailto:ndomino@newtelco.de">@ndomino</a>
-          <a class="item" href="mailto:nhartmann@newtelco.de">@nhartmann</a>
+          <div id="adminDivider" class="divider"></div>
+          <a class="item" id="adminLink" href="/admin">Administration</a>
+          <a class="item" id="reportLink" href="/report">Reports</a>
         </div>
       </div>
       <div class="right menu">
@@ -58,7 +56,7 @@
         <div class="two wide column"></div>
         <div class="twelve wide column">
           <div class="formWrapper">
-            <h2>
+            <h2 id="newvacaheader">
               New Vacation Request
             </h2>
             <form id="requestForm" class="ui form" autocomplete="off">
@@ -79,23 +77,27 @@
               </h4>
               <div class="field">
                 <label>Rest Urlaub aus dem Vorjahr</label>
-                <span class="ui small green text">Left over days from last year</span>
+                <span class="ui medium lightgray text">Left over days from last year</span>
                 <input tabindex="3" name="resturlaubVorjahr" type="text" value="">
               </div>
               <div class="field">
                 <label>Jahresurlaub Insgesamt</label>
+                <span class="ui medium lightgray text">Days earned this year</span>
                 <input tabindex="4" id="jahresurlaubInsgesamt" name="jahresurlaubInsgesamt" type="text" value="">
               </div>
               <div class="field">
                 <label>Rest Jahresurlaub Insgesamt</label>
+                <span class="ui medium lightgray text">Available days total this year</span>
                 <input tabindex="5" name="restjahresurlaubInsgesamt" type="text" value="">
               </div>
               <div class="field">
                 <label>Beantragt</label>
+                <span class="ui medium lightgray text">Requested vacation days</span>
                 <input tabindex="6" id="beantragt" name="beantragt" type="text" value="">
               </div>
               <div class="field">
                 <label id="resturlaubYEARlabel">Resturlaub [Year]</label>
+                <span class="ui medium lightgray text">Vacation days left over this year</span>
                 <input tabindex="7" name="resturlaubJAHR" type="text" value="">
               </div>
               <h4 class="ui horizontal divider header">
@@ -186,6 +188,7 @@
   </div> 
 
   <script src="/request.js"></script>
+  <script src="js/helper.js"></script>
   <link rel="stylesheet" href="components/gotop.css">
   <script src="components/gotop.js"></script>
 

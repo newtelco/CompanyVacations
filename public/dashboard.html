@@ -7,8 +7,16 @@
   <link rel="stylesheet" href="semantic/dist/semantic.min.css">
   <script src="semantic/dist/semantic.min.js"></script>
 
-  <link rel="stylesheet" href="css/OverlayScrollbars.min.css">
-  <script src="js/OverlayScrollbars.min.js"></script>
+  <link rel="stylesheet" href="css/simplebar.min.css">
+  <script src="js/simplebar.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/@fullcalendar/daygrid/main.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/@fullcalendar/daygrid/main.min.js"></script>
+
+  <!-- FullCal GoogleCal-->
+  <script type="text/javascript" src="components/fullcal_googlecal/main.min.js"></script>
 
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet">
@@ -38,11 +46,9 @@
         <div class="menu">
           <a class="item" href="/request">New Request</a>
           <a class="item" href="/overview">My Vacations</a>
-          <a class="item" href="/admin">Administration</a>
-          <div class="divider"></div>
-          <div class="header">Support</div>
-          <a class="item" href="mailto:ndomino@newtelco.de">@ndomino</a>
-          <a class="item" href="mailto:nhartmann@newtelco.de">@nhartmann</a>
+          <div id="adminDivider" class="divider"></div>
+          <a class="item" id="adminLink" href="/admin">Administration</a>
+          <a class="item" id="reportLink" href="/report">Reports</a>
         </div>
       </div>
       <div class="right menu">
@@ -56,8 +62,8 @@
       <div class="ui three column grid dashboardGrid">
         <div class="two wide column"></div>
         <div class="twelve wide column">
-          <div class="cal_placeholder">
-
+          <div id="calEl" class="cal_placeholder">
+            <!-- <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=2&amp;bgcolor=%23ffffff&amp;ctz=Europe%2FBerlin&amp;src=bmV3dGVsY28uZGVfYTJubTRnZ2gyNTljNjhsbWltNWUwbXBwOG9AZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&amp;color=%237986CB&amp;showTitle=0&amp;showNav=1&amp;showDate=1&amp;showCalendars=0" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe> -->
           </div>
         </div>
         <div class="two wide column"></div>
@@ -65,5 +71,6 @@
 
   </div>
   <script src="/dashboard.js"></script>
+  <script src="js/helper.js"></script>
 </body>
 </html>

@@ -1,3 +1,8 @@
+
+const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
+autoHide: false
+});
+
 const CreateUser = document.querySelector('.loginform')
 CreateUser.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -19,4 +24,3 @@ function post(path, data) {
         window.location = res.url
     })
 }
-

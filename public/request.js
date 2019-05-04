@@ -1,6 +1,6 @@
 
 const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
-    autoHide: false
+autoHide: false
 });
 
 $('#managerDropdown').dropdown({
@@ -209,12 +209,3 @@ onFailure: function(err, fields) {
 $('#clearBtn').on('click', function() {
     $('#requestForm').form('clear');
 });
-
-/* 
- * Get Form Values - https://fomantic-ui.com/behaviors/form.html
- *
- * var $form = $('#requestForm');
- * allFields = $form.form('get values');
- * console.log(allFields); 
- * 
- */

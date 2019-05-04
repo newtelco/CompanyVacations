@@ -90,12 +90,17 @@ app.post('/login', (req, res, next) => {
 });
 
 app.get('/logout', (req, res) => {
-  req.session.destroy()
+  //req.session.destroy()
   req.logout()
   return res.redirect('/')
 })
 
 app.get('/dashboard', (req, res) => {
+  var user = req.user
+  // TEST
+  for(i = 0; i < user.memberOf.length; i++) {
+    console.log(user.memberOf[i])
+  }
   console.log('\nInside GET /dashboard callback')
   console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
@@ -137,9 +142,35 @@ app.get('/admin', (req, res) => {
   }
 })
 
-app.post('/vacation/submit', (req, res) => {
-  user = req.user
+app.post('/vacation/user', (req, res) => {
     if (req.isAuthenticated() == true) {
+
+      user = req.user
+      return res.status(202).send(user)
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/vacation/list', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      user = req.user.sAMAccountName
+
+      connection.query('SELECT resturlaubVorjahr, jahresurlaubInsgesamt, restjahresurlaubInsgesamt, beantragt, resturlaubJAHR, fromDate, toDate, manager, note, submitted_datetime, approved FROM vacations WHERE submitted_by LIKE "'+ user + '";', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/vacation/submit', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      user = req.user
 
       let newVaca = req.body
 
@@ -150,6 +181,7 @@ app.post('/vacation/submit', (req, res) => {
 
       newVaca['toDate'] = toDATE
       newVaca['fromDate'] = fromDATE
+      newVaca['submitted_by'] = user.sAMAccountName
       newVaca['submitted_datetime'] = submitted_datetime
       newVaca['approval_hash'] = approval_hash
 

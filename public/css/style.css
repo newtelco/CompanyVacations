@@ -63,17 +63,31 @@ body {
 .ui.menu.fixed {
     background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);
 }
+/* Cal Customizations */
 
 .cal_placeholder {
-    /* background: linear-gradient(90deg, rgba(255, 79, 167, 0.7) 0%, rgba(114, 165, 224, 0.788) 100%); */
-    background: linear-gradient(90deg, #f8ff00 0%, #3ad59f 100%);
-    /* background-color: rgba(103, 178, 70, 0.6); */
     border-radius: 8px;
-    border: 5px solid rgba(231, 189, 236, 0.932);
-    height:500px;
-    width: 800px;
+    border: 10px solid rgba(103, 178, 70, 0.8);
+    box-shadow: 0px 0px 40px 1px rgba(103, 178, 70, 1);
+    padding: 10px;
+    height: 680px;
+    width: 820px;
     margin: 0 auto;
     margin-top: 10px;
+}
+
+body .fc {
+    border-radius: 20px;
+}
+
+.fc-event {
+    background-color: rgba(103, 178, 70, 0.8) !important;
+    border: 1px solid rgba(103, 178, 70, 0.8) !important;
+}
+
+.fc-button-primary {
+    background-color: rgba(168, 168, 168, 0.8) !important;
+    border: 1px solid rgba(168, 168, 168, 0.8) !important;
 }
 
 /* New Request */
@@ -107,6 +121,43 @@ body {
     background-color: #67B246 !important;
 }
 
-.ui.small.green {
+/* .ui.small.green {
     color: #67B246 !important;
+} */
+
+.ui.medium.lightgray.text {
+    font-size: 0.8em;
+    color: #767676;
+    top: -5px;
+    position: relative;
+
+}
+
+/* My Vacations */
+
+.overviewHeader {
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+.dlBtn {
+    margin-top: 20px !important;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
+    white-space: normal !important;
+}
+
+.tabulator-headers .tabulator-col-content {
+    height: 60px !important;
+}
+
+.tabulator-row-even {
+    background-color: rgba(103, 178, 70, 0.2) !important; 
+}
+
+.approvedIcon {
+    font-size: 18px;
+    text-align: center;
+    width: 100%;
 }
