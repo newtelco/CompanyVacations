@@ -4,7 +4,20 @@ const FileStore = require('session-file-store')(session)
 const bodyParser = require('body-parser')
 const passport = require('passport')
 const ldapstrategy = require('passport-ldapauth')
-const uuid = require('uuid')
+const mysql = require('mysql')
+
+var connection = mysql.createConnection({
+  host     : '127.0.0.1',
+  user     : 'ntvacations',
+  password : 'N3wt3lco',
+  database : 'ntvacations',
+  port     : 3306
+})
+
+connection.connect(function(err) {
+    if (err) throw err
+    console.log('You are now connected...')
+})
 
 var OPTS = {
     server: {
@@ -40,6 +53,8 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
+
+// Handle the different routes
 // create the homepage route at '/'
 app.get('/', (req, res) => {
   console.log('Inside the homepage callback function')
@@ -71,8 +86,6 @@ app.post('/login', function(req, res, next) {
     })
   })(req, res, next);
 });
-
-// Handle the different routes
 
 app.get('/logout', (req, res) => {
   req.session.destroy()
@@ -109,7 +122,19 @@ app.get('/overview', (req, res) => {
     return res.redirect('/')
   }
 })
+
+app.post('/vacation/submit', function (req, res) {
+  console.log(req.body)
+  var fieldData = JSON.parse(req.body)
+
+  connection.query('select * from vacations', function(error, results, fields) {
+    if (error) throw error
+    console.log(results)
+    console.log(fields)
+    // res.end(JSON.stringify(results))
+  })
+})
+
 app.listen(7555, () => {
     console.log('Server running on http://localhost:7555')
 })
-

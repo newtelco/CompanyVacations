@@ -56,7 +56,7 @@
             <h2>
               New Vacation Request
             </h2>
-            <form id="requestForm" class="ui  form">
+            <form action="/vacation/submit" id="requestForm" class="ui form">
               <h4 class="ui horizontal divider header">
                 User Details
               </h4>
@@ -83,7 +83,7 @@
               </div>
               <div class="field">
                 <label>Rest Jahresurlaub Insgesamt</label>
-                <input name="restUrlaub-insgesamt" type="text" value="">
+                <input name="restjahresUrlaub-insgesamt" type="text" value="">
               </div>
               <div class="field">
                 <label>Beantragt</label>
@@ -166,11 +166,11 @@
     </div>
     <div style="text-align:center !important" class="ui center aligned">
       <div class="actions">
-        <div class="ui red basic cancel inverted button">
+        <div id="modalCancelBtn" class="ui red basic cancel inverted button">
           <i class="trash can icon"></i>
           Cancel
         </div>
-        <div class="ui green ok inverted button">
+        <div id="modalSubmitBtn" class="ui green ok inverted button">
           <i class="checkmark icon"></i>
           Send
         </div>

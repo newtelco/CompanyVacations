@@ -15,7 +15,32 @@ $('#toCalendar').calendar({
   });
 
 $('#submitBtn').on('click', function() {
-    $('#confirmModal').modal('show');
+    $('#confirmModal').modal('show')
+})
+
+$('#modalSubmitBtn').on('click', function() {
+
+    var $form = $('#requestForm')
+    allFields = $form.form('get values')
+    console.log(allFields)
+    console.log(JSON.stringify(allFields))
+
+    fetch('/vacation/submit', {
+        method: 'POST',
+        body: JSON.stringify(allFields), 
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+    // console.log(data) 
+    })
+    .catch(error => console.error(error))
+})
+
+$('#modalCancelBtn').on('click', function() {
+    $('#confirmModal').modal('hide')
 })
 
 $('.ui.form')
@@ -50,6 +75,15 @@ fields: {
     },
     jahresUrlaubinsgesamt: {
     identifier: 'jahresUrlaub-insgesamt',
+    rules: [
+        {
+        type   : 'number',
+        prompt : 'Please enter the number of vacation days youve earned this year'
+        }
+    ]
+    },
+    restjahresUrlaubinsgesamt: {
+    identifier: 'restjahresUrlaub-insgesamt',
     rules: [
         {
         type   : 'number',
