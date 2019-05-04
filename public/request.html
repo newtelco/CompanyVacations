@@ -6,9 +6,6 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
   <link rel="stylesheet" href="semantic/dist/semantic.min.css">
   <script src="semantic/dist/semantic.min.js"></script>
-  
-  <!-- <link rel="stylesheet" href="css/OverlayScrollbars.min.css">
-  <script src="js/OverlayScrollbars.min.js"></script> -->
 
   <link rel="stylesheet" href="css/simplebar.min.css">
   <script src="js/simplebar.min.js"></script>
@@ -30,7 +27,7 @@
 </head>
 <body id="bodyId">
   <div id="bodyDiv">
-  <div class="ui fixed inverted menu">
+  <div id="headerId" class="ui fixed inverted menu">
     <div class="ui container">
       <span href="#" class="header item">
         <img class="logo dashboardMenuImg" src="img/island_icon_white.png">
@@ -70,11 +67,11 @@
               </h4>
               <div class="field">
                 <label>Name</label>
-                <input name="name" type="text" placeholder="Full Name">
+                <input tabindex="1" name="name" type="text" placeholder="Full Name">
               </div>
               <div class="field">
                 <label>Email</label>
-                <input name="email" type="text" placeholder="Email Address">
+                <input tabindex="2" name="email" type="text" placeholder="Email Address">
               </div>
               <h4 class="ui horizontal divider header">
                 <i class="briefcase icon"></i>
@@ -83,23 +80,23 @@
               <div class="field">
                 <label>Rest Urlaub aus dem Vorjahr</label>
                 <span class="ui small green text">Left over days from last year</span>
-                <input name="resturlaubVorjahr" type="text" value="">
+                <input tabindex="3" name="resturlaubVorjahr" type="text" value="">
               </div>
               <div class="field">
                 <label>Jahresurlaub Insgesamt</label>
-                <input name="jahresurlaubInsgesamt" type="text" value="">
+                <input tabindex="4" id="jahresurlaubInsgesamt" name="jahresurlaubInsgesamt" type="text" value="">
               </div>
               <div class="field">
                 <label>Rest Jahresurlaub Insgesamt</label>
-                <input name="restjahresurlaubInsgesamt" type="text" value="">
+                <input tabindex="5" name="restjahresurlaubInsgesamt" type="text" value="">
               </div>
               <div class="field">
                 <label>Beantragt</label>
-                <input name="beantragt" type="text" value="">
+                <input tabindex="6" id="beantragt" name="beantragt" type="text" value="">
               </div>
               <div class="field">
                 <label id="resturlaubYEARlabel">Resturlaub [Year]</label>
-                <input name="resturlaubJAHR" type="text" value="">
+                <input tabindex="7" name="resturlaubJAHR" type="text" value="">
               </div>
               <h4 class="ui horizontal divider header">
                 <i class="calendar alternate outline icon"></i>
@@ -109,20 +106,20 @@
               <div class="ui calendar" id="fromCalendar">
                 <div class="ui input left icon">
                   <i class="calendar icon"></i>
-                  <input autocomplete="false" name="fromDate" placeholder="From Date">
+                  <input tabindex="8" autocomplete="false" name="fromDate" placeholder="From Date">
                 </div>
               </div>
               <div class="ui calendar" id="toCalendar">
                 <div class="ui input left icon">
                   <i class="calendar icon"></i>
-                  <input autocomplete="false" name="toDate" placeholder="To Date">
+                  <input tabindex="9" autocomplete="false" name="toDate" placeholder="To Date">
                 </div>
               </div>
               <div class="ui section divider"></div>
               <!-- TODO: Pull Managers from Dropdown and let Admins edit choices -->
               Please select an Approval Manager. <br>
               This person will receive the email to approve your vacation request.
-              <select id="managerDropdown" name="manager" class="ui search selection dropdown">
+              <select tabindex="10" id="managerDropdown" name="manager" class="ui search selection dropdown">
                 <option value="">Approval Manager</option>
                 <option value="nhartmann@newtelco.de">Natascha Hartmann</option>
                 <option value="jskribek@newtelco.de">Jens Skribek</option>
@@ -135,7 +132,7 @@
               <div class="field">
                 <label>Note</label>
                 <label class="sublabel">Optional note to manager</label>
-                <textarea name="note" rows="2"></textarea>
+                <textarea tabindex="11" name="note" rows="2"></textarea>
               </div>
               <div class="ui buttons">
                 <button id="clearBtn" style="width:initial" class="ui animated button">
@@ -145,7 +142,7 @@
                   </div>
                 </button>
                 <div class="or"></div>
-                <button id="submitBtn" style="width:initial" class="ui positive animated button">
+                <button tabindex="12" id="submitBtn" style="width:initial" class="ui positive animated button">
                   <div class="visible content">send</div>
                   <div class="hidden content">
                     <i class="paper plane icon"></i>
@@ -161,6 +158,8 @@
         <div class="two wide column"></div>
       </div>
   </div>
+  <a href="#" class="go-top"><i></i></a>
+
  <div id="confirmModal" class="ui basic modal">
     <div class="ui icon huge header">
       <i class="paper plane outline icon"></i>
@@ -187,6 +186,9 @@
   </div> 
 
   <script src="/request.js"></script>
+  <link rel="stylesheet" href="components/gotop.css">
+  <script src="components/gotop.js"></script>
+
   </div>
 </body>
 </html>
