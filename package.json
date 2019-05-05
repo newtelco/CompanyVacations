@@ -26,6 +26,7 @@
     "express": "^4.16.4",
     "express-session": "^1.16.1",
     "fomantic-ui": "^2.7.4",
+    "googleapis": "^39.2.0",
     "knex": "^0.16.5",
     "luxon": "^1.12.1",
     "mysql": "^2.17.1",
