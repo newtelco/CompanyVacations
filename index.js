@@ -142,6 +142,65 @@ app.get('/admin', (req, res) => {
   }
 })
 
+app.post('/admin/users', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      connection.query('SELECT DISTINCT name, email FROM vacations ORDER BY name', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/admin/managers', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      connection.query('SELECT * FROM managers', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/admin/managers/update', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      body = req.body
+      console.log(body)
+      const id = body.id
+      console.log(id)
+      const name = body.name
+      const email = body.email
+
+      connection.query('UPDATE managers SET name = "' + name + '", email = "' + email + '" WHERE id LIKE "' + id + '";', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/admin/listall', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      connection.query('SELECT name, resturlaubVorjahr, jahresurlaubInsgesamt, restjahresurlaubInsgesamt, beantragt, resturlaubJAHR, fromDate, toDate, manager, note, submitted_datetime, approved, approval_datetime FROM vacations;', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
 app.post('/vacation/user', (req, res) => {
     if (req.isAuthenticated() == true) {
 
@@ -155,7 +214,11 @@ app.post('/vacation/user', (req, res) => {
 app.post('/vacation/list', (req, res) => {
     if (req.isAuthenticated() == true) {
 
-      user = req.user.sAMAccountName
+      if(req.body.username){
+        user = req.body.username
+      } else {
+        user = req.user.sAMAccountName
+      }
 
       connection.query('SELECT resturlaubVorjahr, jahresurlaubInsgesamt, restjahresurlaubInsgesamt, beantragt, resturlaubJAHR, fromDate, toDate, manager, note, submitted_datetime, approved FROM vacations WHERE submitted_by LIKE "'+ user + '";', (error, results, fields) => {
         if (error) throw error

@@ -7,13 +7,21 @@
   <link rel="stylesheet" href="semantic/dist/semantic.min.css">
   <script src="semantic/dist/semantic.min.js"></script>
   
-  <link rel="stylesheet" href="css/OverlayScrollbars.min.css">
-  <script src="js/OverlayScrollbars.min.js"></script>
+  <link rel="stylesheet" href="css/simplebar.min.css">
+  <script src="js/simplebar.min.js"></script>
 
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 
+  <link href="https://unpkg.com/tabulator-tables@4.2.7/dist/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.7/dist/js/tabulator.min.js"></script>
+  <link href="css/tabulator_semantic-ui.min.css" rel="stylesheet">
+  <script type="text/javascript" src="js/tabulator_download.min.js"></script>
+  <script lang="javascript" src="js/xlsx.full.min.js"></script>
+  <script type="text/javascript" src="js/moment.min.js"></script>
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon_white/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon_white/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon_white/favicon-16x16.png">
@@ -25,7 +33,7 @@
   <meta name="msapplication-TileColor" content="#00aba9">
   <meta name="theme-color" content="#ffffff">
 </head>
-<body>
+<body id="bodyId">
   <div class="ui fixed inverted menu">
     <div class="ui container">
       <span href="#" class="header item">
@@ -38,11 +46,9 @@
         <div class="menu">
           <a class="item" href="/request">New Request</a>
           <a class="item" href="/overview">My Vacations</a>
-          <a class="item" href="/admin">Administration</a>
           <div class="divider"></div>
-          <div class="header">Support</div>
-          <a class="item" href="mailto:ndomino@newtelco.de">@ndomino</a>
-          <a class="item" href="mailto:nhartmann@newtelco.de">@nhartmann</a>
+          <a class="item" id="adminLink" href="/admin">Administration</a>
+          <a class="item" id="reportLink" href="/report">Reports</a>
         </div>
       </div>
       <div class="right menu">
@@ -54,14 +60,176 @@
   </div>
   <div style="background: #fff" class="wrapper">
       <div class="ui three column grid dashboardGrid">
-        <div class="two wide column"></div>
-        <div class="twelve wide column">
+        <div class="one wide column"></div>
+        <div class="fourteen wide column">
+          <h1 style="display: inline-block" class="ui header overviewHeader">
+            Administration
+          </h1>
+
+          <div class="ui two column grid">
+            <div class="eight wide column">
+              <div class="ui segments">
+                <div id="allVacaSegment" class="ui segment">
+                  <p id="allVacaHeaderText">
+                    Edit Managers
+                  </p>
+                </div>
+                <div class="ui secondary segment">
+                  <div id="managerTable"></div>
+                  <div class="ui tiny basic green labeled icon button">
+                    Add Manager
+                    <i class="add icon"></i>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="eight wide column">
+              <div class="ui segments">
+                <div id="allVacaSegment" class="ui segment">
+                  <p id="allVacaHeaderText">
+                    Export Reports
+                  </p>
+                </div>
+                <div class="ui secondary segment">
+                  <div class="ui placeholder segment">
+                    <div class="ui two column stackable center aligned grid">
+                      <div class="ui vertical divider">Or</div>
+                      <div class="middle aligned row">
+                        <div class="column">
+                          <div class="ui icon header">
+                            <i class="green calendar alternate outline icon"></i>
+                            Monthly
+                          </div>
+                          <div class="field">
+                            <select id="reportMonthDropdown" class="ui dropdown">
+                              <option value="">Month</option>
+                              <option value="1">January</option>
+                              <option value="2">February</option>
+                              <option value="3">March</option>
+                              <option value="4">April</option>
+                              <option value="5">May</option>
+                              <option value="6">June</option>
+                              <option value="7">Juli</option>
+                              <option value="8">August</option>
+                              <option value="9">September</option>
+                              <option value="10">October</option>
+                              <option value="11">November</option>
+                              <option value="12">December</option>
+                            </select>
+                            <button style="margin-top: 15px !important" class="ui fade animated button">
+                              <div class="hidden content">Download</div>
+                              <div class="visible content">
+                                <i class="download icon"></i>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="column">
+                          <div class="ui icon header">
+                            <i class="green calendar alternate outline icon"></i>
+                            Yearly
+                          </div>
+                          <div class="field">
+                            <select id="reportYearDropdown1" class="ui dropdown">
+                              <option value="">Month</option>
+                              <option value="1">January</option>
+                              <option value="2">February</option>
+                              <option value="3">March</option>
+                              <option value="4">April</option>
+                              <option value="5">May</option>
+                              <option value="6">June</option>
+                              <option value="7">Juli</option>
+                              <option value="8">August</option>
+                              <option value="9">September</option>
+                              <option value="10">October</option>
+                              <option value="11">November</option>
+                              <option value="12">December</option>
+                            </select>
+                          </div>
+                          <div class="field">
+                            <select id="reportYearDropdown2" class="ui dropdown">
+                              <option value="">Year</option>
+                              <option value="2019">2019</option>
+                              <option value="2018">2018</option>
+                              <option value="2017">2017</option>
+                            </select>
+                            <button style="margin-top: 15px !important" class="ui fade animated button">
+                              <div class="hidden content">Download</div>
+                              <div class="visible content">
+                                <i class="download icon"></i>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div id="monthlyReport" class="ui orange segment">
+                    Monthly
+                    <button class="ui orange basic mini right floated icon button"><i class="download icon"></i></button>
+                  </div>
+                  <div id="quarterlyReport" class="ui yellow segment">
+                    Quarterly
+                    <button class="ui yellow basic mini right floated icon button"><i class="download icon"></i></button>
+                  </div>
+                  <div id="yearlyReport" class="ui olive segment">
+                    Yearly
+                    <button class="ui olive basic mini right floated icon button"><i class="download icon"></i></button>
+                  </div> -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="ui segments">
+            <div id="allVacaSegment" class="ui segment">
+              <p id="allVacaHeaderText">
+                Display vacations of
+                <div id="userSelectDropdown" style="min-width:300px" class="ui inline two column scrolling pointing dropdown">
+                  <div class="text">__________</div>
+                  <i class="dropdown icon"></i>
+                  <div id="userSelectMenu" class="menu">
+                  </div>
+                </div> 
+              </p>
+              <button style="float: right; display: inline-block"  class="ui right labeled icon inverted green button userVacaDLBtn">
+                <i class="download icon"></i>
+                Download .xlsx
+              </button>
+            </div>
+            <div class="ui secondary segment">
+              <div id="userVacas"></div>
+              <div id="userVacasPlaceholder" class="ui placeholder segment">
+                <div class="ui icon header">
+                  <i class="user circle outline icon"></i>
+                  No user selected yet. Please make a selection above.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui segments">
+            <div id="allVacaSegment" class="ui segment">
+              <p id="allVacaHeaderText">
+                All Vacations
+              </p>
+              <button style="float: right; display: inline-block"  class="ui right labeled icon inverted green button allVacaDLBtn">
+                <i class="download icon"></i>
+                Download .xlsx
+              </button>
+            </div>
+            <div class="ui secondary segment">
+              <div id="totalVacas"></div>
+            </div>
+          </div>
 
         </div>
-        <div class="two wide column"></div>
+        <div class="one wide column"></div>
       </div>
 
   </div>
-  <script src="/overview.js"></script>
+  <script src="/admin.js"></script>
 </body>
 </html>

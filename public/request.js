@@ -1,6 +1,6 @@
 
 const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
-autoHide: false
+    autoHide: false
 });
 
 $('#managerDropdown').dropdown({
@@ -31,6 +31,24 @@ const yearNow = dt.getYear() + 1900
 resturlaubYearLabel.text('Resturlaub ' + yearNow)
 
 // form autofill help
+
+// Fill full name into Name field on load
+$(document).ready(() => {
+
+    var $form = $('#requestForm')
+
+    let fullname = window.sessionStorage.getItem('user')
+    fullname = JSON.parse(fullname)
+    emailAddress = fullname.mail
+    fullname = fullname.displayName
+
+    $form.form('set values', { 
+        name : fullname,  
+        email : emailAddress 
+    })
+    // $form.form('set values', { email : emailAddress })
+
+})
 $('#jahresurlaubInsgesamt').blur(() => {
     const $form = $('.ui.form')
     const resturlaubVorjahrVal = parseFloat($form.form('get value', 'resturlaubVorjahr').replace(',', '.'))
@@ -186,18 +204,20 @@ onSuccess: function(evt, fields) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(JSON.stringify(data))
+        // console.log(JSON.stringify(data))
 
-        $('body').toast({
-                title: 'Vacation Requested!',
-                message: 'Successfully requested vacation. You will be notified as soon as your manager responds.',
-                class : 'green',
-                position: 'bottom right',
-                displayTime: 5000,
-                className: {
-                    toast: 'ui message'
-                }
-            });
+        if(data.changedRows > 0) {
+            $('body').toast({
+                    title: 'Vacation Requested!',
+                    message: 'Successfully requested vacation. You will be notified as soon as your manager responds.',
+                    class : 'green',
+                    position: 'bottom right',
+                    displayTime: 5000,
+                    className: {
+                        toast: 'ui message'
+                    }
+                });
+        }
     })
     .catch(error => console.error(error))
 },
