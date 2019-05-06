@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const passport = require('passport')
 const ldapstrategy = require('passport-ldapauth')
 const mysql = require('mysql')
+const moment = require('moment')
 const { DateTime } = require('luxon')
 const uuid = require('uuid/v4')
 let {google} = require('googleapis')
@@ -219,14 +220,34 @@ app.get('/admin/response', (req, res) => {
         action = '0'
       }
 
-      connection.query('UPDATE vacations SET approved = "' + action + '" WHERE approval_hash LIKE "' + id + '";', (error, results, fields) => {
+      const datetimeNow = moment().format('YYYY-MM-DD HH:mm:ss')
+
+      // on request resposne, first update the DB with approval value
+      connection.query('UPDATE vacations SET approval_datetime = "' + datetimeNow + '", approved = "' + action + '" WHERE approval_hash LIKE "' + id + '";', (error, results, fields) => {
         if (error) throw error
         // res.end(JSON.stringify(results))
-        return res.status(202).send(results)
+        //return res.status(202).send(results)
+        // then get associated user data to build emailnfirmation
+
+        // TO DO: Fix up this SQL Query - somehow theres something wrong with the Syntax?!
+        connection.query('SELECT name, email, submitted_datetime, toDate, fromDate, approved WHERE approval_hash LIKE "' + id + '";', (error, results, fields) => {
+        if (error) throw error
+          console.log(results)
+          console.log(fields)
+          // const name = 
+          // sendMsg()
+        })
+        // TO DO: save req URL and pass it into login path to redirect
+        //    after successful login incase manager isnt pre-logged in 
+        //    when approving vacation request
+        if(results.affectedRows > "0") {
+          res.sendFile(__dirname + "/public/responseSuccess.html")
+        }
       })
 
       // TO DO:
       // 1. send response to manager - approved / denied successfully
+
       // 2. send email to requester - your vacation has been approved
 
     } else {
@@ -322,7 +343,20 @@ app.post('/vacation/list', (req, res) => {
     }
 })
 
-app.post('/vacation/submit', (req, res) => {
+app.post('/request/managers', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      connection.query('SELECT * FROM managers', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/request/submit', (req, res) => {
     if (req.isAuthenticated() == true) {
 
       user = req.user
@@ -350,11 +384,19 @@ app.post('/vacation/submit', (req, res) => {
 
       // SEND MAIL - GOOGLE API CLIENT?
       const reqUser = newVaca['name']
-      const reqfromDate = newVaca['fromDate']
-      const reqtoDate = newVaca['toDate']
+      const reqfromDate = moment(newVaca['fromDate']).format('ddd MMM Do, YYYY')
+      const reqtoDate = moment(newVaca['toDate']).format('ddd MMM Do, YYYY')
+      const dateToday = moment().format('DD.MM.YYYY')
       let msgSubject = 'Request by ' + newVaca['name'] + ' [' + newVaca['fromDate'] + ' to ' + newVaca['toDate'] + ']'
       let mgrMail = newVaca['manager']
-      let msgBody = '<html><head> <style>@font-face{font-family: "Lato"; font-style: normal; font-weight: 300; src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh7USSwiPGQ.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face{font-family: "Lato"; font-style: normal; font-weight: 400; src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXg.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}html{font-family: Lato, Arial;}img{display: block; margin: auto;}#wrapper{max-width: 500px; margin: 0 auto;}#header{height: 60px; margin: auto 0; background-color: #67B246; width: 100%; text-align: center; line-height: 60px;}#subheader{text-align: center;}h1{font-weight: 300;}h3{font-weight: 900;}hr{width: 90%; height: 3px; border: none; color: #67B246; background-color: #67B246;}#msgBody > p{padding: 15px;}.dateSpan{display: inline-block; width: 40%;}.dateBox{border: 4px solid #8c8c8c; border-radius: 10px; padding: 40px; margin-top: 20px; margin-bottom: 20px; height: 220px;}.dateBox:after{clear: both;}.dateHeader{color: #8c8c8c; display: inline-block; font-size: 28px; text-align: center; width: 100%; font-weight: 800; margin-bottom: 5px;}.fa-calendar-alt{margin-bottom: 5px;}.fa-calendar-alt, .dateText{color: #8c8c8c; display: inline-block; text-align: center; width: 100%;}.dateText{font-size: 32px; font-weight: 900;}.btnWrapper{}.button{margin-top: 10px; display: inline-block; font-size: 24px; font-weight: 900; width: 200px; height: 60px; text-align: center; line-height: 60px; text-decoration: none; color: #fff; border-radius: 5px;}.negative{margin-left: 30px; background-color: rgba(255, 0, 0, 0.5);}.negative:hover{box-shadow: 0 0 20px 1px rgba(255, 0, 0, 0.7);}.positive{margin-right: 30px; background-color: #67B246; float: right;}.positive:hover{box-shadow: 0 0 20px 1px #67B246;}</style></head><body> <div id="wrapper"> <div id="header"> <h1>Vacation Request</h1> </div><div id="subheader"> <h3>New Vacation Request from ' + reqUser + '</h3> <hr> </div><div id="msgBody"> <p> There has been a new vacation request from ' + reqUser + ' <br><br>Please approve or deny this request below. The user will be informed via email of your decision. </p><div class="dateBox"> <div style="float: left;" class="dateSpan"> <div class="dateHeader">From</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqfromDate + '</h2> </div><div style="float: right;" class="dateSpan"> <div class="dateHeader">To</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqtoDate + '</h2> </div></div><div class="btnWrapper"> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=d" class="button negative">Deny</a> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=a" class="button positive">Approve</a> </div></div></div></body></html>'
+      let optNote = ''
+      if(newVaca['note'] != '') {
+        const fName = reqUser.substr(0,reqUser.indexOf(' '));
+        optNote = '<p style="margin-top: 0 !important;"><b>Note from ' + fName + ':<br></b>' + newVaca['note'] + '</p>'
+      } else {
+        optNote = ''
+      }
+      let msgBody = '<html><head> <style>@font-face{font-family: "Lato"; font-style: normal; font-weight: 300; src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh7USSwiPGQ.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face{font-family: "Lato"; font-style: normal; font-weight: 400; src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXg.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}html{font-family: Lato, Arial;}img{display: block; margin: auto;}#wrapper{max-width: 600px; margin: 0 auto;}#header{height: 80px; margin: auto 0; background-color: #67B246; width: 100%; text-align: center; line-height: 80px;}#subheader{text-align: center;}h1{font-size: 34px; color: #ffffff; font-weight: 300;}h3{font-size: 18px; font-weight: 900;}hr{width: 90%; height: 3px; border: none; color: #67B246; background-color: #67B246;}#msgBody > p{padding: 15px;}.dateSpan{display: inline-block; width: 45%;}.dateBox{border: 4px solid #8c8c8c; border-radius: 10px; padding: 40px; margin-top: 20px; margin-bottom: 20px; height: 220px;}.dateBox:after{clear: both;}.dateHeader{color: #8c8c8c; display: inline-block; font-size: 28px; text-align: center; width: 100%; font-weight: 800; margin-bottom: 5px;}.fa-calendar-alt{margin-bottom: 5px;}.fa-calendar-alt, .dateText{color: #8c8c8c; display: inline-block; text-align: center; width: 100%;}.dateText{font-size: 24px; font-weight: 900;}.btnWrapper{}.button{margin-top: 10px; display: inline-block; font-size: 24px; font-weight: 900; width: 200px; height: 60px; text-align: center; line-height: 60px; text-decoration: none; color: #ffffff !important; border-radius: 5px;}.negative{margin-left: 70px; background-color: rgba(255, 0, 0, 0.5);}.negative:hover{box-shadow: 0 0 20px 1px rgba(255, 0, 0, 0.7);}.positive{margin-right: 70px; background-color: #67B246; float: right;}.positive:hover{box-shadow: 0 0 20px 1px #67B246;}.footerBar{background-color:#67B246;text-align:center;color:#fff;font-size:16px;font-weight:300;line-height:60px;height:60px;width:100%;margin-top: 40px;}</style></head><body> <div id="wrapper"> <div id="header"> <h1>Vacation Request</h1> </div><div id="subheader"> <h3>New Vacation Request from ' + reqUser + '</h3> <hr> </div><div id="msgBody"> <p style="margin-bottom:0 !important;font-size: 16px;"> There has been a new vacation request from ' + reqUser + ' <br><br>Please approve or deny this request below. This user will be notified via email of your decision. </p>' + optNote + '<div class="dateBox"> <div style="float: left;" class="dateSpan"> <div class="dateHeader">From</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqfromDate + '</h2> </div><div style="float: right;" class="dateSpan"> <div class="dateHeader">To</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqtoDate + '</h2> </div></div><div class="btnWrapper"> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=d" class="button negative">Deny</a> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=a" class="button positive">Approve</a> </div></div><div class="footerBar">' + dateToday + '  <b>|</b>  <3 ndom91  <b>|</b>  NewTelco GmbH</div></div></body></html>'
 
 
       mgrName = mgrMail.substring(0, mgrMail.lastIndexOf("@"));

@@ -41,7 +41,6 @@
           <a class="item" href="/overview">My Vacations</a>
           <div id="adminDivider" class="divider"></div>
           <a class="item" id="adminLink" href="/admin">Administration</a>
-          <a class="item" id="reportLink" href="/report">Reports</a>
         </div>
       </div>
       <div class="right menu">
@@ -78,27 +77,52 @@
               <div class="field">
                 <label>Rest Urlaub aus dem Vorjahr</label>
                 <span class="ui medium lightgray text">Left over days from last year</span>
-                <input tabindex="3" name="resturlaubVorjahr" type="text" value="">
+                <div class="ui right labeled input">
+                  <input tabindex="3" name="resturlaubVorjahr" type="text" placeholder="">
+                  <div class="ui basic label">
+                    days
+                  </div>
+                </div>
               </div>
               <div class="field">
                 <label>Jahresurlaub Insgesamt</label>
                 <span class="ui medium lightgray text">Days earned this year</span>
-                <input tabindex="4" id="jahresurlaubInsgesamt" name="jahresurlaubInsgesamt" type="text" value="">
+                <div class="ui right labeled input">
+                  <input tabindex="4" name="jahresurlaubInsgesamt" id="jahresurlaubInsgesamt" type="text" placeholder="">
+                  <div class="ui basic label">
+                    days
+                  </div>
+                </div>
               </div>
               <div class="field">
                 <label>Rest Jahresurlaub Insgesamt</label>
                 <span class="ui medium lightgray text">Available days total this year</span>
-                <input tabindex="5" name="restjahresurlaubInsgesamt" type="text" value="">
+                <div class="ui right labeled input">
+                  <input tabindex="5" name="restjahresurlaubInsgesamt" type="text" placeholder="">
+                  <div class="ui basic label">
+                    days
+                  </div>
+                </div>
               </div>
               <div class="field">
                 <label>Beantragt</label>
                 <span class="ui medium lightgray text">Requested vacation days</span>
-                <input tabindex="6" id="beantragt" name="beantragt" type="text" value="">
+                <div class="ui right labeled input">
+                  <input tabindex="6" id="beantragt" name="beantragt" type="text" placeholder="">
+                  <div class="ui basic label">
+                    days
+                  </div>
+                </div>
               </div>
               <div class="field">
                 <label id="resturlaubYEARlabel">Resturlaub [Year]</label>
                 <span class="ui medium lightgray text">Vacation days left over this year</span>
-                <input tabindex="7" name="resturlaubJAHR" type="text" value="">
+                <div class="ui right labeled input">
+                  <input tabindex="7" name="resturlaubJAHR" type="text" placeholder="">
+                  <div class="ui basic label">
+                    days
+                  </div>
+                </div>
               </div>
               <h4 class="ui horizontal divider header">
                 <i class="calendar alternate outline icon"></i>
@@ -106,13 +130,13 @@
               </h4>
               When would you like off?
               <div class="ui calendar" id="fromCalendar">
-                <div class="ui input left icon">
+                <div style="width: 100%;" class="ui input left icon">
                   <i class="calendar icon"></i>
                   <input tabindex="8" autocomplete="false" name="fromDate" placeholder="From Date">
                 </div>
               </div>
               <div class="ui calendar" id="toCalendar">
-                <div class="ui input left icon">
+                <div style="width: 100%;" class="ui input left icon">
                   <i class="calendar icon"></i>
                   <input tabindex="9" autocomplete="false" name="toDate" placeholder="To Date">
                 </div>
@@ -121,11 +145,11 @@
               <!-- TODO: Pull Managers from Dropdown and let Admins edit choices -->
               Please select an Approval Manager. <br>
               This person will receive the email to approve your vacation request.
-              <select tabindex="10" id="managerDropdown" name="manager" class="ui search selection dropdown">
+              <select style="width: 100% !important;"tabindex="10" id="managerDropdown" name="manager" class="ui search selection dropdown">
                 <option value="">Approval Manager</option>
-                <option value="nhartmann@newtelco.de">Natascha Hartmann</option>
+                <!-- <option value="nhartmann@newtelco.de">Natascha Hartmann</option>
                 <option value="jskribek@newtelco.de">Jens Skribek</option>
-                <option value="ndomino@newtelco.de">Nico Domino</option>
+                <option value="ndomino@newtelco.de">Nico Domino</option> -->
                 <div class="ui error message">
                   <div class="header">Selection Required</div>
                   <p>You must select a manager to approve your vacation request.</p>
@@ -133,11 +157,11 @@
               </select>
               <div class="ui section divider"></div>
               <div class="field">
-                <label>Note</label>
+                <!-- <label>Note</label> -->
                 <label class="sublabel">Optional note to manager</label>
                 <textarea tabindex="11" name="note" rows="2"></textarea>
               </div>
-              <div class="ui buttons">
+              <div style="width: 100%;" class="ui buttons">
                 <button id="clearBtn" style="width:initial" class="ui animated fade button">
                   <div class="visible content">clear</div>
                   <div class="hidden content">

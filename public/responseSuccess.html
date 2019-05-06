@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Newtelco Vacations - Dashboard</title>
+  <title>Newtelco Vacations - Response</title>
 
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-  <link rel="stylesheet" href="semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="../semantic/dist/semantic.min.css">
   <script src="semantic/dist/semantic.min.js"></script>
 
-  <link rel="stylesheet" href="css/simplebar.min.css">
+  <link rel="stylesheet" href="../css/simplebar.min.css">
   <script src="js/simplebar.min.js"></script>
 
   <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css" rel="stylesheet">
@@ -15,19 +15,16 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.js"></script>
   <script type="text/javascript" src="https://unpkg.com/@fullcalendar/daygrid/main.min.js"></script>
 
-  <!-- FullCal GoogleCal-->
-  <script type="text/javascript" src="components/fullcal_googlecal/main.min.js"></script>
-
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="../css/style.css">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon_white/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon_white/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon_white/favicon-16x16.png">
-  <link rel="manifest" href="manifest.json">
-  <link rel="mask-icon" href="images/favicon_white/safari-pinned-tab.svg" color="#51bda3">
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon_white/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon_white/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon_white/favicon-16x16.png">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="mask-icon" href="../images/favicon_white/safari-pinned-tab.svg" color="#51bda3">
+  <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
   <meta name="apple-mobile-web-app-title" content="Newtelco Vacations">
   <meta name="application-name" content="Newtelco Vacations">
   <meta name="msapplication-TileColor" content="#00aba9">
@@ -37,7 +34,7 @@
   <div class="ui fixed inverted menu">
     <div class="ui container">
       <span href="#" class="header item">
-        <img class="logo dashboardMenuImg" src="img/island_icon_white.png">
+        <img class="logo dashboardMenuImg" src="../img/island_icon_white.png">
         Newtelco Vacation
       </span>
       <a href="/dashboard" class="item">Home</a>
@@ -59,12 +56,26 @@
   </div>
   <div style="background: #fff" class="wrapper">
       <div class="ui three column grid dashboardGrid">
-        <div class="two wide column"></div>
-        <div class="twelve wide column">
-          <div id="calEl" class="cal_placeholder"> </div>
+        <div class="four wide column"></div>
+        <div class="eight wide column">
+          <div style="margin-top: 50px;" class="ui placeholder segment">
+            <div class="ui icon header">
+              <i class="thumbs up outline icon"></i><br>
+              Thank you for responding to this vacation request.<br><br>
+              Your answer has been saved and the user has been notified.
+            </div>
+            <!-- <div id="closeBtn" class="ui primary button">Close</div> -->
+          </div>
         </div>
-        <div class="two wide column"></div>
+        <div class="four wide column"></div>
       </div>
+      <script>
+        $('#closeBtn').on('click', () => {
+          window.opener = self
+          window.close()
+        })
+      
+      </script>
 
   </div>
   <script src="/dashboard.js"></script>

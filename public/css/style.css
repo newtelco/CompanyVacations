@@ -82,12 +82,12 @@ i.green.icon.icon.icon.icon {
 /* Cal Customizations */
 
 .cal_placeholder {
-    border-radius: 8px;
-    border: 10px solid rgba(103, 178, 70, 0.8);
-    box-shadow: 0px 0px 40px 1px rgba(103, 178, 70, 1);
+    border-radius: 5px;
+    border: 5px solid rgba(103, 178, 70, 0.8);
+    box-shadow: 0px 0px 10px 1px rgba(103, 178, 70, 0.5);
     padding: 10px;
-    height: 680px;
-    width: 820px;
+    max-height: 680px;
+    width: 100%;
     margin: 0 auto;
     margin-top: 10px;
 }
@@ -126,11 +126,11 @@ body .fc {
 #requestForm > .ui {
     margin-top: 15px;
     margin-bottom: 15px;
-    width: 100%;
+    /* width: 100%; */
 }
 
 #requestForm > .ui > .ui {
-    width: 100%;
+    /* width: 100%; */
 }
 
 .positive {

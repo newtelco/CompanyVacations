@@ -35,6 +35,8 @@ resturlaubYearLabel.text('Resturlaub ' + yearNow)
 // Fill full name into Name field on load
 $(document).ready(() => {
 
+    $('.ui.search.selection.dropdown').css('width','100%')
+
     var $form = $('#requestForm')
 
     let fullname = window.sessionStorage.getItem('user')
@@ -46,9 +48,39 @@ $(document).ready(() => {
         name : fullname,  
         email : emailAddress 
     })
-    // $form.form('set values', { email : emailAddress })
+
+    fetch('/request/managers', {
+        method: 'POST',
+        credentials: 'include',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // console.log(JSON.stringify(data))
+        
+        data.forEach((manager) => {
+            $('#managerDropdown').append('<option value="'+manager.email+'">'+manager.name+'</option>')
+        })
+
+        const userGroups = user.memberOf
+
+        userGroups.forEach((group) => {
+            if(group.includes('CN=Technik')) {
+                select = document.getElementById('managerDropdown')
+                for(var i = 0;i < select.options.length;i++){
+                    if(select.options[i].value == 'jskribek@newtelco.de' ){
+                        select.options[i].selected = true;
+                    }
+                }
+            }
+        })
+    })
+    .catch(error => console.error(error))
 
 })
+
 $('#jahresurlaubInsgesamt').blur(() => {
     const $form = $('.ui.form')
     const resturlaubVorjahrVal = parseFloat($form.form('get value', 'resturlaubVorjahr').replace(',', '.'))
@@ -194,7 +226,7 @@ onSuccess: function(evt, fields) {
     allFields = $form.form('get values')
     console.log(JSON.stringify(allFields))
 
-    fetch('/vacation/submit', {
+    fetch('/request/submit', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(allFields), 
