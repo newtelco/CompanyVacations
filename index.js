@@ -11,6 +11,65 @@ const uuid = require('uuid/v4')
 let {google} = require('googleapis')
 let privatekey = require('./nt_gsuite_priv.json')
 
+function addCal(summary, desc, start, end, user, calendarId) {
+  (() => {
+  "use strict";
+  const google_key = require("./nt_gsuite_priv.json"); 
+
+  var event = {
+    'summary': summary,
+    'description': desc,
+    'start': {
+      'dateTime': start,
+      // 'dateTime': '2015-05-28T09:00:00-07:00',
+      'timeZone': 'Europe/Berlin'
+    },
+    'end': {
+      'dateTime': end,
+      'timeZone': 'Europe/Berlin'
+    },
+    // 'recurrence': [
+    //   'RRULE:FREQ=DAILY;COUNT=2'
+    // ],
+    'attendees': [
+      {'email': user}
+    ],
+    'reminders': {
+      'useDefault': true
+      // 'overrides': [
+      //   {'method': 'email', 'minutes': 24 * 60},
+      //   {'method': 'popup', 'minutes': 10}
+      // ]
+    }
+  };
+
+  const jwtClient = new google.auth.JWT(
+    google_key.client_email,
+    null,
+    google_key.private_key,
+    ["https://mail.google.com/", "https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events"], 
+    'device@newtelco.de' 
+  );
+
+  jwtClient.authorize((err, tokens) => (err
+    ? console.log(err)
+    : (() => { 
+      console.log("Google-API Authed!");
+
+      let calendar = google.calendar('v3');
+      calendar.events.insert({
+        auth: jwtClient,
+        calendarId: calendarId,
+        resource: event
+      }, function (err, response) {
+        console.log(err)
+        console.log(response)
+      });
+    })() 
+  ))
+})();
+}
+
 function sendMsg(userName, userMail, subject, body) {
   (() => {
   "use strict";
@@ -230,19 +289,38 @@ app.get('/admin/response', (req, res) => {
         // then get associated user data to build emailnfirmation
 
         // TO DO: Fix up this SQL Query - somehow theres something wrong with the Syntax?!
-        connection.query('SELECT name, email, submitted_datetime, toDate, fromDate, approved WHERE approval_hash LIKE "' + id + '";', (error, results, fields) => {
+        connection.query('SELECT name, email, submitted_datetime, toDate, fromDate, approved FROM vacations WHERE approval_hash LIKE "' + id + '";', (error, results, fields) => {
         if (error) throw error
+
+          console.log('\n results:')
           console.log(results)
-          console.log(fields)
-          // const name = 
-          // sendMsg()
+          console.log(results[0].email)
+          // TO DO - if action = a (approve) then send mail to requester + add event to calendar of requester and newtelco vacations calendar
+          if(action == '2') {
+            ntvacaCal = 'newtelco.de_a2nm4ggh259c68lmim5e0mpp8o@group.calendar.google.com'
+
+            reqUser = results[0]
+            console.log(reqUser.submitted_datetime)
+            let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format()
+            console.log(reqDateTime)
+            let start = moment.utc(reqUser.fromDate).local().format()
+            let end = moment.utc(reqUser.toDate).local().format()
+            let userMail = reqUser.email
+            let userName = reqUser.name
+            let userCal = userMail
+            let summary = userName+' Vacation'
+            let desc = userName+' Vacation\nFrom: '+start+'\nTo: '+end
+
+            addCal(summary, desc, start, end, userMail, ntvacaCal)
+            addCal(summary, desc, start, end, userMail, userCal)
+          }
+          if(results.affectedRows > "0") {
+            res.sendFile(__dirname + "/public/responseSuccess.html")
+          }
         })
         // TO DO: save req URL and pass it into login path to redirect
         //    after successful login incase manager isnt pre-logged in 
         //    when approving vacation request
-        if(results.affectedRows > "0") {
-          res.sendFile(__dirname + "/public/responseSuccess.html")
-        }
       })
 
       // TO DO:
@@ -285,13 +363,45 @@ app.post('/admin/managers/update', (req, res) => {
     if (req.isAuthenticated() == true) {
 
       body = req.body
-      console.log(body)
       const id = body.id
-      console.log(id)
       const name = body.name
       const email = body.email
 
       connection.query('UPDATE managers SET name = "' + name + '", email = "' + email + '" WHERE id LIKE "' + id + '";', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/admin/managers/add', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      body = req.body
+      const id = body.id
+      const name = body.name
+      const email = body.email
+
+      connection.query('INSERT INTO managers SET name = "' + name + '", email = "' + email + '";', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/admin/managers/delete', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      body = req.body
+      const id = body.id
+
+      connection.query('DELETE FROM managers WHERE id = "' + id + '";', (error, results, fields) => {
         if (error) throw error
         // res.end(JSON.stringify(results))
         return res.status(202).send(results)
@@ -365,7 +475,9 @@ app.post('/request/submit', (req, res) => {
 
       console.log(newVaca)
 
-      const approval_hash = uuid()
+
+      let approval_hash = uuid()
+      approval_hash = approval_hash.replace(/-/g, '')
       const submitted_datetime = DateTime.local().toFormat('kkkk-MM-dd HH:mm:ss')
       const toDATE = DateTime.fromFormat(newVaca.toDate, 'LLLL d, yyyy').toISODate()
       const fromDATE = DateTime.fromFormat(newVaca.fromDate, 'LLLL d, yyyy').toISODate()
@@ -382,7 +494,7 @@ app.post('/request/submit', (req, res) => {
         return res.status(202).send(results)
       })
 
-      // SEND MAIL - GOOGLE API CLIENT?
+      // MANAGER APPROVE / DENY REQUEST
       const reqUser = newVaca['name']
       const reqfromDate = moment(newVaca['fromDate']).format('ddd MMM Do, YYYY')
       const reqtoDate = moment(newVaca['toDate']).format('ddd MMM Do, YYYY')

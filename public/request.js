@@ -21,7 +21,9 @@ $('#toCalendar').calendar({
 
 $('#submitBtn').on('click', function(e) {
     e.preventDefault()
-    $('#confirmModal').modal('show')
+    $('#confirmModal').modal({
+        transition: 'fly up'
+    }).modal('show')
 })
 
 // Resturlaub [YEAR] Form Replacement - dynamicism ;) 
@@ -247,6 +249,12 @@ onSuccess: function(evt, fields) {
                     displayTime: 5000,
                     className: {
                         toast: 'ui message'
+                    },
+                    transition: {
+                        showMethod   : 'fly right',
+                        showDuration : 1000,
+                        hideMethod   : 'fly left',
+                        hideDuration : 1000
                     }
                 });
         }

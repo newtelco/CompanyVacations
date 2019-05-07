@@ -28,9 +28,50 @@ fetch('/admin/managers', {
         // paginationSize: 5,
         data: data,
         columns: [
-            {title: "ID", field:"id", width: 80},
+            {title: "ID", field:"id", align: 'center', headerSort:false, width: 50},
             {title: "Name", field:"name", editor: "input"},
             {title: "Email", field:"email", editor: "input"},
+            {title: 'Delete', align: 'center', width: 70, headerSort:false, formatter:'buttonCross', cellClick: function(e, cell) {
+                $('.ui.basic.modal.confirmDeleteManager')
+                .modal({ onApprove: () => {
+                    cell.getRow().delete();
+                    let cellData = cell.getRow().getData();
+                    // TO DO: fetch to delete from DB
+                    fetch('/admin/managers/delete', {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: JSON.stringify(cellData),
+                        headers: new Headers({
+                            'Content-Type': 'application/json'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(JSON.stringify(data))
+                        if(data.changedRows > 0) {
+                            $('body').toast({
+                                    title: 'Manager Deleted',
+                                    message: 'Successfully deleted manager.',
+                                    class : 'green',
+                                    position: 'bottom left',
+                                    displayTime: 5000,
+                                    className: {
+                                        toast: 'ui message'
+                                    },
+                                    transition: {
+                                        showMethod   : 'fly right',
+                                        showDuration : 1000,
+                                        hideMethod   : 'fly left',
+                                        hideDuration : 1000
+                                    }
+                                });
+                            }
+                        
+                    })
+                    .catch(error => console.error(error))
+                }})
+                .modal('show')
+            }},
         ],
         cellEdited:function(cell) {
 
@@ -56,6 +97,12 @@ fetch('/admin/managers', {
                         displayTime: 5000,
                         className: {
                             toast: 'ui message'
+                        },
+                        transition: {
+                            showMethod   : 'fly right',
+                            showDuration : 1000,
+                            hideMethod   : 'fly left',
+                            hideDuration : 1000
                         }
                     });
                 }
@@ -268,7 +315,7 @@ $('#userSelectDropdown').dropdown({
                         if (cell.getValue() == "2") {
                             return "<i class='approvedIcon fa fa-check'></i>"
                         }
-                    },}
+                    }},
                 ]
             });
             Tabulator.prototype.extendModule("download", "downloaders", {
@@ -288,4 +335,29 @@ $('.userVacaDLBtn').on('click', () => {
     const date = moment().format('DDMMYYYY')
     const filename = name + '_' + date + '_' + 'vacationsExport.xlsx'
     table2.download("xlsx", filename, {sheetName:"vacations"}); 
+})
+
+$('#addManagerBtn').on('click', () => {
+    $('.ui.modal.addManager')
+    .modal('show');
+})
+
+$('#addManagerSubmitBtn').on('click', () => {
+
+    let managerForm = $('.ui.form.addManager').form('get values')
+    console.log(managerForm)
+
+        fetch('/admin/managers/add', {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify(managerForm),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(JSON.stringify(data))
+        })
+        .catch(error => console.error(error))
 })

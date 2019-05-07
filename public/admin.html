@@ -75,7 +75,7 @@
                 </div>
                 <div class="ui secondary segment">
                   <div id="managerTable"></div>
-                  <div class="ui tiny basic green labeled icon button">
+                  <div id="addManagerBtn" class="ui tiny basic green labeled icon button">
                     Add Manager
                     <i class="add icon"></i>
                   </div>
@@ -164,18 +164,6 @@
                       </div>
                     </div>
                   </div>
-                  <!-- <div id="monthlyReport" class="ui orange segment">
-                    Monthly
-                    <button class="ui orange basic mini right floated icon button"><i class="download icon"></i></button>
-                  </div>
-                  <div id="quarterlyReport" class="ui yellow segment">
-                    Quarterly
-                    <button class="ui yellow basic mini right floated icon button"><i class="download icon"></i></button>
-                  </div>
-                  <div id="yearlyReport" class="ui olive segment">
-                    Yearly
-                    <button class="ui olive basic mini right floated icon button"><i class="download icon"></i></button>
-                  </div> -->
                 </div>
               </div>
 
@@ -227,8 +215,55 @@
         </div>
         <div class="one wide column"></div>
       </div>
-
-  </div>
+      <div class="ui basic modal confirmDeleteManager">
+        <div class="ui icon header">
+          <i class="archive icon"></i>
+          Confirm Delete
+        </div>
+        <div class="content">
+          <p class="delManagerModalText">Are you sure you want to delete this manager?</p>
+        </div>
+        <div class="actions">
+          <div class="ui red basic cancel inverted button">
+            <i class="remove icon"></i>
+            No
+          </div>
+          <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+          </div>
+        </div>
+      </div>
+      <div class="ui modal addManager">
+        <div class="header">
+          Add Manager
+        </div>
+        <div class="image content">
+          <div class="description">
+            <div class="ui header">Please fill out the following form to add a new Manager</div>
+            <form class="ui form addManager">
+              <div class="field">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Full Name">
+              </div>
+              <div class="field">
+                <label>Email Address</label>
+                <input type="text" name="email" placeholder="Email Address">
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="actions">
+          <div class="ui black deny button">
+            Cancel
+          </div>
+          <div id="addManagerSubmitBtn" class="ui positive right labeled icon button">
+            Add
+            <i class="checkmark icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   <script src="/admin.js"></script>
 </body>
 </html>
