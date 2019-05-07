@@ -217,14 +217,14 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/dashboard', (req, res) => {
-  var user = req.user
-  // TEST
-  for(i = 0; i < user.memberOf.length; i++) {
-    console.log(user.memberOf[i])
-  }
   console.log('\nInside GET /dashboard callback')
   console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
+    var user = req.user
+    // TEST
+    for(i = 0; i < user.memberOf.length; i++) {
+      console.log(user.memberOf[i])
+    }
     res.sendFile(__dirname + '/public/dashboard.html')
   } else {
     return res.redirect('/')
@@ -313,7 +313,13 @@ app.get('/admin/response', (req, res) => {
 
             addCal(summary, desc, start, end, userMail, ntvacaCal)
             addCal(summary, desc, start, end, userMail, userCal)
+
+            //TO DO - send mail to user: vaca approved
+          } else if (action == '1') {
+            //TO DO - send mail to user vaca denied.
+
           }
+
           if(results.affectedRows > "0") {
             res.sendFile(__dirname + "/public/responseSuccess.html")
           }
@@ -323,10 +329,6 @@ app.get('/admin/response', (req, res) => {
         //    when approving vacation request
       })
 
-      // TO DO:
-      // 1. send response to manager - approved / denied successfully
-
-      // 2. send email to requester - your vacation has been approved
 
     } else {
       return res.status(403).send('Forbidden!')
@@ -515,28 +517,6 @@ app.post('/request/submit', (req, res) => {
 
       sendMsg(mgrName, mgrMail, msgSubject, msgBody)
 
-      // function sendMsg(userName, userMail, subject, body) 
-      
-      //Google Calendar API
-      // let calendar = google.calendar('v3');
-      // calendar.events.list({
-      //   auth: jwtClient,
-      //   calendarId: 'newtelco.de_a2nm4ggh259c68lmim5e0mpp8o@group.calendar.google.com'
-      // }, function (err, response) {
-      //   if (err) {
-      //       console.log('The API returned an error: ' + err);
-      //       return;
-      //   }
-      //   var events = response.items;
-      //   if (events.length == 0) {
-      //       console.log('No events found.');
-      //   } else {
-      //       console.log('Event from Google Calendar:');
-      //       for (let event of response.items) {
-      //           console.log('Event name: %s, Creator name: %s, Create date: %s', event.summary, event.creator.displayName, event.start.date);
-      //       }
-      //   }
-      // });
 
     } else {
       return res.status(403).send('Forbidden!')
