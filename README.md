@@ -1,4 +1,4 @@
-![logo](/public/nt_vacation.png)
+<img src="https://vacation.newtelco.dev/public/nt_vacation.png" width="64" height="64">
 Newtelco Vacation Application  
 
 [![newtelco](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg?style=flat-square)](https://vacation.newtelco.de)
@@ -11,9 +11,9 @@ Newtelco Vacation Application
 
 ## Screenshots
 
-<img src="http://i.imgur.com/fcEAzvM.png" width="860" height="426">
-<img src="http://i.imgur.com/cWbc0X3.png" width="860" height="426">
-<img src="http://i.imgur.com/Zn7GZg8.png" width="860" height="426">
+<img src="http://i.imgur.com/fcEAzvM.png" width="860" height="526">
+<img src="http://i.imgur.com/cWbc0X3.png" width="860" height="526">
+<img src="http://i.imgur.com/Zn7GZg8.png" width="860" height="526">
 
 ## Setup  
 
