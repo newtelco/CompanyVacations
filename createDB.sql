@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 04, 2019 at 11:20 PM
+-- Generation Time: May 08, 2019 at 02:57 PM
 -- Server version: 10.3.13-MariaDB-1:10.3.13+maria~bionic
 -- PHP Version: 7.2.17-0ubuntu0.18.04.1
 
@@ -32,14 +32,14 @@ CREATE TABLE `vacations` (
   `id` int(16) NOT NULL,
   `name` varchar(128) NOT NULL,
   `email` varchar(256) NOT NULL,
-  `resturlaubVorjahr` decimal(8,0) NOT NULL,
-  `jahresurlaubInsgesamt` decimal(8,0) NOT NULL,
-  `restjahresurlaubInsgesamt` decimal(8,0) NOT NULL,
-  `beantragt` decimal(8,0) NOT NULL,
-  `resturlaubJAHR` decimal(8,0) NOT NULL,
+  `resturlaubVorjahr` decimal(8,1) NOT NULL,
+  `jahresurlaubInsgesamt` decimal(8,1) NOT NULL,
+  `restjahresurlaubInsgesamt` decimal(8,1) NOT NULL,
+  `beantragt` decimal(8,1) NOT NULL,
+  `resturlaubJAHR` decimal(8,1) NOT NULL,
   `fromDate` date NOT NULL,
   `toDate` date NOT NULL,
-  `manager` varchar(128) NOT NULL,
+  `manager` varchar(128) NOT NULL DEFAULT 'nhartmann@newtelco.de',
   `note` varchar(512) DEFAULT NULL,
   `submitted_datetime` datetime NOT NULL,
   `submitted_by` varchar(64) NOT NULL,
