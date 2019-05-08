@@ -149,6 +149,41 @@ body .fc {
 
 }
 
+/* Go Top */
+.go-top {
+    position: fixed;
+    bottom: 2em;
+    right: 2em;
+    text-decoration: none;
+    color: white;
+    background-color: #f6f6f6;
+    background-color: rgba(0, 0, 0, 0.3);
+    font-size: 12px;
+    padding: 18px;
+    border-radius: 3px;
+    display: none;
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+.go-top:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.go-top i {
+    height: 0;
+    width: 0;
+    position: absolute;
+    top: 9px;
+    left: 8px;
+    border-bottom: 17px solid white;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+
 /* My Vacations */
 
 .overviewHeader {
