@@ -1,3 +1,5 @@
+const dotenv = require('dotenv')
+const env = dotenv.config({ path: './config.env' })
 const express = require('express')
 const session = require('express-session')
 const FileStore = require('session-file-store')(session)
@@ -9,42 +11,32 @@ const moment = require('moment')
 const { DateTime } = require('luxon')
 const uuid = require('uuid/v4')
 let {google} = require('googleapis')
-let privatekey = require('./nt_gsuite_priv.json')
+const google_key = require(process.env.GS_APIKEY)
+
+
+
 
 function addCal(summary, desc, start, end, user, calendarId) {
   (() => {
   "use strict";
-  const google_key = require("./nt_gsuite_priv.json"); 
+  // const google_key = require("./nt_gsuite_priv.json"); 
 
   var event = {
     'summary': summary,
     'description': desc,
     'start': {
       'date': start,
-      // 'dateTime': '2015-05-28T09:00:00-07:00',
       'timeZone': 'Europe/Berlin'
     },
     'end': {
       'date': end,
       'timeZone': 'Europe/Berlin'
     },
-    // 'recurrence': [
-    //   'RRULE:FREQ=DAILY;COUNT=2'
-    // ],
     'attendees': [
       {'email': user}
     ],
     'reminders': {
       'useDefault': true
-      // 'overrides': [
-      //   {'method': 'email', 'minutes': 24 * 60},
-      //   {'method': 'popup', 'minutes': 10}
-      // ]
-    },
-    'gadget': {
-      'display': 'chip',
-      'iconLink': 'https://home.newtelco.de/nt_512.png',
-      'link': 'https://vacation.newtelco.dev'
     }
   };
 
@@ -53,7 +45,7 @@ function addCal(summary, desc, start, end, user, calendarId) {
     null,
     google_key.private_key,
     ["https://mail.google.com/", "https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events"], 
-    'device@newtelco.de' 
+    process.env.GS_USER
   );
 
   jwtClient.authorize((err, tokens) => (err
@@ -78,7 +70,7 @@ function addCal(summary, desc, start, end, user, calendarId) {
 function sendMsg(userName, userMail, subject, body) {
   (() => {
   "use strict";
-  const google_key = require("./nt_gsuite_priv.json"); 
+  // const google_key = require("./nt_gsuite_priv.json"); 
 
   subject = '[VACATION] ' + subject
   const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
@@ -108,7 +100,7 @@ function sendMsg(userName, userMail, subject, body) {
     null,
     google_key.private_key,
     ["https://mail.google.com/", "https://www.googleapis.com/auth/calendar"], 
-    'device@newtelco.de' 
+    process.env.GS_USER
   );
 
   jwtClient.authorize((err, tokens) => (err
@@ -120,7 +112,7 @@ function sendMsg(userName, userMail, subject, body) {
         auth: jwtClient
       });
       gmail.users.messages.send({
-        userId: 'device@newtelco.de',
+        userId: process.env.GS_USER,
         resource: {
           raw: encodedMessage
         }
@@ -136,11 +128,11 @@ function sendMsg(userName, userMail, subject, body) {
 }
 
 var connection = mysql.createConnection({
-  host     : '127.0.0.1',
-  user     : 'ntvacations',
-  password : 'N3wt3lco',
-  database : 'ntvacations',
-  port     : 3306
+  host     : process.env.DB_HOST,
+  user     : process.env.DB_USER,
+  password : process.env.DB_PW,
+  database : process.env.DB,
+  port     : process.env.DB_PORT
 })
 
 connection.connect((err) => {
@@ -150,11 +142,11 @@ connection.connect((err) => {
 
 var OPTS = {
     server: {
-        url: 'ldap://ldap.newtelco.dev:389',
-        bindDN: 'cn=jcleese,ou=technik,ou=users,ou=frankfurt,dc=newtelco,dc=local',
-        bindCredentials: 'N3wt3lco',
-        searchBase: 'ou=users,ou=frankfurt,dc=newtelco,dc=local',
-        searchFilter: '(cn={{username}})'
+        url             : process.env.LDAP_URL,
+        bindDN          : process.env.LDAP_BINDDN,
+        bindCredentials : process.env.LDAP_BINDPW,
+        searchBase      : process.env.LDAP_SEARCHBASE,
+        searchFilter    : process.env.LDAP_SEARCHFILTER
     }
 }
 
@@ -307,7 +299,8 @@ app.get('/admin/response', (req, res) => {
           let userName = reqUser.name
 
           if(action == '2') {
-            ntvacaCal = 'newtelco.de_a2nm4ggh259c68lmim5e0mpp8o@group.calendar.google.com'
+            ntvacaCal = process.env.GS_CALID
+            //  'newtelco.de_a2nm4ggh259c68lmim5e0mpp8o@group.calendar.google.com'
 
             let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format('DD.MM.YYYY HH:mm:ss')
             let summary = userName+' Vacation'
@@ -552,7 +545,7 @@ app.post('/request/submit', (req, res) => {
       } else {
         optNote = ''
       }
-      let msgBody = '<html><head> <style>@font-face{font-family: "Lato"; font-style: normal; font-weight: 300; src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh7USSwiPGQ.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face{font-family: "Lato"; font-style: normal; font-weight: 400; src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXg.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}html{font-family: Lato, Arial;}img{display: block; margin: auto;}#wrapper{max-width: 600px; margin: 0 auto;}#header{height: 80px; margin: auto 0; background-color: #67B246; width: 100%; text-align: center; line-height: 80px;}#subheader{text-align: center;}h1{font-size: 34px; color: #ffffff; font-weight: 300;}h3{font-size: 18px; font-weight: 900;}hr{width: 90%; height: 3px; border: none; color: #67B246; background-color: #67B246;}#msgBody > p{padding: 15px;}.dateSpan{display: inline-block; width: 45%;}.dateBox{border: 4px solid #8c8c8c; border-radius: 10px; padding: 40px; margin-top: 20px; margin-bottom: 20px; height: 220px;}.dateBox:after{clear: both;}.dateHeader{color: #8c8c8c; display: inline-block; font-size: 28px; text-align: center; width: 100%; font-weight: 800; margin-bottom: 5px;}.fa-calendar-alt{margin-bottom: 5px;}.fa-calendar-alt, .dateText{color: #8c8c8c; display: inline-block; text-align: center; width: 100%;}.dateText{font-size: 22px; font-weight: 900;}.btnWrapper{}.button{margin-top: 10px; display: inline-block; font-size: 24px; font-weight: 900; width: 200px; height: 60px; text-align: center; line-height: 60px; text-decoration: none; color: #ffffff !important; border-radius: 5px;}.negative{margin-left: 70px; background-color: rgba(255, 0, 0, 0.5);}.negative:hover{box-shadow: 0 0 20px 1px rgba(255, 0, 0, 0.7);}.positive{margin-right: 70px; background-color: #67B246; float: right;}.positive:hover{box-shadow: 0 0 20px 1px #67B246;}.footerBar{background-color:#67B246;text-align:center;color:#fff;font-size:16px;font-weight:300;line-height:60px;height:60px;width:100%;margin-top: 40px;}</style></head><body> <div id="wrapper"> <div id="header"> <h1>Vacation Request</h1> </div><div id="subheader"> <h3>New Vacation Request from ' + reqUser + '</h3> <hr> </div><div id="msgBody"> <p style="margin-bottom:0 !important;font-size: 16px;"> There has been a new vacation request from ' + reqUser + ' <br><br>Please approve or deny this request below. This user will be notified via email of your decision. </p>' + optNote + '<div class="dateBox"> <div style="float: left;" class="dateSpan"> <div class="dateHeader">From</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqfromDate + '</h2> </div><div style="float: right;" class="dateSpan"> <div class="dateHeader">To</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqtoDate + '</h2> </div></div><div class="btnWrapper"> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=d" class="button negative">Deny</a> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=a" class="button positive">Approve</a> </div></div><div class="footerBar">' + dateToday + '  <b>|</b>  <3 ndom91  <b>|</b>  NewTelco GmbH</div></div></body></html>'
+      let msgBody = '<html><head> <style>@font-face{font-family: "Lato"; font-style: normal; font-weight: 300; src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh7USSwiPGQ.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face{font-family: "Lato"; font-style: normal; font-weight: 400; src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXg.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}html{font-family: Lato, Arial;}img{display: block; margin: auto;}#wrapper{max-width: 600px; margin: 0 auto;}#header{height: 80px; margin: auto 0; background-color: #67B246; width: 100%; text-align: center; line-height: 80px;}#subheader{text-align: center;}h1{font-size: 34px; color: #ffffff; font-weight: 300;}h3{font-size: 18px; font-weight: 900;}hr{width: 90%; height: 3px; border: none; color: #67B246; background-color: #67B246;}#msgBody > p{padding: 15px;}.dateSpan{display: inline-block; width: 45%;}.dateBox{border: 4px solid #8c8c8c; border-radius: 10px; padding: 40px; margin-top: 20px; margin-bottom: 20px; height: 220px;}.dateBox:after{clear: both;}.dateHeader{color: #8c8c8c; display: inline-block; font-size: 28px; text-align: center; width: 100%; font-weight: 800; margin-bottom: 5px;}.fa-calendar-alt{margin-bottom: 5px;}.fa-calendar-alt, .dateText{color: #8c8c8c; display: inline-block; text-align: center; width: 100%;}.dateText{font-size: 22px; font-weight: 900;}.btnWrapper{}.button{margin-top: 10px; display: inline-block; font-size: 24px; font-weight: 900; width: 200px; height: 60px; text-align: center; line-height: 60px; text-decoration: none; color: #ffffff !important; border-radius: 5px;}.negative{margin-left: 70px; background-color: rgba(255, 0, 0, 0.5);}.negative:hover{box-shadow: 0 0 20px 1px rgba(255, 0, 0, 0.7);}.positive{margin-right: 70px; background-color: #67B246; float: right;}.positive:hover{box-shadow: 0 0 20px 1px #67B246;}.footerBar{background-color:#67B246;text-align:center;color:#fff;font-size:16px;font-weight:300;line-height:60px;height:60px;width:100%;margin-top: 40px;}</style></head><body> <div id="wrapper"> <div id="header"> <h1>Vacation Request</h1> </div><div id="subheader"> <h3>New Vacation Request from ' + reqUser + '</h3> <hr> </div><div id="msgBody"> <p style="margin-bottom:0 !important;font-size: 16px;"> There has been a new vacation request from ' + reqUser + ' <br><br>Please approve or deny this request below. This user will be notified via email of your decision. </p>' + optNote + '<div class="dateBox"> <div style="float: left;" class="dateSpan"> <div class="dateHeader">From</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqfromDate + '</h2> </div><div style="float: right;" class="dateSpan"> <div class="dateHeader">To</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqtoDate + '</h2> </div></div><div class="btnWrapper"> <a href="'+process.env.BASE_URL+'/admin/response?h=' + approval_hash + '&a=d" class="button negative">Deny</a> <a href="'+process.env.BASE_URL+'/admin/response?h=' + approval_hash + '&a=a" class="button positive">Approve</a> </div></div><div class="footerBar">' + dateToday + '  <b>|</b>  <3 ndom91  <b>|</b>  NewTelco GmbH</div></div></body></html>'
 
 
       mgrName = mgrMail.substring(0, mgrMail.lastIndexOf("@"));
@@ -565,6 +558,7 @@ app.post('/request/submit', (req, res) => {
     }
 })
 
-app.listen(7555, () => {
-    console.log('Server running on http://localhost:7555')
+port = process.env.PORT || 7555
+app.listen(port, () => {
+    console.log('Server running on http://localhost:'+port)
 })

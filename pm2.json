@@ -1,0 +1,9 @@
+{
+  "apps" : [{
+    "name"        : "Newtelco Vacation",
+    "script"      : "/opt/vacation_node/index.js",
+    "autorestart" : true,
+    "watch"       : true,
+    "ignore_watch": ["node_modules","sessions"]
+  }]
+}
