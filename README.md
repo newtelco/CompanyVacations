@@ -1,4 +1,4 @@
-<img src="https://vacation.newtelco.dev/public/nt_vacation.png" width="64" height="64">
+<img src="https://vacation.newtelco.dev/nt_vacation.png" width="64" height="64">
 Newtelco Vacation Application  
 
 [![newtelco](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg?style=flat-square)](https://vacation.newtelco.de)
@@ -11,15 +11,15 @@ Newtelco Vacation Application
 
 ## Screenshots
 
-<img src="http://i.imgur.com/fcEAzvM.png" width="860" height="526">
-<img src="http://i.imgur.com/cWbc0X3.png" width="860" height="526">
-<img src="http://i.imgur.com/Zn7GZg8.png" width="860" height="526">
+<img src="http://i.imgur.com/fcEAzvM.png" width="860" height="546">
+<img src="http://i.imgur.com/cWbc0X3.png" width="860" height="546">
+<img src="http://i.imgur.com/Zn7GZg8.png" width="860" height="546">
 
 ## Setup  
 
 1. Clone this repo  
 2. Run `npm install`  
-3. Visit localhost:7555 
+3. Visit localhost:7555  
   3a. Or reverse proxy that port out via nginx   
 
 ## Contributing  
