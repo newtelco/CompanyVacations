@@ -20,12 +20,12 @@ function addCal(summary, desc, start, end, user, calendarId) {
     'summary': summary,
     'description': desc,
     'start': {
-      'dateTime': start,
+      'date': start,
       // 'dateTime': '2015-05-28T09:00:00-07:00',
       'timeZone': 'Europe/Berlin'
     },
     'end': {
-      'dateTime': end,
+      'date': end,
       'timeZone': 'Europe/Berlin'
     },
     // 'recurrence': [
@@ -40,6 +40,11 @@ function addCal(summary, desc, start, end, user, calendarId) {
       //   {'method': 'email', 'minutes': 24 * 60},
       //   {'method': 'popup', 'minutes': 10}
       // ]
+    },
+    'gadget': {
+      'display': 'chip',
+      'iconLink': 'https://home.newtelco.de/nt_512.png',
+      'link': 'https://vacation.newtelco.dev'
     }
   };
 
@@ -63,7 +68,7 @@ function addCal(summary, desc, start, end, user, calendarId) {
         resource: event
       }, function (err, response) {
         console.log(err)
-        console.log(response)
+        // console.log(response)
       });
     })() 
   ))
@@ -121,8 +126,9 @@ function sendMsg(userName, userMail, subject, body) {
         }
       }, (err, messages) => {
         //will print out an array of messages plus the next page token
-        console.log(err);
-        console.dir(messages);
+        // console.log(err);
+        // console.log('[*] jwtMessage block')
+        // console.dir(messages);
       });
     })() 
   ));
@@ -176,9 +182,6 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-
-// Handle the different routes
-// create the homepage route at '/'
 app.get('/', (req, res) => {
   console.log('Inside the homepage callback function')
   console.log(`User authenticated? ${req.isAuthenticated()}`)
@@ -190,7 +193,8 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     console.log('Inside the /login GET callback')
     console.log(req.sessionID)
-    res.send(`You got to the login page!\n`)
+    res.status(403).redirect('/#login-failed')
+    // res.send(`You got to the login page!\n`)
 })
 
 app.post('/login', (req, res, next) => {
@@ -200,7 +204,8 @@ app.post('/login', (req, res, next) => {
     }
     if (! user) {
       console.log('\nRequest Login failed!')
-      return res.send({ success : false, message : 'authentication failed' });
+      return res.status(403).redirect('/?failed=1')
+      // return res.send({ success : false, message : 'authentication failed' });
     }
     req.login(user,(err) => {
         if (err) return next(err)
@@ -220,11 +225,11 @@ app.get('/dashboard', (req, res) => {
   console.log('\nInside GET /dashboard callback')
   console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
-    var user = req.user
     // TEST
-    for(i = 0; i < user.memberOf.length; i++) {
-      console.log(user.memberOf[i])
-    }
+    // var user = req.user
+    // for(i = 0; i < user.memberOf.length; i++) {
+    //   console.log(user.memberOf[i])
+    // }
     res.sendFile(__dirname + '/public/dashboard.html')
   } else {
     return res.redirect('/')
@@ -282,46 +287,50 @@ app.get('/admin/response', (req, res) => {
       const datetimeNow = moment().format('YYYY-MM-DD HH:mm:ss')
 
       // on request resposne, first update the DB with approval value
-      connection.query('UPDATE vacations SET approval_datetime = "' + datetimeNow + '", approved = "' + action + '" WHERE approval_hash LIKE "' + id + '";', (error, results, fields) => {
+      connection.query('UPDATE vacations SET approval_datetime = "' + datetimeNow + '", approved = "' + action + '" WHERE approval_hash LIKE "' + id + '";', (error, results1, fields) => {
         if (error) throw error
-        // res.end(JSON.stringify(results))
-        //return res.status(202).send(results)
-        // then get associated user data to build emailnfirmation
 
-        // TO DO: Fix up this SQL Query - somehow theres something wrong with the Syntax?!
         connection.query('SELECT name, email, submitted_datetime, toDate, fromDate, approved FROM vacations WHERE approval_hash LIKE "' + id + '";', (error, results, fields) => {
         if (error) throw error
 
-          console.log('\n results:')
-          console.log(results)
-          console.log(results[0].email)
-          // TO DO - if action = a (approve) then send mail to requester + add event to calendar of requester and newtelco vacations calendar
+          // console.log('\n results:')
+          // console.log(results)
+          // console.log(results[0].email)
+
+          reqUser = results[0]
+          let start = moment.utc(reqUser.fromDate).local().format('YYYY-MM-DD')
+          let end = moment.utc(reqUser.toDate).local().format('YYYY-MM-DD')
+          console.log(start + '\n' + end)
+          let mailStart = moment(start).format('DD.MM.YYYY')
+          let mailEnd = moment(end).format('DD.MM.YYYY')
+          let userMail = reqUser.email
+          let userName = reqUser.name
+
           if(action == '2') {
             ntvacaCal = 'newtelco.de_a2nm4ggh259c68lmim5e0mpp8o@group.calendar.google.com'
 
-            reqUser = results[0]
-            console.log(reqUser.submitted_datetime)
-            let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format()
-            console.log(reqDateTime)
-            let start = moment.utc(reqUser.fromDate).local().format()
-            let end = moment.utc(reqUser.toDate).local().format()
-            let userMail = reqUser.email
-            let userName = reqUser.name
-            let userCal = userMail
+            let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format('DD.MM.YYYY HH:mm:ss')
             let summary = userName+' Vacation'
-            let desc = userName+' Vacation\nFrom: '+start+'\nTo: '+end
+            let desc = userName+' Vacation\n\nFrom: '+mailStart+'\nTo: '+mailEnd+'\n\n'+'Submitted On: '+reqDateTime+'\n\n'+'https://vacations.newtelco.de'
 
+            // end + 1 day hack for google calendar
+            end = moment(end).local().add(1,'d').format('YYYY-MM-DD')
             addCal(summary, desc, start, end, userMail, ntvacaCal)
-            addCal(summary, desc, start, end, userMail, userCal)
 
-            //TO DO - send mail to user: vaca approved
+            let userSubject = 'Request Approved'
+            let userBody = '<html><head> <style>@font-face{font-family: "Lato"; font-style: normal; font-weight: 300; src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh7USSwiPGQ.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face{font-family: "Lato"; font-style: normal; font-weight: 400; src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXg.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}html{font-family: Lato, Arial;}img{display: block; margin: auto;}#wrapper{max-width: 600px; margin: 0 auto;}#header{height: 80px; margin: auto 0; background-color: #67B246; width: 100%; text-align: center; line-height: 80px;}#subheader{text-align: center;}h1{font-size: 34px; color: #ffffff; font-weight: 300;}h3{font-size: 18px; font-weight: 900;}hr{width: 90%; height: 3px; border: none; color: #67B246; background-color: #67B246;}#msgBody > p{padding: 15px;}.dateSpan{display: inline-block; width: 45%;}.dateBox{border: 4px solid #8c8c8c; border-radius: 10px; padding: 40px; margin-top: 20px; margin-bottom: 20px; height: 220px;}.dateBox:after{clear: both;}.dateHeader{color: #8c8c8c; display: inline-block; font-size: 28px; text-align: center; width: 100%; font-weight: 800; margin-bottom: 5px;}.fa-calendar-alt{margin-bottom: 5px;}.fa-calendar-alt, .dateText{color: #8c8c8c; display: inline-block; text-align: center; width: 100%;}.dateText{font-size: 22px; font-weight: 900;}.btnWrapper{}.button{margin-top: 10px; display: inline-block; font-size: 24px; font-weight: 900; width: 200px; height: 60px; text-align: center; line-height: 60px; text-decoration: none; color: #ffffff !important; border-radius: 5px;}.negative{margin-left: 70px; background-color: rgba(255, 0, 0, 0.5);}.negative:hover{box-shadow: 0 0 20px 1px rgba(255, 0, 0, 0.7);}.positive{margin-right: 70px; background-color: #67B246; float: right;}.positive:hover{box-shadow: 0 0 20px 1px #67B246;}.footerBar{background-color:#67B246;text-align:center;color:#fff;font-size:16px;font-weight:300;line-height:60px;height:60px;width:100%;margin-top: 40px;}</style></head><body> <div id="wrapper"> <div id="header"> <h1>Vacation Request</h1> </div><div id="subheader"> <h3>Vacation Request Approved</h3> <hr> </div><div id="msgBody"> <p style="margin-bottom:0 !important;font-size: 16px;">Hello ' + userName + ', <br><br>We would like to inform you that your vacation request has been approved</p><div class="dateBox"> <div style="float: left;" class="dateSpan"> <div class="dateHeader">From</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + mailStart + '</h2> </div><div style="float: right;" class="dateSpan"> <div class="dateHeader">To</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + mailEnd + '</h2> </div></div></div><div class="footerBar"><3 ndom91  <b>|</b>  NewTelco GmbH</div></div></body></html>'
+            sendMsg(userName, userMail, userSubject, userBody)
           } else if (action == '1') {
-            //TO DO - send mail to user vaca denied.
 
+            let userSubject = 'Request Denied'
+            let userBody = '<html><head> <style>@font-face{font-family: "Lato"; font-style: normal; font-weight: 300; src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh7USSwiPGQ.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face{font-family: "Lato"; font-style: normal; font-weight: 400; src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXg.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}html{font-family: Lato, Arial;}img{display: block; margin: auto;}#wrapper{max-width: 600px; margin: 0 auto;}#header{height: 80px; margin: auto 0; background-color: #67B246; width: 100%; text-align: center; line-height: 80px;}#subheader{text-align: center;}h1{font-size: 34px; color: #ffffff; font-weight: 300;}h3{font-size: 18px; font-weight: 900;}hr{width: 90%; height: 3px; border: none; color: #67B246; background-color: #67B246;}#msgBody > p{padding: 15px;}.dateSpan{display: inline-block; width: 45%;}.dateBox{border: 4px solid #8c8c8c; border-radius: 10px; padding: 40px; margin-top: 20px; margin-bottom: 20px; height: 220px;}.dateBox:after{clear: both;}.dateHeader{color: #8c8c8c; display: inline-block; font-size: 28px; text-align: center; width: 100%; font-weight: 800; margin-bottom: 5px;}.fa-calendar-alt{margin-bottom: 5px;}.fa-calendar-alt, .dateText{color: #8c8c8c; display: inline-block; text-align: center; width: 100%;}.dateText{font-size: 22px; font-weight: 900;}.btnWrapper{}.button{margin-top: 10px; display: inline-block; font-size: 24px; font-weight: 900; width: 200px; height: 60px; text-align: center; line-height: 60px; text-decoration: none; color: #ffffff !important; border-radius: 5px;}.negative{margin-left: 70px; background-color: rgba(255, 0, 0, 0.5);}.negative:hover{box-shadow: 0 0 20px 1px rgba(255, 0, 0, 0.7);}.positive{margin-right: 70px; background-color: #67B246; float: right;}.positive:hover{box-shadow: 0 0 20px 1px #67B246;}.footerBar{background-color:#67B246;text-align:center;color:#fff;font-size:16px;font-weight:300;line-height:60px;height:60px;width:100%;margin-top: 40px;}</style></head><body> <div id="wrapper"> <div id="header"> <h1>Vacation Request</h1> </div><div id="subheader"> <h3>Vacation Request Denied</h3> <hr> </div><div id="msgBody"> <p style="margin-bottom:0 !important;font-size: 16px;">Hello ' + userName + ', <br><br>We regret to inform you, that your vacation request has been denied.</p><div class="dateBox"> <div style="float: left;" class="dateSpan"> <div class="dateHeader">From</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + mailStart + '</h2> </div><div style="float: right;" class="dateSpan"> <div class="dateHeader">To</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + mailEnd + '</h2> </div></div></div><div class="footerBar"><3 ndom91  <b>|</b>  NewTelco GmbH</div></div></body></html>'
+            sendMsg(userName, userMail, userSubject, userBody)
           }
 
-          if(results.affectedRows > "0") {
+          if(results1.affectedRows > 0) {
             res.sendFile(__dirname + "/public/responseSuccess.html")
+          } else {
+            res.sendFile(__dirname + "/public/responseError.html")
           }
         })
         // TO DO: save req URL and pass it into login path to redirect
@@ -388,6 +397,39 @@ app.post('/admin/managers/add', (req, res) => {
       const email = body.email
 
       connection.query('INSERT INTO managers SET name = "' + name + '", email = "' + email + '";', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/report/year', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      body = req.body
+      const year = body.year 
+
+      connection.query('SELECT * FROM vacations WHERE YEAR(submitted_datetime) = "' + year + '";', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      return res.status(403).send('Forbidden!')
+    }
+})
+
+app.post('/report/month', (req, res) => {
+    if (req.isAuthenticated() == true) {
+
+      body = req.body
+      const month = body.month
+      const year = body.year 
+
+      connection.query('SELECT * FROM vacations WHERE MONTH(submitted_datetime) = "' + month + '" AND YEAR(submitted_datetime) = "' + year + '";', (error, results, fields) => {
         if (error) throw error
         // res.end(JSON.stringify(results))
         return res.status(202).send(results)
@@ -510,7 +552,7 @@ app.post('/request/submit', (req, res) => {
       } else {
         optNote = ''
       }
-      let msgBody = '<html><head> <style>@font-face{font-family: "Lato"; font-style: normal; font-weight: 300; src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh7USSwiPGQ.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face{font-family: "Lato"; font-style: normal; font-weight: 400; src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXg.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}html{font-family: Lato, Arial;}img{display: block; margin: auto;}#wrapper{max-width: 600px; margin: 0 auto;}#header{height: 80px; margin: auto 0; background-color: #67B246; width: 100%; text-align: center; line-height: 80px;}#subheader{text-align: center;}h1{font-size: 34px; color: #ffffff; font-weight: 300;}h3{font-size: 18px; font-weight: 900;}hr{width: 90%; height: 3px; border: none; color: #67B246; background-color: #67B246;}#msgBody > p{padding: 15px;}.dateSpan{display: inline-block; width: 45%;}.dateBox{border: 4px solid #8c8c8c; border-radius: 10px; padding: 40px; margin-top: 20px; margin-bottom: 20px; height: 220px;}.dateBox:after{clear: both;}.dateHeader{color: #8c8c8c; display: inline-block; font-size: 28px; text-align: center; width: 100%; font-weight: 800; margin-bottom: 5px;}.fa-calendar-alt{margin-bottom: 5px;}.fa-calendar-alt, .dateText{color: #8c8c8c; display: inline-block; text-align: center; width: 100%;}.dateText{font-size: 24px; font-weight: 900;}.btnWrapper{}.button{margin-top: 10px; display: inline-block; font-size: 24px; font-weight: 900; width: 200px; height: 60px; text-align: center; line-height: 60px; text-decoration: none; color: #ffffff !important; border-radius: 5px;}.negative{margin-left: 70px; background-color: rgba(255, 0, 0, 0.5);}.negative:hover{box-shadow: 0 0 20px 1px rgba(255, 0, 0, 0.7);}.positive{margin-right: 70px; background-color: #67B246; float: right;}.positive:hover{box-shadow: 0 0 20px 1px #67B246;}.footerBar{background-color:#67B246;text-align:center;color:#fff;font-size:16px;font-weight:300;line-height:60px;height:60px;width:100%;margin-top: 40px;}</style></head><body> <div id="wrapper"> <div id="header"> <h1>Vacation Request</h1> </div><div id="subheader"> <h3>New Vacation Request from ' + reqUser + '</h3> <hr> </div><div id="msgBody"> <p style="margin-bottom:0 !important;font-size: 16px;"> There has been a new vacation request from ' + reqUser + ' <br><br>Please approve or deny this request below. This user will be notified via email of your decision. </p>' + optNote + '<div class="dateBox"> <div style="float: left;" class="dateSpan"> <div class="dateHeader">From</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqfromDate + '</h2> </div><div style="float: right;" class="dateSpan"> <div class="dateHeader">To</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqtoDate + '</h2> </div></div><div class="btnWrapper"> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=d" class="button negative">Deny</a> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=a" class="button positive">Approve</a> </div></div><div class="footerBar">' + dateToday + '  <b>|</b>  <3 ndom91  <b>|</b>  NewTelco GmbH</div></div></body></html>'
+      let msgBody = '<html><head> <style>@font-face{font-family: "Lato"; font-style: normal; font-weight: 300; src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh7USSwiPGQ.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}@font-face{font-family: "Lato"; font-style: normal; font-weight: 400; src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXg.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}html{font-family: Lato, Arial;}img{display: block; margin: auto;}#wrapper{max-width: 600px; margin: 0 auto;}#header{height: 80px; margin: auto 0; background-color: #67B246; width: 100%; text-align: center; line-height: 80px;}#subheader{text-align: center;}h1{font-size: 34px; color: #ffffff; font-weight: 300;}h3{font-size: 18px; font-weight: 900;}hr{width: 90%; height: 3px; border: none; color: #67B246; background-color: #67B246;}#msgBody > p{padding: 15px;}.dateSpan{display: inline-block; width: 45%;}.dateBox{border: 4px solid #8c8c8c; border-radius: 10px; padding: 40px; margin-top: 20px; margin-bottom: 20px; height: 220px;}.dateBox:after{clear: both;}.dateHeader{color: #8c8c8c; display: inline-block; font-size: 28px; text-align: center; width: 100%; font-weight: 800; margin-bottom: 5px;}.fa-calendar-alt{margin-bottom: 5px;}.fa-calendar-alt, .dateText{color: #8c8c8c; display: inline-block; text-align: center; width: 100%;}.dateText{font-size: 22px; font-weight: 900;}.btnWrapper{}.button{margin-top: 10px; display: inline-block; font-size: 24px; font-weight: 900; width: 200px; height: 60px; text-align: center; line-height: 60px; text-decoration: none; color: #ffffff !important; border-radius: 5px;}.negative{margin-left: 70px; background-color: rgba(255, 0, 0, 0.5);}.negative:hover{box-shadow: 0 0 20px 1px rgba(255, 0, 0, 0.7);}.positive{margin-right: 70px; background-color: #67B246; float: right;}.positive:hover{box-shadow: 0 0 20px 1px #67B246;}.footerBar{background-color:#67B246;text-align:center;color:#fff;font-size:16px;font-weight:300;line-height:60px;height:60px;width:100%;margin-top: 40px;}</style></head><body> <div id="wrapper"> <div id="header"> <h1>Vacation Request</h1> </div><div id="subheader"> <h3>New Vacation Request from ' + reqUser + '</h3> <hr> </div><div id="msgBody"> <p style="margin-bottom:0 !important;font-size: 16px;"> There has been a new vacation request from ' + reqUser + ' <br><br>Please approve or deny this request below. This user will be notified via email of your decision. </p>' + optNote + '<div class="dateBox"> <div style="float: left;" class="dateSpan"> <div class="dateHeader">From</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqfromDate + '</h2> </div><div style="float: right;" class="dateSpan"> <div class="dateHeader">To</div><img src="https://home.newtelco.de/calendar_icon.png"/> <h2 class="dateText">' + reqtoDate + '</h2> </div></div><div class="btnWrapper"> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=d" class="button negative">Deny</a> <a href="https://vacation.newtelco.dev/admin/response?h=' + approval_hash + '&a=a" class="button positive">Approve</a> </div></div><div class="footerBar">' + dateToday + '  <b>|</b>  <3 ndom91  <b>|</b>  NewTelco GmbH</div></div></body></html>'
 
 
       mgrName = mgrMail.substring(0, mgrMail.lastIndexOf("@"));

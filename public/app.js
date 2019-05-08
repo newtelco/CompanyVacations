@@ -1,3 +1,8 @@
+const url = new URL(window.location.href)
+let failedQuery = url.searchParams.get('failed')
+if(failedQuery == 1) {
+    $('.loginform').addClass('error')
+}
 
 const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
 autoHide: false
