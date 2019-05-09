@@ -164,9 +164,10 @@ const app = express()
 passport.use(new ldapstrategy(OPTS))
 
 app.use(session({
-    secret: 'ldap secret',
+    secret: '87oY7tsTHbYuU6oeS36RudzZjrXopf0ltNUeQInlDbTPSeRSWglLcEWVDPy43twKmjOl8rRlE8cvFSpWEhaIS0e5mPli17bhyve2vVRBld6ZRpyw94tM5ms7YY932W1u',
     resave: false,
     saveUninitialized: true,
+    // cookie: { secure: true }
     store: new FileStore()
 }))
 
@@ -195,7 +196,7 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     // console.log('Inside the /login GET callback')
     // console.log(req.sessionID)
-    res.status(403).redirect('/#login-failed')
+    res.status(403).redirect('/?failed=1')
     // res.send(`You got to the login page!\n`)
 })
 
@@ -359,7 +360,7 @@ app.get('/admin/response', (req, res) => {
     } else {
       console.error('not Authenticated!')
       req.session.returnTo = req.originalUrl
-      return res.status(403).redirect('/#response')
+      return res.status(403).redirect('/?response=2')
     }
 })
 

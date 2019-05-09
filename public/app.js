@@ -3,6 +3,28 @@ let failedQuery = url.searchParams.get('failed')
 if(failedQuery == 1) {
     $('.loginform').addClass('error')
 }
+let responseQuery = url.searchParams.get('response')
+if(responseQuery == 2) {
+    $('body').toast({
+            title: 'You must login',
+            message: 'Please login to approve / deny a vacation request!',
+            class : 'green',
+            position: 'bottom center',
+            displayTime: 6000,
+            showIcon: 'exclamation',
+            className: {
+                toast: 'ui hoverfloating message'
+            },
+            transition: {
+                showMethod   : 'fly right',
+                showDuration : 1000,
+                hideMethod   : 'fly left',
+                hideDuration : 1000
+            }, onClick: () => {
+                window.location.href = "https://vacation.newtelco.de"
+            }
+    })
+}
 const hostname = url.hostname
 if(hostname.includes('newtelco.dev')){ 
     $('body').toast({

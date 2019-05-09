@@ -70,7 +70,14 @@ $(document).ready(() => {
         const userGroups = user.memberOf
 
         userGroups.forEach((group) => {
-            if(group.includes('CN=Technik')) {
+            if(group.includes('CN=Billing')) {
+                select = document.getElementById('managerDropdown')
+                for(var i = 0;i < select.options.length;i++){
+                    if(select.options[i].value == 'oberegovy@newtelco.de' ){
+                        select.options[i].selected = true;
+                    }
+                }
+            } else if(group.includes('CN=Technik')) {
                 select = document.getElementById('managerDropdown')
                 for(var i = 0;i < select.options.length;i++){
                     if(select.options[i].value == 'jskribek@newtelco.de' ){
@@ -241,7 +248,7 @@ onSuccess: function(evt, fields) {
     .then(data => {
         // console.log(JSON.stringify(data))
 
-        if(data.changedRows > 0) {
+        if(data.affectedRows > 0) {
             $('body').toast({
                     title: 'Vacation Requested!',
                     message: 'Successfully requested vacation. You will be notified as soon as your manager responds.',
