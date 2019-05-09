@@ -34,6 +34,7 @@ resturlaubYearLabel.text('Resturlaub ' + yearNow)
 
 // form autofill help
 
+
 // Fill full name into Name field on load
 $(document).ready(() => {
 

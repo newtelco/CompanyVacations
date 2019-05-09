@@ -8,7 +8,16 @@ function UserInfo(verb) {
     })
     .then(response => response.json())
     .then(data => {
+        $('#adminLink').hide()
+        $('#adminDivider').hide()
+        for(i = 0; i < data.memberOf.length; i++) {
+            if(data.memberOf[i].includes('AdminGroup') || data.memberOf[i].includes('Management')) {
+                $('#adminLink').show()
+                $('#adminDivider').show()
+            }
+        }
         if(verb == 'set') {
+
             window.sessionStorage.setItem('user',JSON.stringify(data))
         } else if (verb == 'get') {
             return data.sAMAccountName

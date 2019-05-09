@@ -65,6 +65,10 @@ i.green.icon.icon.icon.icon {
     color: #67B246;
 }
 
+.hoverfloating:hover {
+    box-shadow: 0 0 30px 1px rgba(255,255,255,0.4) !important;
+}
+
 /* Dashboard Page */
 
 .dashboardGrid {

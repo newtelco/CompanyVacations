@@ -127,6 +127,16 @@ function sendMsg(userName, userMail, subject, body) {
 })();
 }
 
+function memberOfAdmin(group) {
+  for(i = 0; i < group.length; i++) {
+      if(group[i].includes('AdminGroup') || group[i].includes('Management')) {
+        return true
+      } else {
+        return false
+      }
+  }
+}
+
 var connection = mysql.createConnection({
   host     : process.env.DB_HOST,
   user     : process.env.DB_USER,
@@ -175,16 +185,16 @@ passport.deserializeUser((user, done) => {
 });
 
 app.get('/', (req, res) => {
-  console.log('Inside the homepage callback function')
-  console.log(`User authenticated? ${req.isAuthenticated()}`)
+  // console.log('Inside the homepage callback function')
+  // console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
     res.redirect('/dashboard.html')
   }
 })
 
 app.get('/login', (req, res) => {
-    console.log('Inside the /login GET callback')
-    console.log(req.sessionID)
+    // console.log('Inside the /login GET callback')
+    // console.log(req.sessionID)
     res.status(403).redirect('/#login-failed')
     // res.send(`You got to the login page!\n`)
 })
@@ -201,8 +211,15 @@ app.post('/login', (req, res, next) => {
     }
     req.login(user,(err) => {
         if (err) return next(err)
-        console.log('Request Login successful')
-        return res.redirect('dashboard')
+        // console.log('Request Login successful')
+        var loginTime = moment().local().format('DD.MM.YYYY HH:mm:ss')
+        console.log('[LOGIN] ' + req.user.sAMAccountName + ' - ' + loginTime)
+        let returnToUrl = ''
+        if(req.session.returnTo != ''){
+          returnToUrl = req.session.returnTo
+          delete req.session.returnTo
+        }
+        return res.redirect(returnToUrl || 'dashboard')
     })
   })(req, res, next);
 });
@@ -214,8 +231,8 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/dashboard', (req, res) => {
-  console.log('\nInside GET /dashboard callback')
-  console.log(`User authenticated? ${req.isAuthenticated()}`)
+  // console.log('\nInside GET /dashboard callback')
+  // console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
     // TEST
     // var user = req.user
@@ -224,44 +241,48 @@ app.get('/dashboard', (req, res) => {
     // }
     res.sendFile(__dirname + '/public/dashboard.html')
   } else {
-    return res.redirect('/')
+    req.session.returnTo = req.originalUrl
+    return res.status(403).redirect('/')
   }
 })
 
 app.get('/request', (req, res) => {
-  console.log('\nInside GET /request callback')
-  console.log(`User authenticated? ${req.isAuthenticated()}`)
+  // console.log('\nInside GET /request callback')
+  // console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
     res.sendFile(__dirname + '/public/request.html')
   } else {
-    return res.redirect('/')
+    req.session.returnTo = req.originalUrl
+    return res.status(403).redirect('/')
   }
 })
 
 
 app.get('/overview', (req, res) => {
-  console.log('\nInside GET /overview callback')
-  console.log(`User authenticated? ${req.isAuthenticated()}`)
+  // console.log('\nInside GET /overview callback')
+  // console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated()) {
     res.sendFile(__dirname + '/public/overview.html')
   } else {
-    return res.redirect('/')
+    req.session.returnTo = req.originalUrl
+    return res.status(403).redirect('/')
   }
 })
 
 
 app.get('/admin', (req, res) => {
-  console.log('\nInside GET /admin callback')
-  console.log(`User authenticated? ${req.isAuthenticated()}`)
-  if(req.isAuthenticated()) {
+  // console.log('\nInside GET /admin callback')
+  // console.log(`User authenticated? ${req.isAuthenticated()}`)
+  if(req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
     res.sendFile(__dirname + '/public/admin.html')
   } else {
-    return res.redirect('/')
+    req.session.returnTo = req.originalUrl
+    return res.status(403).redirect('/')
   }
 })
 
 app.get('/admin/response', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated()  && memberOfAdmin(req.user.memberOf)) {
 
       const id = req.query.h
       let action = req.query.a
@@ -282,9 +303,12 @@ app.get('/admin/response', (req, res) => {
       connection.query('UPDATE vacations SET approval_datetime = "' + datetimeNow + '", approved = "' + action + '" WHERE approval_hash LIKE "' + id + '";', (error, results1, fields) => {
         if (error) throw error
 
+        // console.log('result1: ')
+        // console.log(result1)
+
         connection.query('SELECT name, email, submitted_datetime, toDate, fromDate, approved FROM vacations WHERE approval_hash LIKE "' + id + '";', (error, results, fields) => {
         if (error) throw error
-
+          
           // console.log('\n results:')
           // console.log(results)
           // console.log(results[0].email)
@@ -292,7 +316,7 @@ app.get('/admin/response', (req, res) => {
           reqUser = results[0]
           let start = moment.utc(reqUser.fromDate).local().format('YYYY-MM-DD')
           let end = moment.utc(reqUser.toDate).local().format('YYYY-MM-DD')
-          console.log(start + '\n' + end)
+          // console.log(start + '\n' + end)
           let mailStart = moment(start).format('DD.MM.YYYY')
           let mailEnd = moment(end).format('DD.MM.YYYY')
           let userMail = reqUser.email
@@ -303,7 +327,7 @@ app.get('/admin/response', (req, res) => {
             //  'newtelco.de_a2nm4ggh259c68lmim5e0mpp8o@group.calendar.google.com'
 
             let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format('DD.MM.YYYY HH:mm:ss')
-            let summary = userName+' Vacation'
+            let summary = userName
             let desc = userName+' Vacation\n\nFrom: '+mailStart+'\nTo: '+mailEnd+'\n\n'+'Submitted On: '+reqDateTime+'\n\n'+'https://vacations.newtelco.de'
 
             // end + 1 day hack for google calendar
@@ -333,12 +357,14 @@ app.get('/admin/response', (req, res) => {
 
 
     } else {
-      return res.status(403).send('Forbidden!')
+      console.error('not Authenticated!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/#response')
     }
 })
 
 app.post('/admin/users', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
       connection.query('SELECT DISTINCT name, email FROM vacations ORDER BY name', (error, results, fields) => {
         if (error) throw error
@@ -346,12 +372,13 @@ app.post('/admin/users', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
 app.post('/admin/managers', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
       connection.query('SELECT * FROM managers', (error, results, fields) => {
         if (error) throw error
@@ -359,12 +386,13 @@ app.post('/admin/managers', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
 app.post('/admin/managers/update', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
       body = req.body
       const id = body.id
@@ -377,12 +405,13 @@ app.post('/admin/managers/update', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
 app.post('/admin/managers/add', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
       body = req.body
       const id = body.id
@@ -395,12 +424,13 @@ app.post('/admin/managers/add', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
 app.post('/report/year', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
       body = req.body
       const year = body.year 
@@ -411,12 +441,13 @@ app.post('/report/year', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
 app.post('/report/month', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
       body = req.body
       const month = body.month
@@ -428,12 +459,13 @@ app.post('/report/month', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
 app.post('/admin/managers/delete', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
       body = req.body
       const id = body.id
@@ -444,12 +476,13 @@ app.post('/admin/managers/delete', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
 app.post('/admin/listall', (req, res) => {
-    if (req.isAuthenticated() == true) {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
       connection.query('SELECT name, resturlaubVorjahr, jahresurlaubInsgesamt, restjahresurlaubInsgesamt, beantragt, resturlaubJAHR, fromDate, toDate, manager, note, submitted_datetime, approved, approval_datetime FROM vacations;', (error, results, fields) => {
         if (error) throw error
@@ -457,7 +490,8 @@ app.post('/admin/listall', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
@@ -467,7 +501,8 @@ app.post('/vacation/user', (req, res) => {
       user = req.user
       return res.status(202).send(user)
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
@@ -486,7 +521,8 @@ app.post('/vacation/list', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
@@ -499,7 +535,8 @@ app.post('/request/managers', (req, res) => {
         return res.status(202).send(results)
       })
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
@@ -509,9 +546,6 @@ app.post('/request/submit', (req, res) => {
       user = req.user
 
       let newVaca = req.body
-
-      console.log(newVaca)
-
 
       let approval_hash = uuid()
       approval_hash = approval_hash.replace(/-/g, '')
@@ -554,7 +588,8 @@ app.post('/request/submit', (req, res) => {
 
 
     } else {
-      return res.status(403).send('Forbidden!')
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
     }
 })
 
