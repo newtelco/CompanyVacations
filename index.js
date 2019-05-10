@@ -141,7 +141,7 @@ var connection = mysql.createConnection({
   host     : process.env.DB_HOST,
   user     : process.env.DB_USER,
   password : process.env.DB_PW,
-  database : process.env.DB,
+  database : process.env.DB_DB,
   port     : process.env.DB_PORT
 })
 
@@ -594,7 +594,7 @@ app.post('/request/submit', (req, res) => {
     }
 })
 
-port = process.env.PORT || 7555
+port = process.env.WEB_PORT || 7555
 app.listen(port, () => {
     console.log('Server running on http://localhost:'+port)
 })
