@@ -150,9 +150,10 @@ connection.connect((err) => {
     console.log('You are now connected...')
 })
 
+const ldapUrl = 'ldap://' + process.emit.LDAP_URL
 var OPTS = {
     server: {
-        url             : "ldap://" + process.env.LDAP_URL,
+        url             : ldapUrl,
         bindDN          : process.env.LDAP_BINDDN,
         bindCredentials : process.env.LDAP_BINDPW,
         searchBase      : process.env.LDAP_SEARCHBASE,

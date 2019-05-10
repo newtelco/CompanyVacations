@@ -155,11 +155,18 @@ fetch('/admin/listall', {
                 }},
             // {title: "Manager", field:"manager"},
             // {title: "Note", field:"note"},
-            {title: "Submitted", field:"submitted_datetime", formatter:"datetime", formatterParams: {
-                    inputFormat: "YYYY-MM-DD[T]HH:mm:ss[.000Z]",
-                    outputFormat: "DD.MM.YYYY HH:MM",
-                    invalidPlaceholder: "invalid date",
-                }},
+            {title: "Submitted", field:"submitted_datetime", formatter:function(cell, formatterParams, onRendered) {
+                let cellVal = cell.getValue()
+                let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
+                return newDate
+            }},
+
+            
+            // "datetime", formatterParams: {
+            //         inputFormat: "YYYY-MM-DD[T]HH:mm:ss[.000Z]",
+            //         outputFormat: "DD.MM.YYYY HH:MM",
+            //         invalidPlaceholder: "invalid date",
+            //     }},
             {title: "Approved", field:"approved", width: 100, formatter: function(cell, formatterParams, onRendered) {
                 // WAITING ON RESPONSE
                 if (cell.getValue() == "0") {
@@ -174,11 +181,12 @@ fetch('/admin/listall', {
                     return "<i class='approvedIcon fa fa-check'></i>"
                 }
             },},
-            {title: "Approved Date/Time", field: "approval_datetime", formatter:"datetime", formatterParams: {
-                    inputFormat: "YYYY-MM-DD[T]HH:mm:ss[.000Z]",
-                    outputFormat: "DD.MM.YYYY HH:MM",
-                    invalidPlaceholder: "no date",
-                }},
+            {title: "Approved Date/Time", field: "approval_datetime", formatter:function(cell, formatterParams, onRendered) {
+                let cellVal = cell.getValue()
+                let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
+                return newDate
+            }},
+
         ]
     });
 
@@ -259,6 +267,17 @@ $('#dlMonthlyBtn').on('click', () => {
             return false
         }
 
+        dateAccessor = function(value, data, type, params, column){
+            let newDate = moment.utc(value).local().format('DD.MM.YYYY')
+            console.log(newDate)
+            return newDate
+        }
+
+        dateTimeAccessor = function(value, data, type, params, column){
+            let newDate = moment.utc(value).local().format('DD.MM.YYYY HH:mm')
+            return newDate
+        }
+
         table4 = new Tabulator("#exportTable", {
             layout: "fitColumns",
             data: data,
@@ -274,47 +293,21 @@ $('#dlMonthlyBtn').on('click', () => {
                 {title: "Total Days Available", field:"restjahresurlaubInsgesamt"},
                 {title: "Requested", width: 120, field:"beantragt"},
                 {title: "Days Leftover", field:"resturlaubJAHR"},
-                {title: "From", field:"fromDate", width: 100, formatter:"datetime", formatterParams: {
-                        inputFormat: "YYYY-MM-DD",
-                        outputFormat: "DD.MM.YYYY",
-                        invalidPlaceholder: "invalid date",
-                    }},
-                {title: "To", field:"toDate", width: 100, formatter:"datetime", formatterParams: {
-                        inputFormat: "YYYY-MM-DD",
-                        outputFormat: "DD.MM.YYYY",
-                        invalidPlaceholder: "invalid date",
-                    }},
+                {title: "From", field:"fromDate", width: 100, accessorDownload:dateAccessor},
+                {title: "To", field:"toDate", width: 100, accessorDownload:dateAccessor}
                 {title: "Note", field:"note"},
-                {title: "Submitted", field:"submitted_datetime", formatter:"datetime", formatterParams: {
-                        inputFormat: "YYYY-MM-DDTHH:mm:ss.000Z",
-                        outputFormat: "DD.MM.YYYY HH:MM",
-                        invalidPlaceholder: "invalid date",
-                    }},
+                {title: "Submitted", field:"submitted_datetime", formatter:function(cell, formatterParams, onRendered) {
+                    let cellVal = cell.getValue()
+                    let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
+                    return newDate
+                }},
                 {title: "Approved", field:"approved"},
-                {title: "Approved Date/Time", field: "approval_datetime", formatter:"datetime", formatterParams: {
-                        inputFormat: "YYYY-MM-DDTHH:mm:ss.000Z",
-                        outputFormat: "DD.MM.YYYY HH:MM",
-                        invalidPlaceholder: "no date",
-                    }},
+                {title: "Approved Date/Time", field: "approval_datetime", formatter:function(cell, formatterParams, onRendered) {
+                    let cellVal = cell.getValue()
+                    let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
+                    return newDate
+                }},
             ],
-            // downloadDataFormatter:function(data) {
-            //     // console.log('data:')
-            //     tableData = data.data
-            //     // console.log(tableData)
-
-            //     for(i = 0; i < tableData.length; i++) {
-
-            //         console.log(tableData[i])
-            //         submitted_datetime = tableData[i].submitted_datetime 
-            //         // console.log(submitted_datetime)
-            //         submitted_datetime = moment.utc(submitted_datetime).local().format('DD.MM.YYYY HH:mm:ss')
-            //         toDate = tableData[i].toDate 
-            //         toDate = moment.utc(toDate).local().format('DD.MM.YYYY')
-            //         fromDate = tableData[i].fromDate 
-            //         fromDate = moment.utc(fromDate).local().format('DD.MM.YYYY')
-            //     }
-            //     return data
-            // }
         });
 
         Tabulator.prototype.extendModule("download", "downloaders", {
@@ -334,7 +327,6 @@ $('#dlMonthlyBtn').on('click', () => {
 $('#dlYearlyBtn').on('click', () => {
 
     let targetYear = $('#reportYearDropdown2 option:selected').val()
-    console.log('Year: ' + targetYear)
 
     targetDate = { 
         year: targetYear
@@ -350,7 +342,7 @@ $('#dlYearlyBtn').on('click', () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(JSON.stringify(data))
+        // console.log(JSON.stringify(data))
 
         if(JSON.stringify(data) == "[]") {
             $('body').toast({
@@ -373,6 +365,17 @@ $('#dlYearlyBtn').on('click', () => {
             return false
         }
 
+        dateAccessor = function(value, data, type, params, column){
+            let newDate = moment.utc(value).local().format('DD.MM.YYYY')
+            console.log(newDate)
+            return newDate
+        }
+
+        dateTimeAccessor = function(value, data, type, params, column){
+            let newDate = moment.utc(value).local().format('DD.MM.YYYY HH:mm')
+            return newDate
+        }
+
         table4 = new Tabulator("#exportTable", {
             layout: "fitColumns",
             data: data,
@@ -386,30 +389,15 @@ $('#dlYearlyBtn').on('click', () => {
                 {title: "Days from last year", field:"resturlaubVorjahr"},
                 {title: "Days earned this Year", field:"jahresurlaubInsgesamt"},
                 {title: "Total Days Available", field:"restjahresurlaubInsgesamt"},
-                {title: "Requested", width: 120, field:"beantragt"},
+                {title: "Requested", field:"beantragt"},
                 {title: "Days Leftover", field:"resturlaubJAHR"},
-                {title: "From", field:"fromDate", width: 100, formatter:"datetime", formatterParams: {
-                        inputFormat: "YYYY-MM-DD",
-                        outputFormat: "DD.MM.YYYY",
-                        invalidPlaceholder: "invalid date",
-                    }},
-                {title: "To", field:"toDate", width: 100, formatter:"datetime", formatterParams: {
-                        inputFormat: "YYYY-MM-DD",
-                        outputFormat: "DD.MM.YYYY",
-                        invalidPlaceholder: "invalid date",
-                    }},
+                {title: "From", field:"fromDate", accessor: dateAccessor},
+                {title: "To", field:"toDate", accessor: dateAccessor},
                 {title: "Note", field:"note"},
-                {title: "Submitted", field:"submitted_datetime", formatter:"datetime", formatterParams: {
-                        inputFormat: "YYYY-MM-DD[T]HH:mm:ss[.000Z]",
-                        outputFormat: "DD.MM.YYYY HH:MM",
-                        invalidPlaceholder: "invalid date",
-                    }},
+                {title: "Submitted", field:"submitted_datetime", accessor: dateTimeAccessor},
+                {title: "Manager", field:"manager"},
                 {title: "Approved", field:"approved"},
-                {title: "Approved Date/Time", field: "approval_datetime", formatter:"datetime", formatterParams: {
-                        inputFormat: "YYYY-MM-DD[T]HH:mm:ss[.000Z]",
-                        outputFormat: "DD.MM.YYYY HH:MM",
-                        invalidPlaceholder: "no date",
-                    }},
+                {title: "Approved Date/Time", field: "approval_datetime", accessor: dateTimeAccessor}
             ]
         });
 
