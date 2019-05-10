@@ -48,6 +48,7 @@ deploy_master:
       - master
   image: alpine
   stage: deploy
+  when: manual
   script:
     # SETUP CONFIG FILE
     - sed -i 's/WEB_PORT=/WEB_PORT=7555/' /builds/newtelco/vacation_node/config.template.env
@@ -74,4 +75,4 @@ deploy_master:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - echo "$SERVICE_ACCOUNT" >> /builds/newtelco/vacation_node/nt_gsuite_priv.json
     - rsync -rav -e 'ssh -p 2424' --delete /builds/newtelco/vacation_node/ ndo@94.249.131.5:/opt/vaca_prod
-    - ssh -p 2424 ndo@94.249.131.5 'pm2 reload 2'
+    - ssh -p 2424 ndo@94.249.131.5 'pm2 reload 2 --update-env'
