@@ -152,7 +152,7 @@ connection.connect((err) => {
 
 var OPTS = {
     server: {
-        url             : process.env.LDAP_URL,
+        url             : "ldap://" + process.env.LDAP_URL,
         bindDN          : process.env.LDAP_BINDDN,
         bindCredentials : process.env.LDAP_BINDPW,
         searchBase      : process.env.LDAP_SEARCHBASE,
