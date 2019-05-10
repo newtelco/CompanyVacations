@@ -294,7 +294,7 @@ $('#dlMonthlyBtn').on('click', () => {
                 {title: "Requested", width: 120, field:"beantragt"},
                 {title: "Days Leftover", field:"resturlaubJAHR"},
                 {title: "From", field:"fromDate", width: 100, accessorDownload:dateAccessor},
-                {title: "To", field:"toDate", width: 100, accessorDownload:dateAccessor}
+                {title: "To", field:"toDate", width: 100, accessorDownload:dateAccessor},
                 {title: "Note", field:"note"},
                 {title: "Submitted", field:"submitted_datetime", formatter:function(cell, formatterParams, onRendered) {
                     let cellVal = cell.getValue()
