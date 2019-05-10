@@ -20,10 +20,10 @@ deploy_dev:
     - sed -i 's/BASE_URL=/BASE_URL=\"https:\/\/vacation.newtelco.dev\"/' /builds/newtelco/vacation_node/config.template.env
     - sed -i 's/GS_APIKEY=/GS_APIKEY=\"\/opt\/vaca_dev\/nt_gsuite_priv.json\"/' /builds/newtelco/vacation_node/config.template.env
     - sed -i 's/GS_USER=/GS_USER=\"device@newtelco.de\"/' /builds/newtelco/vacation_node/config.template.env
-    - sed -i 's/GS_CALID=/GS_CALID=\"{$GS_CALID}\"/' /builds/newtelco/vacation_node/config.template.env
-    - sed -i 's/DB_HOST=/DB_HOST=\"{$DB_HOST}\"/' /builds/newtelco/vacation_node/config.template.env
-    - sed -i 's/DB_USER=/DB_USER=\"{$DB_USER}\"/' /builds/newtelco/vacation_node/config.template.env
-    - sed -i 's/DB_PW=/DB_PW=\"{$DB_PW}\"/' /builds/newtelco/vacation_node/config.template.env
+    - sed -i 's/GS_CALID=/GS_CALID=\"${GS_CALID}\"/' /builds/newtelco/vacation_node/config.template.env
+    - sed -i 's/DB_HOST=/DB_HOST=\"${$DB_HOST}\"/' /builds/newtelco/vacation_node/config.template.env
+    - sed -i "s/DB_USER=/DB_USER=\"$DB_USER\"/" /builds/newtelco/vacation_node/config.template.env
+    - sed -i "s/DB_PW=/DB_PW=\"\"$DB_PW\"\"/" /builds/newtelco/vacation_node/config.template.env
     - sed -i 's/DB_DB=/DB_DB=\"{$DB_DB}\"/' /builds/newtelco/vacation_node/config.template.env
     - sed -i 's/DB_PORT=/DB_PORT={$DB_PORT}/' /builds/newtelco/vacation_node/config.template.env
     - sed -i 's/LDAP_URL=/LDAP_URL=\"{$LDAP_URL}\"/' /builds/newtelco/vacation_node/config.template.env
