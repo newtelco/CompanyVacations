@@ -45,7 +45,7 @@ deploy_dev:
 deploy_master:
   only:
     refs:
-      -master
+      - master
   image: alpine
   stage: deploy
   script:
