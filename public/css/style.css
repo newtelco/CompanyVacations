@@ -260,3 +260,11 @@ body .fc {
     font-size: 24px;
     text-align: center;
 }
+
+.approveBtn:hover {
+    text-shadow: 1px 1px 15px #67B236 !important;
+}
+
+.denyBtn:hover {
+    text-shadow: 1px 1px 15px #ff7272 !important;
+}

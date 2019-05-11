@@ -487,7 +487,7 @@ app.post('/admin/managers/delete', (req, res) => {
 app.post('/admin/listall', (req, res) => {
     if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
-      connection.query('SELECT name, resturlaubVorjahr, jahresurlaubInsgesamt, restjahresurlaubInsgesamt, beantragt, resturlaubJAHR, fromDate, toDate, manager, note, submitted_datetime, approved, approval_datetime FROM vacations;', (error, results, fields) => {
+      connection.query('SELECT name, resturlaubVorjahr, jahresurlaubInsgesamt, restjahresurlaubInsgesamt, beantragt, resturlaubJAHR, fromDate, toDate, manager, note, submitted_datetime, approval_hash, approved, approval_datetime FROM vacations;', (error, results, fields) => {
         if (error) throw error
         // res.end(JSON.stringify(results))
         return res.status(202).send(results)

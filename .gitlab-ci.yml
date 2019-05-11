@@ -42,7 +42,7 @@ deploy_dev:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - echo "$SERVICE_ACCOUNT" >> /builds/newtelco/vacation_node/nt_gsuite_priv.json
     - rsync -rav -e 'ssh -p 2424' --delete /builds/newtelco/vacation_node/ ndo@94.249.131.5:/opt/vaca_dev
-    - ssh -p 2424 ndo@94.249.131.5 'pm2 reload 3 --update-env'
+    - ssh -p 2424 ndo@94.249.131.5 'pm2 restart 3 --update-env'
 
 deploy_master:
   only:
@@ -79,4 +79,4 @@ deploy_master:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - echo "$SERVICE_ACCOUNT" >> /builds/newtelco/vacation_node/nt_gsuite_priv.json
     - rsync -rav -e 'ssh -p 2424' --delete /builds/newtelco/vacation_node/ ndo@94.249.131.5:/opt/vaca_prod
-    - ssh -p 2424 ndo@94.249.131.5 'pm2 reload 2 --update-env'
+    - ssh -p 2424 ndo@94.249.131.5 'pm2 start /opt/vaca_prod/pm2.json'

@@ -127,6 +127,24 @@ fetch('/admin/listall', {
 .then(data => {
 
     // console.log(JSON.stringify(data))
+    let approvedenyMutator = function(value, data, type, params, component) {
+        console.log('comopnent')
+        console.log(component)
+
+        let user = JSON.parse(window.sessionStorage.getItem('user'))
+        user = user.sAMAccountName
+
+        let manager = data.manager
+        manager = manager.substring(0, manager.lastIndexOf("@"));
+
+        let approvalhash = data.approval_hash
+
+        let hostname = window.location.hostname
+
+        if(manager == user) {
+            return '<a class="approveBtn" target"_blank" href="https://'+hostname+'/admin/response?h='+approvalhash+'&a=a"><i style="font-size: 22px; margin-right: 5px; color: #67B236;" class="fas fa-check"></i></a><a class="denyBtn" target="_blank" href="https://'+hostname+'/admin/response?h='+approvalhash+'&a=d"><i style="font-size: 22px; color: #ff7272" class="fas fa-ban"></i></a>'
+        }
+    }
 
     table = new Tabulator("#totalVacas", {
         layout: "fitColumns",
@@ -139,7 +157,7 @@ fetch('/admin/listall', {
         columns: [
             {title: "Name", field:"name"},
             {title: "Days from last year", field:"resturlaubVorjahr"},
-            {title: "Days earned this Year", field:"jahresurlaubInsgesamt"},
+            {title: "Days earned this Year",field:"jahresurlaubInsgesamt"},
             {title: "Total Days Available", field:"restjahresurlaubInsgesamt"},
             {title: "Requested", width: 120, field:"beantragt"},
             {title: "Days Leftover", field:"resturlaubJAHR"},
@@ -153,20 +171,12 @@ fetch('/admin/listall', {
                     outputFormat: "DD.MM.YYYY",
                     invalidPlaceholder: "invalid date",
                 }},
-            // {title: "Manager", field:"manager"},
-            // {title: "Note", field:"note"},
             {title: "Submitted", field:"submitted_datetime", formatter:function(cell, formatterParams, onRendered) {
                 let cellVal = cell.getValue()
                 let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
                 return newDate
             }},
-
-            
-            // "datetime", formatterParams: {
-            //         inputFormat: "YYYY-MM-DD[T]HH:mm:ss[.000Z]",
-            //         outputFormat: "DD.MM.YYYY HH:MM",
-            //         invalidPlaceholder: "invalid date",
-            //     }},
+            {title: "Approval Hash", field:"approval_hash", visible: false},
             {title: "Approved", field:"approved", width: 100, formatter: function(cell, formatterParams, onRendered) {
                 // WAITING ON RESPONSE
                 if (cell.getValue() == "0") {
@@ -180,12 +190,14 @@ fetch('/admin/listall', {
                 if (cell.getValue() == "2") {
                     return "<i class='approvedIcon fa fa-check'></i>"
                 }
-            },},
+            }},
             {title: "Approved Date/Time", field: "approval_datetime", formatter:function(cell, formatterParams, onRendered) {
                 let cellVal = cell.getValue()
                 let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
                 return newDate
             }},
+            {title: 'manager', tooltip: true, field: 'manager' },
+            {title: 'Approve/Deny', field: 'approvedeny', headerSort: false, width: 80, align: 'center', formatter:"html", mutator: approvedenyMutator}, 
 
         ]
     });
