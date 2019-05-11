@@ -128,20 +128,23 @@ fetch('/admin/listall', {
 
     // console.log(JSON.stringify(data))
     let approvedenyMutator = function(value, data, type, params, component) {
-        console.log('comopnent')
-        console.log(component)
+        console.log(data)
 
         let user = JSON.parse(window.sessionStorage.getItem('user'))
         user = user.sAMAccountName
-
         let manager = data.manager
         manager = manager.substring(0, manager.lastIndexOf("@"));
-
         let approvalhash = data.approval_hash
-
+        let approved = data.approved
         let hostname = window.location.hostname
 
-        if(manager == user) {
+        if(manager == user && approved == 0) {
+            return '<a class="approveBtn" target"_blank" href="https://'+hostname+'/admin/response?h='+approvalhash+'&a=a"><i style="font-size: 22px; margin-right: 5px; color: #67B236;" class="fas fa-check"></i></a><a class="denyBtn" target="_blank" href="https://'+hostname+'/admin/response?h='+approvalhash+'&a=d"><i style="font-size: 22px; color: #ff7272" class="fas fa-ban"></i></a>'
+        } else if (manager == user && approved != 0) {
+            return '<small>All Done!</small>'
+        // } else if (manager != user) {
+        //     return '<small>Submitted to someone else</small>'
+        } else if (user == 'nhartmann' && approved == 0) {
             return '<a class="approveBtn" target"_blank" href="https://'+hostname+'/admin/response?h='+approvalhash+'&a=a"><i style="font-size: 22px; margin-right: 5px; color: #67B236;" class="fas fa-check"></i></a><a class="denyBtn" target="_blank" href="https://'+hostname+'/admin/response?h='+approvalhash+'&a=d"><i style="font-size: 22px; color: #ff7272" class="fas fa-ban"></i></a>'
         }
     }
