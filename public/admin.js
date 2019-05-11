@@ -128,7 +128,6 @@ fetch('/admin/listall', {
 
     // console.log(JSON.stringify(data))
     let approvedenyMutator = function(value, data, type, params, component) {
-        console.log(data)
 
         let user = JSON.parse(window.sessionStorage.getItem('user'))
         user = user.sAMAccountName

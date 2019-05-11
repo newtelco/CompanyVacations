@@ -438,7 +438,7 @@ app.post('/report/year', (req, res) => {
       body = req.body
       const year = body.year 
 
-      connection.query('SELECT * FROM vacations WHERE YEAR(submitted_datetime) = "' + year + '";', (error, results, fields) => {
+      connection.query('SELECT * FROM vacations WHERE YEAR(fromDate) = "' + year + '" OR YEAR(toDate) = "' + year + '";', (error, results, fields) => {
         if (error) throw error
         // res.end(JSON.stringify(results))
         return res.status(202).send(results)
@@ -456,7 +456,7 @@ app.post('/report/month', (req, res) => {
       const month = body.month
       const year = body.year 
 
-      connection.query('SELECT * FROM vacations WHERE MONTH(submitted_datetime) = "' + month + '" AND YEAR(submitted_datetime) = "' + year + '";', (error, results, fields) => {
+      connection.query('SELECT * FROM vacations WHERE (MONTH(toDate) = "' + month + '" AND YEAR(toDate) = "' + year + '") OR (MONTH(fromDate) = "' + month + '" AND YEAR(fromDate) = "' + year + '");', (error, results, fields) => {
         if (error) throw error
         // res.end(JSON.stringify(results))
         return res.status(202).send(results)
