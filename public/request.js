@@ -26,14 +26,10 @@ $('#submitBtn').on('click', function(e) {
     }).modal('show')
 })
 
-// Resturlaub [YEAR] Form Replacement - dynamicism ;) 
 let resturlaubYearLabel = $('#resturlaubYEARlabel')
 let dt = new Date()
 const yearNow = dt.getYear() + 1900
 resturlaubYearLabel.text('Resturlaub ' + yearNow)
-
-// form autofill help
-
 
 // Fill full name into Name field on load
 $(document).ready(() => {
@@ -304,8 +300,21 @@ $('#monthsInput').on('change', (e) => {
 })
 
 $('#yearsInput').on('change', (e) => {
-    let years = $('#yearsInput').val()
-    years = +years + 25
-    years += ' days available'
-    $('#yearsResult').text(years)
+    let years = parseInt($('#yearsInput').val())
+    let days = ''
+
+    if(years < 2) {
+        days = 26
+    } else if (years == 2){
+        days = 27
+    } else if (years == 3) {
+        days = 28
+    } else if (years == 4) {
+        days = 29
+    } else if (years >= 5) {
+        days = 30
+    }
+
+    days = days + ' days available'
+    $('#yearsResult').text(days)
 })
