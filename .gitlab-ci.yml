@@ -70,7 +70,7 @@ deploy_master:
     - sed -i "s/LDAP_SEARCHFILTER=/LDAP_SEARCHFILTER=\"$LDAP_SEARCHFILTER\"/" /builds/newtelco/vacation_node/config.template.env
     - mv /builds/newtelco/vacation_node/config.template.env /builds/newtelco/vacation_node/config.env
     - sed -i "s/Newtelco Vacation/Newtelco Vacation Prod/" /builds/newtelco/vacation_node/pm2.json
-    - sed -i "s/\"watch\"       : true/\"watch\"       : false/" /builds/newtelco/vacation_node/pm2.json
+    # - sed -i "s/\"watch\"       : true/\"watch\"       : false/" /builds/newtelco/vacation_node/pm2.json
     - sed -i 's/\/opt\/vacation_node\/index.js/\/opt\/vaca_prod\/index.js/' /builds/newtelco/vacation_node/pm2.json
     # PUSH
     - apk add --no-cache rsync openssh
