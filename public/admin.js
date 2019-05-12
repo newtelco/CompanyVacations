@@ -230,8 +230,22 @@ fetch('/admin/listall', {
     // });
 
     hotkeys('shift+l', (event, handler) =>{
-        var selectedData = table.getSelectedData()
+        let selectedData = table.getSelectedData()
         console.log(selectedData)
+        let selectedVacations = []
+        selectedData.forEach((el) => {
+            let fromDate = moment().utc(el.fromDate).local().format('DD.MM.YYYY')
+            let toDate = moment().utc(el.toDate).local().format('DD.MM.YYYY')
+            selectedVacations.push([el.name, fromDate, toDate])
+        })
+        // console.log(selectedVacations)
+        // $('#delModalContent').append('<p>')
+        selectedVacations.forEach((el) => {
+            console.log(el)
+            $('#delModalContent').append('<br><b>' + el[0] + '</b> - From: <b>' + el[1]+ '</b> To: <b>' + el[2] + '</b>')
+        })
+        $('#delModalContent').append('</p>')
+        $('.delVacaModal').modal('show')
     })
 })
 .catch(error => console.error(error))
