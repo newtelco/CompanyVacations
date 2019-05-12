@@ -273,7 +273,7 @@ body .fc {
     text-shadow: 1px 1px 15px #ff7272 !important;
 }
 
-.ui.inverted.green.button:active {
+.ui.inverted.green.button:active .ui.inverted.green.button:hover {
     background-color: #67B246 !important;
 }
 
