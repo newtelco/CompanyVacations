@@ -52,8 +52,10 @@
   </div>
   <div style="background: #fff" class="wrapper">
       <div class="ui three column grid dashboardGrid">
-        <div class="two wide column"></div>
-        <div class="twelve wide column">
+        <div class="four wide column"></div>
+        <div class="eight wide column">
+
+          
           <div class="formWrapper">
             <h2 id="newvacaheader">
               New Vacation Request
@@ -85,7 +87,8 @@
                 </div>
               </div>
               <div class="field">
-                <label>Jahresurlaub Insgesamt</label>
+
+                <label id="earnedThisYear">Jahresurlaub Insgesamt</label>
                 <span class="ui medium lightgray text">Days earned this year</span>
                 <div class="ui right labeled input">
                   <input tabindex="4" name="jahresurlaubInsgesamt" id="jahresurlaubInsgesamt" type="text" placeholder="">
@@ -93,6 +96,7 @@
                     days
                   </div>
                 </div>
+
               </div>
               <div class="field">
                 <label>Rest Jahresurlaub Insgesamt</label>
@@ -143,14 +147,10 @@
 
               </div>
               <div class="ui section divider"></div>
-              <!-- TODO: Pull Managers from Dropdown and let Admins edit choices -->
               Please select an Approval Manager. <br>
-              This person will receive the email to approve your vacation request.
+              <span style="top: 5px" class="ui medium lightgray text">They will receive an email to approve or deny your request.</span>
               <select style="width: 100% !important;"tabindex="10" id="managerDropdown" name="manager" class="ui search selection dropdown">
                 <option value="">Approval Manager</option>
-                <!-- <option value="nhartmann@newtelco.de">Natascha Hartmann</option>
-                <option value="jskribek@newtelco.de">Jens Skribek</option>
-                <option value="ndomino@newtelco.de">Nico Domino</option> -->
                 <div class="ui error message">
                   <div class="header">Selection Required</div>
                   <p>You must select a manager to approve your vacation request.</p>
@@ -158,7 +158,6 @@
               </select>
               <div class="ui section divider"></div>
               <div class="field">
-                <!-- <label>Note</label> -->
                 <label class="sublabel">Optional note to manager</label>
                 <textarea tabindex="11" name="note" rows="2"></textarea>
               </div>
@@ -183,7 +182,42 @@
             </form>
           </div>
         </div>
-        <div class="two wide column"></div>
+        <div class="four wide column">
+          <div id="vacaHelper" class="ui raised segment">
+            Available Days Calculator
+            <div class="ui accordion">
+              <div class="title">
+                <i class="dropdown icon"></i>
+                At Newtelco <b>less than</b> 1 year
+              </div>
+              <div class="content">
+                <p class="transition hidden">
+                  <span class="ui green ribbon label">Months at Newtelco</span>
+                  <div class="ui small right labeled input">
+                    <input id="monthsInput" style="width:40px" type="text" placeholder="">
+                    <div class="ui basic label">Mo.</div>
+                  </div>
+                  <span class="ui lightgray text" id="monthsResult"></span>
+                </p>
+              </div>
+              <div class="title">
+                <i class="dropdown icon"></i>
+                At Newtelco <b>more than</b> 1 year
+              </div>
+              <div class="content">
+                <p class="transition hidden">
+                  <span class="ui green ribbon label">Years at Newtelco</span>
+                  <div class="ui small right labeled input">
+                    <input id="yearsInput" style="width:40px" type="text" placeholder="">
+                    <div class="ui basic label">Yrs.</div>
+                  </div>
+                  <span class="ui lightgray text" id="yearsResult"></span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
   </div>
   <a href="#" class="go-top"><i></i></a>

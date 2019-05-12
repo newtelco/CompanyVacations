@@ -293,3 +293,19 @@ $('.go-top').click(function(event) {
     let bodyscrollTop = simpleBar.getScrollElement()
     $('#newvacaheader')[0].scrollIntoView({ behavior: 'smooth' })
 })
+
+$('.ui.accordion').accordion()
+
+$('#monthsInput').on('change', (e) => {
+    let months = $('#monthsInput').val()
+    months = Math.abs(Math.floor(26 * (months / 12)))
+    months += ' days available'
+    $('#monthsResult').text(months)
+})
+
+$('#yearsInput').on('change', (e) => {
+    let years = $('#yearsInput').val()
+    years = +years + 25
+    years += ' days available'
+    $('#yearsResult').text(years)
+})

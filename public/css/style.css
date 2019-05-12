@@ -124,7 +124,8 @@ body .fc {
 #requestForm {
     display: inline-block;
     text-align: left;
-    width: 70%;
+    width: 75%;
+
 }
 
 #requestForm > .ui {
@@ -133,24 +134,42 @@ body .fc {
     /* width: 100%; */
 }
 
-#requestForm > .ui > .ui {
-    /* width: 100%; */
-}
-
 .positive {
     background-color: #67B246 !important;
 }
-
-/* .ui.small.green {
-    color: #67B246 !important;
-} */
 
 .ui.medium.lightgray.text {
     font-size: 0.8em;
     color: #767676;
     top: -5px;
     position: relative;
+}
 
+#vacaHelper {
+    right: 20px;
+    top: 410px;
+}
+
+.ui.ui.ui.green.ribbon.label {
+    border-color: #4a8232;
+}
+
+.ui.ui.ui.green.label {
+    background-color: #67B246;
+}
+
+#monthsResult {
+    margin-right: 22px;
+    margin-top: 5px;
+    font-size: 1.2em;
+    float: right;
+}
+
+#yearsResult {
+    margin-right: 22px;
+    margin-top: 5px;
+    font-size: 1.2em;
+    float: right;
 }
 
 /* Go Top */
