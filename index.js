@@ -466,6 +466,23 @@ app.post('/report/month', (req, res) => {
     }
 })
 
+app.post('/admin/vacations/delete', (req, res) => {
+    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
+
+      body = req.body
+      console.log(body)
+
+     connection.query('DELETE FROM vacations WHERE id IN (' + body + ');', (error, results, fields) => {
+        if (error) throw error
+        // res.end(JSON.stringify(results))
+        return res.status(202).send(results)
+      })
+    } else {
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
+    }
+})
+
 app.post('/admin/managers/delete', (req, res) => {
     if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
@@ -486,7 +503,7 @@ app.post('/admin/managers/delete', (req, res) => {
 app.post('/admin/listall', (req, res) => {
     if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
 
-      connection.query('SELECT name, resturlaubVorjahr, jahresurlaubInsgesamt, restjahresurlaubInsgesamt, beantragt, resturlaubJAHR, fromDate, toDate, manager, note, submitted_datetime, approval_hash, approved, approval_datetime FROM vacations;', (error, results, fields) => {
+      connection.query('SELECT id, name, resturlaubVorjahr, jahresurlaubInsgesamt, restjahresurlaubInsgesamt, beantragt, resturlaubJAHR, fromDate, toDate, manager, note, submitted_datetime, approval_hash, approved, approval_datetime FROM vacations;', (error, results, fields) => {
         if (error) throw error
         // res.end(JSON.stringify(results))
         return res.status(202).send(results)

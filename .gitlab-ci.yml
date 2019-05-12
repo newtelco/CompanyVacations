@@ -16,24 +16,23 @@ deploy_dev:
   stage: deploy
   script:
     # SETUP CONFIG FILE
-    - sed -i "s/WEB_PORT=/WEB_PORT=7666/" config.template.env
-    - sed -i "s/BASE_URL=/BASE_URL=\"https:\/\/vacation.newtelco.dev\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/GS_APIKEY=/GS_APIKEY=\"\/opt\/vaca_dev\/nt_gsuite_priv.json\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/GS_USER=/GS_USER=\"device@newtelco.de\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/GS_CALID=/GS_CALID=\"$GS_CALID\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_HOST=/DB_HOST=\"$DB_HOST\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_USER=/DB_USER=\"$DB_USER\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_PW=/DB_PW=\"$DB_PW\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_DB=/DB_DB=\"$DB_DB\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_PORT=/DB_PORT=\"$DB_PORT\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_URL=/LDAP_URL=\"$LDAP_URL\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_BINDDN=/LDAP_BINDDN=\"$LDAP_BINDDN\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_BINDPW=/LDAP_BINDPW=\"$LDAP_BINDPW\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_SEARCHBASE=/LDAP_SEARCHBASE=\"$LDAP_SEARCHBASE\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_SEARCHFILTER=/LDAP_SEARCHFILTER=\"$LDAP_SEARCHFILTER\"/" /builds/newtelco/vacation_node/config.template.env
-    - mv /builds/newtelco/vacation_node/config.template.env /builds/newtelco/vacation_node/config.env
-    - sed -i "s/vacation_/vacation_dev/" /builds/newtelco/vacation_node/pm2.json
-    - sed -i 's/\/opt\/vacation_node\/index.js/\/opt\/vaca_dev\/index.js/' /builds/newtelco/vacation_node/pm2.json
+    - cp /builds/newtelco/vacation_node/config.template.env /builds/newtelco/vacation_node/config.env
+    - sed -i "s/WEB_PORT=/WEB_PORT=7666/" config.env
+    - sed -i "s/BASE_URL=/BASE_URL=\"https:\/\/vacation.newtelco.dev\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/GS_APIKEY=/GS_APIKEY=\"\/opt\/vaca_dev\/nt_gsuite_priv.json\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/GS_USER=/GS_USER=\"device@newtelco.de\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/GS_CALID=/GS_CALID=\"$GS_CALID\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_HOST=/DB_HOST=\"$DB_HOST\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_USER=/DB_USER=\"$DB_USER\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_PW=/DB_PW=\"$DB_PW\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_DB=/DB_DB=\"$DB_DB\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_PORT=/DB_PORT=\"$DB_PORT\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_URL=/LDAP_URL=\"$LDAP_URL\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_BINDDN=/LDAP_BINDDN=\"$LDAP_BINDDN\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_BINDPW=/LDAP_BINDPW=\"$LDAP_BINDPW\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_SEARCHBASE=/LDAP_SEARCHBASE=\"$LDAP_SEARCHBASE\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_SEARCHFILTER=/LDAP_SEARCHFILTER=\"$LDAP_SEARCHFILTER\"/" /builds/newtelco/vacation_node/config.env
+    - echo "$PM2_DEV" >> /builds/newtelco/vacation_node/pm2.json
     # PUSH
     - apk add --no-cache rsync openssh
     - mkdir -p ~/.ssh
@@ -53,25 +52,23 @@ deploy_master:
   when: manual
   script:
     # SETUP CONFIG FILE
-    - sed -i "s/WEB_PORT=/WEB_PORT=7555/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/BASE_URL=/BASE_URL=\"https:\/\/vacation.newtelco.de\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/GS_APIKEY=/GS_APIKEY=\"\/opt\/vaca_prod\/nt_gsuite_priv.json\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/GS_USER=/GS_USER=\"device@newtelco.de\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/GS_CALID=/GS_CALID=\"$GS_CALID\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_HOST=/DB_HOST=\"$DB_HOST\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_USER=/DB_USER=\"$DB_USER\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_PW=/DB_PW=\"$DB_PW\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_DB=/DB_DB=\"$DB_DB\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/DB_PORT=/DB_PORT=\"$DB_PORT\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_URL=/LDAP_URL=\"$LDAP_URL\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_BINDDN=/LDAP_BINDDN=\"$LDAP_BINDDN\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_BINDPW=/LDAP_BINDPW=\"$LDAP_BINDPW\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_SEARCHBASE=/LDAP_SEARCHBASE=\"$LDAP_SEARCHBASE\"/" /builds/newtelco/vacation_node/config.template.env
-    - sed -i "s/LDAP_SEARCHFILTER=/LDAP_SEARCHFILTER=\"$LDAP_SEARCHFILTER\"/" /builds/newtelco/vacation_node/config.template.env
-    - mv /builds/newtelco/vacation_node/config.template.env /builds/newtelco/vacation_node/config.env
-    - sed -i "s/vacation_/vacation_prod/" /builds/newtelco/vacation_node/pm2.json
-    - sed -i "6s/true/false/" /builds/newtelco/vacation_node/pm2.json
-    - sed -i 's/\/opt\/vacation_node\/index.js/\/opt\/vaca_prod\/index.js/' /builds/newtelco/vacation_node/pm2.json
+    - cp /builds/newtelco/vacation_node/config.template.env /builds/newtelco/vacation_node/config.env
+    - sed -i "s/WEB_PORT=/WEB_PORT=7555/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/BASE_URL=/BASE_URL=\"https:\/\/vacation.newtelco.de\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/GS_APIKEY=/GS_APIKEY=\"\/opt\/vaca_prod\/nt_gsuite_priv.json\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/GS_USER=/GS_USER=\"device@newtelco.de\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/GS_CALID=/GS_CALID=\"$GS_CALID\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_HOST=/DB_HOST=\"$DB_HOST\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_USER=/DB_USER=\"$DB_USER\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_PW=/DB_PW=\"$DB_PW\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_DB=/DB_DB=\"$DB_DB\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/DB_PORT=/DB_PORT=\"$DB_PORT\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_URL=/LDAP_URL=\"$LDAP_URL\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_BINDDN=/LDAP_BINDDN=\"$LDAP_BINDDN\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_BINDPW=/LDAP_BINDPW=\"$LDAP_BINDPW\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_SEARCHBASE=/LDAP_SEARCHBASE=\"$LDAP_SEARCHBASE\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/LDAP_SEARCHFILTER=/LDAP_SEARCHFILTER=\"$LDAP_SEARCHFILTER\"/" /builds/newtelco/vacation_node/config.env
+    - echo "$PM2_PROD" >> /builds/newtelco/vacation_node/pm2.json
     # PUSH
     - apk add --no-cache rsync openssh
     - mkdir -p ~/.ssh

@@ -1,5 +1,6 @@
 node_modules
 config.env
+pm2.json
 nt_gsuite_priv.json
 .DS_Store
 sessions/

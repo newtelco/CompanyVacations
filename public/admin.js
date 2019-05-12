@@ -1,5 +1,5 @@
 let simpleBar = ''
-
+ 
 $(document).ready(() => {
     simpleBar = new SimpleBar(document.getElementById('bodyId'), {
         autoHide: false
@@ -158,22 +158,23 @@ fetch('/admin/listall', {
             {column: "submitted_datetime", dir: "desc"}
         ],
         columns: [
+            {title: "id", field: "id", visible: false},
             {title: "Name", headerSort: false, field:"name"},
             {title: "Days from last year", headerSort: false,field:"resturlaubVorjahr"},
             {title: "Days earned this Year", headerSort: false, field:"jahresurlaubInsgesamt"},
             {title: "Total Days Available", headerSort: false,  field:"restjahresurlaubInsgesamt"},
             {title: "Requested", width: 100, headerSort: false, field:"beantragt"},
             {title: "Days Leftover", headerSort: false, field:"resturlaubJAHR"},
-            {title: "From", field:"fromDate", width: 100, formatter:"datetime", formatterParams: {
-                    inputFormat: "YYYY-MM-DD",
-                    outputFormat: "DD.MM.YYYY",
-                    invalidPlaceholder: "invalid date",
-                }},
-            {title: "To", field:"toDate", width: 100, formatter:"datetime", formatterParams: {
-                    inputFormat: "YYYY-MM-DD",
-                    outputFormat: "DD.MM.YYYY",
-                    invalidPlaceholder: "invalid date",
-                }},
+            {title: "From", field:"fromDate", width: 100, formatter:function(cell, formatterParams, onRendered) {
+                let cellVal = cell.getValue()
+                let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY')
+                return newDate
+            }},
+            {title: "To", field:"toDate", width: 100, formatter:function(cell, formatterParams, onRendered) {
+                let cellVal = cell.getValue()
+                let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY')
+                return newDate
+            }},
             {title: "Submitted", field:"submitted_datetime", formatter:function(cell, formatterParams, onRendered) {
                 let cellVal = cell.getValue()
                 let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
@@ -217,35 +218,79 @@ fetch('/admin/listall', {
     });
 
     // setTimeout(simpleBar.recalculate(), 1000);
-    simpleBar.recalculate()
+    // simpleBar.recalculate()
 
     hotkeys('shift+q', (event, handler) =>{
       event.preventDefault()
       $('.keyboardShortcuts').modal('toggle')
     })
-    // $(document).bind('keydown', 'ß', function (evt) {
-    //     if (evt.shiftKey) {
-    //         $('.keyboardShortcuts').modal('toggle')
-    //     }
-    // });
 
     hotkeys('shift+l', (event, handler) =>{
         let selectedData = table.getSelectedData()
-        console.log(selectedData)
         let selectedVacations = []
         selectedData.forEach((el) => {
-            let fromDate = moment().utc(el.fromDate).local().format('DD.MM.YYYY')
-            let toDate = moment().utc(el.toDate).local().format('DD.MM.YYYY')
-            selectedVacations.push([el.name, fromDate, toDate])
+            let fromDate = moment(el.fromDate).local().format('DD.MM.YYYY')
+            let toDate = moment(el.toDate).local().format('DD.MM.YYYY')
+
+            selectedVacations.push([el.name, fromDate, toDate, el.id])
         })
-        // console.log(selectedVacations)
-        // $('#delModalContent').append('<p>')
+        
+        let delModalContent = []
+        if($('#delModalVacaText').length) {
+            $('#delModalVacaText').remove()
+        }
+        delModalContent.push('<div id="delModalVacaText">')
         selectedVacations.forEach((el) => {
-            console.log(el)
-            $('#delModalContent').append('<br><b>' + el[0] + '</b> - From: <b>' + el[1]+ '</b> To: <b>' + el[2] + '</b>')
+            delModalContent.push('<br><b>' + el[0] + '</b> - From: <b>' + el[1]+ '</b> To: <b>' + el[2] + '</b>')
         })
-        $('#delModalContent').append('</p>')
-        $('.delVacaModal').modal('show')
+        delModalContent.push('</div>')
+        $('#delModalContent').append(delModalContent.join(''))
+        $('.delVacaModal').modal({onApprove: () => {
+
+            let delIds = []
+            selectedVacations.forEach((el) => {
+                delIds.push(el[3])
+            })
+            console.log(delIds)
+            fetch('/admin/vacations/delete', {
+                method: 'POST',
+                credentials: 'include',
+                body: JSON.stringify(delIds),
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // console.log(JSON.stringify(data))
+                if(data.affectedRows > 0) {
+                    // delete row from current table view
+                    delIds.forEach((el) => {
+                        var delRow = table.searchRows("id", "=", el)
+                        table.deleteRow(delRow[0])
+                    })
+                    $('body').toast({
+                        title: 'Vacation(s) Deleted',
+                        message: 'Successfully deleted vacation(s).',
+                        class : 'green',
+                        position: 'bottom left',
+                        showIcon: 'trash alternate outline',
+                        displayTime: 5000,
+                        className: {
+                            toast: 'ui message'
+                        },
+                        transition: {
+                            showMethod   : 'fly right',
+                            showDuration : 1000,
+                            hideMethod   : 'fly left',
+                            hideDuration : 1000
+                        }
+                    });
+                }
+                
+            })
+            .catch(error => console.error(error))
+        }}).modal('show')
     })
 })
 .catch(error => console.error(error))

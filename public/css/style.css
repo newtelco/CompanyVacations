@@ -197,6 +197,7 @@ body .fc {
 
 .dlBtn {
     margin-top: 20px !important;
+    height: 44px !important;
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
@@ -248,10 +249,16 @@ body .fc {
     margin-top: -15px !important;
 }
 
-#allVacaSegment > .allVacaDLBtn {
-    margin: auto 0 !important;
+.ui.right.labeled.icon.button {
+    /* margin: auto 0 !important; */
+    height: 100%;
+    box-shadow: 0 0 0 2px #67B246 inset !important;
+    color: #67B246 !important;
 }
 
+.ui.right.labeled.icon.button > .icon {
+    line-height: 22px;
+}
 #managerTable > .tabulator-header > .tabulator-headers .tabulator-col-content {
     height: initial !important;
 }
@@ -273,7 +280,8 @@ body .fc {
     text-shadow: 1px 1px 15px #ff7272 !important;
 }
 
-.ui.inverted.green.button:active .ui.inverted.green.button:hover {
+.ui.inverted.green.button:active, .ui.inverted.green.button:hover {
+    color: #fff !important;
     background-color: #67B246 !important;
 }
 
