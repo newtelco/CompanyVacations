@@ -21,6 +21,8 @@
   <script lang="javascript" src="js/xlsx.full.min.js"></script>
   <script type="text/javascript" src="js/moment.min.js"></script>
 
+  <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon_white/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon_white/favicon-32x32.png">
@@ -246,8 +248,45 @@
           </div>
         </div>
       </div>
+      <div class="ui basic modal keyboardShortcuts">
+        <div class="ui icon header">
+          <i class="keyboard icon"></i>
+          Keyboard Shortcuts
+        </div>
+        <div class="content">
+          <div class="shortcutsTable">
+            <table class="ui very basic collapsing inverted celled table">
+              <thead>
+                <tr>
+                  <th>Shortcut</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <h4 class="ui header">
+                      <div class="content">
+                        Shift + L
+                      </div>
+                    </h4>
+                  </td>
+                  <td>
+                    Delete selected Vacation Entry
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
     <div style="display:none;visibility:hidden;" id="exportTable"></div>
   <script src="/admin.js"></script>
+  <script>
+    
+
+  
+  </script>
 </body>
 </html>

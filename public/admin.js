@@ -140,7 +140,7 @@ fetch('/admin/listall', {
         if(manager == user && approved == 0) {
             return '<a class="approveBtn" target"_blank" href="https://'+hostname+'/admin/response?h='+approvalhash+'&a=a"><i style="font-size: 22px; margin-right: 5px; color: #67B236;" class="fas fa-check"></i></a><a class="denyBtn" target="_blank" href="https://'+hostname+'/admin/response?h='+approvalhash+'&a=d"><i style="font-size: 22px; color: #ff7272" class="fas fa-ban"></i></a>'
         } else if (manager == user && approved != 0) {
-            return '<small>All Done!</small>'
+            return 'Done'
         // } else if (manager != user) {
         //     return '<small>Submitted to someone else</small>'
         } else if (user == 'nhartmann' && approved == 0) {
@@ -152,17 +152,18 @@ fetch('/admin/listall', {
         layout: "fitColumns",
         pagination:"local",
         paginationSize: 10,
+        selectable: true,
         data: data,
         initialSort: [
             {column: "submitted_datetime", dir: "desc"}
         ],
         columns: [
-            {title: "Name", field:"name"},
-            {title: "Days from last year", field:"resturlaubVorjahr"},
-            {title: "Days earned this Year",field:"jahresurlaubInsgesamt"},
-            {title: "Total Days Available", field:"restjahresurlaubInsgesamt"},
-            {title: "Requested", width: 120, field:"beantragt"},
-            {title: "Days Leftover", field:"resturlaubJAHR"},
+            {title: "Name", headerSort: false, field:"name"},
+            {title: "Days from last year", headerSort: false,field:"resturlaubVorjahr"},
+            {title: "Days earned this Year", headerSort: false, field:"jahresurlaubInsgesamt"},
+            {title: "Total Days Available", headerSort: false,  field:"restjahresurlaubInsgesamt"},
+            {title: "Requested", width: 100, headerSort: false, field:"beantragt"},
+            {title: "Days Leftover", headerSort: false, field:"resturlaubJAHR"},
             {title: "From", field:"fromDate", width: 100, formatter:"datetime", formatterParams: {
                     inputFormat: "YYYY-MM-DD",
                     outputFormat: "DD.MM.YYYY",
@@ -198,7 +199,11 @@ fetch('/admin/listall', {
                 let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
                 return newDate
             }},
-            {title: 'manager', tooltip: true, field: 'manager' },
+            {title: 'Manager', width: 100, headerSort: false, field: 'manager', formatter: function(cell) {
+                let email = cell.getValue()
+                let username = email.substring(0, email.lastIndexOf("@"))
+                return username
+            }},
             {title: 'Approve/Deny', field: 'approvedeny', headerSort: false, width: 80, align: 'center', formatter:"html", mutator: approvedenyMutator}, 
 
         ]
@@ -214,6 +219,20 @@ fetch('/admin/listall', {
     // setTimeout(simpleBar.recalculate(), 1000);
     simpleBar.recalculate()
 
+    hotkeys('shift+q', (event, handler) =>{
+      event.preventDefault()
+      $('.keyboardShortcuts').modal('toggle')
+    })
+    // $(document).bind('keydown', 'ß', function (evt) {
+    //     if (evt.shiftKey) {
+    //         $('.keyboardShortcuts').modal('toggle')
+    //     }
+    // });
+
+    hotkeys('shift+l', (event, handler) =>{
+        var selectedData = table.getSelectedData()
+        console.log(selectedData)
+    })
 })
 .catch(error => console.error(error))
 

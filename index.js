@@ -151,7 +151,6 @@ connection.connect((err) => {
 })
 
 const ldapUrl = 'ldap://' + process.env.LDAP_URL
-console.log(ldapUrl)
 var OPTS = {
     server: {
         url             : ldapUrl,

@@ -211,6 +211,10 @@ body .fc {
     background-color: rgba(103, 178, 70, 0.2) !important; 
 }
 
+/* .tabulator-row-even + .tabulator-selected {
+    background-color: rgba(103, 178, 70, 0.7) !important; 
+} */
+
 .approvedIcon {
     font-size: 18px;
     text-align: center;
@@ -271,4 +275,22 @@ body .fc {
 
 .ui.inverted.green.button:active {
     background-color: #67B246 !important;
+}
+
+tr > th, h4 > div {
+    color: #fff !important;
+}
+
+.shortcutsTable > .table {
+    color: #fff !important;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.ui.ui.inverted.table th {
+    background-color: rgba(0,0,0,0) !important;
+}
+
+.tabulator-table > .tabulator-selected{
+    background-color: rgba(103, 178, 70, 0.7) !important; 
 }

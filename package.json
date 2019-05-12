@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "start:dev": "PORT=7666 nodemon --ignore sessions/ index.js"
+    "start:dev": "WEB_PORT=7666 nodemon --ignore sessions/ index.js"
   },
   "repository": {
     "type": "git",
