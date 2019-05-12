@@ -1,9 +1,0 @@
-{
-  "apps" : [{
-    "name"        : "vacation_",
-    "script"      : "/opt/vaca_dev/index.js",
-    "autorestart" : true,
-    "watch"       : true,
-    "ignore_watch": ["node_modules","sessions"]
-  }]
-}
