@@ -1,6 +1,6 @@
 {
   "name": "newtelco_vacation",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Vacation Request/Approval Application",
   "main": "index.js",
   "scripts": {
