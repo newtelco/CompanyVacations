@@ -1,6 +1,6 @@
 {
   "apps" : [{
-    "name"        : "Newtelco Vacation",
+    "name"        : "vacation_",
     "script"      : "/opt/vaca_dev/index.js",
     "autorestart" : true,
     "watch"       : true,
