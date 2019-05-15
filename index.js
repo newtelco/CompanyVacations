@@ -67,24 +67,22 @@ function addCal(summary, desc, start, end, user, calendarId) {
 })();
 }
 
-function sendMsg(userName, userMail, subject, body) {
+function sendMsg(userName, userMail, subject, body, ccMail) {
   (() => {
   "use strict";
-  // const google_key = require("./nt_gsuite_priv.json"); 
 
   subject = '[VACATION] ' + subject
   const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
   const messageParts = [
     'From: Newtelco Vacations <device@newtelco.de>',
     'To: ' + userName + ' <' + userMail + '>',
-    // 'To: Nico Domino <ndomino@newtelco.de>',
+    'Cc: ["' + ccMail + '"]', 
     'Content-Type: text/html; charset=utf-8',
     'MIME-Version: 1.0',
     `Subject: ${utf8Subject}`,
     '',
     body,
-    '',
-    // '<b>Hello!</b>  🤘❤️😎',
+    ''
   ];
   const message = messageParts.join('\n');
 
@@ -118,8 +116,7 @@ function sendMsg(userName, userMail, subject, body) {
         }
       }, (err, messages) => {
         //will print out an array of messages plus the next page token
-        // console.log(err);
-        // console.log('[*] jwtMessage block')
+        console.log(err);
         // console.dir(messages);
       });
     })() 
@@ -129,12 +126,11 @@ function sendMsg(userName, userMail, subject, body) {
 
 function memberOfAdmin(group) {
   for(i = 0; i < group.length; i++) {
-      if(group[i].includes('AdminGroup') || group[i].includes('Management')) {
+      if(group[i].includes('AdminGroup') || group[i].includes('Administratoren') || group[i].includes('Management')) {
         return true
-      } else {
-        return false
-      }
+      } 
   }
+  return false
 }
 
 var connection = mysql.createConnection({
@@ -273,6 +269,8 @@ app.get('/overview', (req, res) => {
 
 
 app.get('/admin', (req, res) => {
+  console.log(req.isAuthenticated())
+  console.log(memberOfAdmin(req.user.memberOf))
   // console.log('\nInside GET /admin callback')
   // console.log(`User authenticated? ${req.isAuthenticated()}`)
   if(req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
@@ -603,7 +601,13 @@ app.post('/request/submit', (req, res) => {
 
       mgrName = mgrMail.substring(0, mgrMail.lastIndexOf("@"));
 
-      sendMsg(mgrName, mgrMail, msgSubject, msgBody)
+      const ccMail = "yo@ni.co.de"
+      
+      if(mgrName = 'nhartmann') {
+        sendMsg(mgrName, mgrMail, msgSubject, msgBody)
+      } else {
+        sendMsg(mgrName, mgrMail, msgSubject, msgBody, ccMail)
+      }
 
 
     } else {

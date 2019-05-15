@@ -197,8 +197,12 @@ fetch('/admin/listall', {
             }},
             {title: "Approved Date/Time", field: "approval_datetime", formatter:function(cell, formatterParams, onRendered) {
                 let cellVal = cell.getValue()
-                let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
-                return newDate
+                if(cellVal == null) {
+                    return 'N/A'
+                } else {
+                    let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
+                    return newDate
+                }
             }},
             {title: 'Manager', width: 100, headerSort: false, field: 'manager', formatter: function(cell) {
                 let email = cell.getValue()

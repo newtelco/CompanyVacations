@@ -22,11 +22,11 @@ fetch('/vacation/list', {
             {column: "submitted_datetime", dir: "desc"}
         ],
         columns: [
-            {title: "Days from last year", field:"resturlaubVorjahr"},
-            {title: "Days earned this Year", field:"jahresurlaubInsgesamt"},
+            {title: "Remaining days - last year", field:"resturlaubVorjahr"},
+            {title: "Remaining days - this year", field:"jahresurlaubInsgesamt"},
             {title: "Total Days Available", field:"restjahresurlaubInsgesamt"},
             {title: "Requested", width: 120, field:"beantragt"},
-            {title: "Days Leftover", field:"resturlaubJAHR"},
+            {title: "Total Days Remaining", field:"resturlaubJAHR"},
             {title: "From", field:"fromDate", width: 100, formatter:"datetime", formatterParams: {
                     inputFormat: "YYYY-MM-DD",
                     outputFormat: "DD.MM.YYYY",
