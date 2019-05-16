@@ -14,6 +14,8 @@ build site:
 deploy_dev:
   image: alpine
   stage: deploy
+  variables:
+    CI_DEBUG_TRACE: "true"
   script:
     # SETUP CONFIG FILE
     - cp /builds/newtelco/vacation_node/config.template.env /builds/newtelco/vacation_node/config.env
