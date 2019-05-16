@@ -15,7 +15,11 @@ deploy_dev:
   image: alpine
   stage: deploy
   variables:
-    CI_DEBUG_TRACE: "true"
+    - CI_DEBUG_TRACE: "true"
+  before_script:
+    - echo $CI_JOB_TOKEN
+    - echo $CI_JOB_URL
+    - echo $CI_REPOSITORY_URL
   script:
     # SETUP CONFIG FILE
     - cp /builds/newtelco/vacation_node/config.template.env /builds/newtelco/vacation_node/config.env
