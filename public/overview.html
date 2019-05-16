@@ -21,6 +21,8 @@
   <script lang="javascript" src="js/xlsx.full.min.js"></script>
   <script type="text/javascript" src="js/moment.min.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   
   <link rel="apple-touch-icon" sizes="180x180" href="images/favicon_white/apple-touch-icon.png">
@@ -62,14 +64,33 @@
       <div class="ui three column grid dashboardGrid">
         <div class="one wide column"></div>
         <div class="fourteen wide column">
-          <h1 style="display: inline-block" class="ui header overviewHeader">
-            My Vacations
-          </h1>
-          <button style="float: right; display: inline-block"  class="ui right labeled icon inverted green button dlBtn">
-            <i class="download icon"></i>
-            Download .xlsx
-          </button>
-          <div id="vacationsTable"></div>
+          <div class="ui segments overviewSegment">
+            <div id="allVacaSegment" class="ui segment">
+              <h1 style="display: inline-block" class="ui header overviewHeader">
+                My Vacations
+              </h1>
+              <button style="float: right; display: inline-block"  class="ui right labeled icon inverted green button dlBtn">
+                <i class="download icon"></i>
+                Download .xlsx
+              </button>
+            </div>
+            <div class="ui secondary segment">
+              <div id="vacationsTable"></div>
+            </div>
+          </div>
+          <div class="ui segments overviewSegment2">
+            <div id="allVacaSegment" class="ui segment">
+              <h1 style="display: inline-block" class="ui header overviewHeader">
+                Vacation Charts
+              </h1>
+            </div>
+            <div class="ui secondary segment">
+              <!-- Charts! -->
+              <div id="overviewChartContainer" style="">              
+                <canvas id="myChart"></canvas>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="one wide column"></div>
       </div>

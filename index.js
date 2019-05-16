@@ -14,8 +14,6 @@ let {google} = require('googleapis')
 const google_key = require(process.env.GS_APIKEY)
 
 
-
-
 function addCal(summary, desc, start, end, user, calendarId) {
   (() => {
   "use strict";
@@ -430,7 +428,7 @@ app.post('/admin/managers/add', (req, res) => {
 })
 
 app.post('/report/year', (req, res) => {
-    if (req.isAuthenticated() && memberOfAdmin(req.user.memberOf)) {
+    if (req.isAuthenticated()) {
 
       body = req.body
       const year = body.year 
