@@ -2,7 +2,12 @@ build site:
   image: node:6
   stage: build
   before_script:
+    - echo $CI_JOB_TOKEN
+    - echo $CI_JOB_URL
+    - echo $CI_REPOSITORY_URL
     - bash prepare_ci.sh > /dev/null
+  variables:
+    CI_DEBUG_TRACE: "true"
   script:
     - npm install --progress=false
   artifacts:
