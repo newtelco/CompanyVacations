@@ -15,7 +15,7 @@ deploy_dev:
   image: alpine
   stage: deploy
   variables:
-    - CI_DEBUG_TRACE: "true"
+    CI_DEBUG_TRACE: true
   before_script:
     - echo $CI_JOB_TOKEN
     - echo $CI_JOB_URL
