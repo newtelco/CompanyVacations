@@ -8,7 +8,7 @@ $(document).ready(() => {
 
 let table;
 let table2;
-let user;
+// let user;
 
 fetch('/admin/managers', {
     method: 'POST',
@@ -322,8 +322,6 @@ $('#reportMonthDropdown2').append('<option value="' + (yearNow-2) + '">' + (year
 $('#dlMonthlyBtn').on('click', () => {
     let targetMonth = $('#reportMonthDropdown option:selected').val()
     let targetYear = $('#reportMonthDropdown2 option:selected').val()
-    console.log('Month: ' + targetMonth)
-    console.log('Year: ' + targetYear)
 
     targetDate = { 
         month: targetMonth,
@@ -340,7 +338,7 @@ $('#dlMonthlyBtn').on('click', () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(JSON.stringify(data))
+        // console.log(JSON.stringify(data))
 
         if(JSON.stringify(data) == "[]") {
             $('body').toast({
@@ -365,7 +363,6 @@ $('#dlMonthlyBtn').on('click', () => {
 
         dateAccessor = function(value, data, type, params, column){
             let newDate = moment.utc(value).local().format('DD.MM.YYYY')
-            console.log(newDate)
             return newDate
         }
 
@@ -374,6 +371,19 @@ $('#dlMonthlyBtn').on('click', () => {
             return newDate
         }
 
+        approveAccessor = function(value, data, type, params, column){
+            let approvedText = ''
+            switch(value) {
+                case 0:
+                    approvedText = "Waiting"
+                case 1:
+                    approvedText = "Denied"
+                case 2:
+                    approvedText = "Approved"
+            }
+            return approvedText
+        }
+        
         table4 = new Tabulator("#exportTable", {
             layout: "fitColumns",
             data: data,
@@ -392,17 +402,10 @@ $('#dlMonthlyBtn').on('click', () => {
                 {title: "From", field:"fromDate", width: 100, accessorDownload:dateAccessor},
                 {title: "To", field:"toDate", width: 100, accessorDownload:dateAccessor},
                 {title: "Note", field:"note"},
-                {title: "Submitted", field:"submitted_datetime", formatter:function(cell, formatterParams, onRendered) {
-                    let cellVal = cell.getValue()
-                    let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
-                    return newDate
-                }},
-                {title: "Approved", field:"approved"},
-                {title: "Approved Date/Time", field: "approval_datetime", formatter:function(cell, formatterParams, onRendered) {
-                    let cellVal = cell.getValue()
-                    let newDate = moment.utc(cellVal).local().format('DD.MM.YYYY HH:mm')
-                    return newDate
-                }},
+                {title: "Submitted", field:"submitted_datetime", accessorDownload:dateTimeAccessor},
+                {title: "Manager", field:"manager"},
+                {title: "Approved", field:"approved", accessorDownload:approveAccessor},
+                {title: "Approved Date/Time", field: "approval_datetime", accessorDownload:dateTimeAccessor},
             ],
         });
 
@@ -472,6 +475,19 @@ $('#dlYearlyBtn').on('click', () => {
             return newDate
         }
 
+        approveAccessor = function(value, data, type, params, column){
+            let approvedText = ''
+            switch(value) {
+                case 0:
+                    approvedText = "Waiting"
+                case 1:
+                    approvedText = "Denied"
+                case 2:
+                    approvedText = "Approved"
+            }
+            return approvedText
+        }
+        
         table4 = new Tabulator("#exportTable", {
             layout: "fitColumns",
             data: data,
@@ -488,12 +504,12 @@ $('#dlYearlyBtn').on('click', () => {
                 {title: "Requested", field:"beantragt"},
                 {title: "Days Leftover", field:"resturlaubJAHR"},
                 {title: "From", field:"fromDate", accessor: dateAccessor},
-                {title: "To", field:"toDate", accessor: dateAccessor},
+                {title: "To", field:"toDate", accessorDownload: dateAccessor},
                 {title: "Note", field:"note"},
-                {title: "Submitted", field:"submitted_datetime", accessor: dateTimeAccessor},
+                {title: "Submitted", field:"submitted_datetime", accessorDownload: dateTimeAccessor},
                 {title: "Manager", field:"manager"},
-                {title: "Approved", field:"approved"},
-                {title: "Approved Date/Time", field: "approval_datetime", accessor: dateTimeAccessor}
+                {title: "Approved", field:"approved", accessorDownload: approveAccessor},
+                {title: "Approved Date/Time", field: "approval_datetime", accessorDownload: dateTimeAccessor}
             ]
         });
 

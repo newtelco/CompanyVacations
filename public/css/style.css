@@ -280,10 +280,13 @@ body .fc {
 }
 
 .ui.right.labeled.icon.button {
-    /* margin: auto 0 !important; */
     height: 100%;
     box-shadow: 0 0 0 2px #67B246 inset !important;
     color: #67B246 !important;
+}
+
+#addManagerSubmitBtn {
+    color: #fff !important;
 }
 
 .ui.right.labeled.icon.button > .icon {
