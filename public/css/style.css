@@ -320,10 +320,6 @@ body .fc {
     background-color: #67B246 !important;
 }
 
-tr > th, h4 > div {
-    color: rgb(93, 93, 93) !important;
-}
-
 .shortcutsTable > .table {
     color: #fff !important;
     width: 100%;

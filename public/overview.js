@@ -100,98 +100,106 @@ targetYear = {
     year: targetYear
 }
 
-fetch('/report/year', {
+fetch('/report/allVacations', {
     method: 'POST',
-    body: JSON.stringify(targetYear),
     credentials: 'include',
     headers: new Headers({
         'Content-Type': 'application/json'
     })
 })
 .then(response => response.json())
-.then(data => {
-    /* console.log(JSON.stringify(data))
-   
-    {
-        "id":8,
-        "name":"Stylianos Stergiou",
-        "email":"sstergiou@newtelco.de",
-        "resturlaubVorjahr":3,
-        "jahresurlaubInsgesamt":26,
-        "restjahresurlaubInsgesamt":29,
-        "beantragt":5,
-        "resturlaubJAHR":24,
-        "fromDate":"2019-01-07T23:00:00.000Z",
-        "toDate":"2019-01-13T23:00:00.000Z",
-        "manager":"nhartmann@newtelco.de",
-        "note":null,
-        "submitted_datetime":"2018-10-18T15:21:16.000Z",
-        "submitted_by":"sstergiou",
-        "approval_hash":null,
-        "approved":2,
-        "approval_datetime":null
+.then(data1 => {
+    //  console.log(JSON.stringify(data1))
+
+    const userMail = user.mail
+    const userMailObj = {
+        userMail: userMail
     }
 
-    */
-
-    let currentUserRows = ''
-    let sumDates = []
-
-    data.forEach(vaca => {
-        from = vaca.fromDate
-        to = vaca.toDate
-        diffDates = getDates(from, to)
-        sumDates.push(diffDates)
-        console.log(diffDates)
+    fetch('/report/myVacations', {
+        method: 'POST',
+        body: JSON.stringify(userMailObj),
+        credentials: 'include',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        })
     })
+    .then(response => response.json())
+    .then(data => {
+        // console.log(JSON.stringify(data))
 
-    console.log(sumDates)
+        // ALL VACAS
+        let monthCount = []
+        let monthLabel = []
+        data1.forEach(m => { monthCount.push(m.COUNT) })
+        data1.forEach(m => { monthLabel.push(m.MONTH) })
 
-    let flatDates = [].concat.apply([], sumDates)
-    console.log(flatDates)
+        firstMonth = monthLabel[0]
+        lastMonth = monthLabel[7]
 
-    let ctx = document.getElementById('myChart');
-    var mixedChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            datasets: [{
-                label: 'Bar Dataset',
-                data: [10, 20, 30, 40]
-            }, {
-                label: 'Line Dataset',
-                data: [50, 50, 50, 50],
+        monthCount.push(0)
+        monthCount.splice(0,0,0)
+        monthLabel.push('NULL')
+        monthLabel.splice(0,0,'NULL')
 
-                // Changes this dataset to become a line
-                type: 'line'
-            }],
-            labels: ['January', 'February', 'March', 'April']
-        },
-        options: {
-            responsive: true,
-            title:      {
-                display: true,
-                text:    "Chart.js Time Scale"
-            },
-            scales:     {
-                xAxes: [{
-                    type:       "time",
-                    time:       {
-                        // format: timeFormat,
-                        tooltipFormat: 'll'
-                    },
-                    scaleLabel: {
-                        display:     true,
-                        labelString: 'Date'
-                    }
+        // MY VACAS
+        let userMonthCount = []
+        data.forEach(m => { userMonthCount.push(m.COUNT) })
+        userMonthCount.push(0)
+        userMonthCount.splice(0,0,0)
+
+        let maxCount = monthCount.reduce(function(a, b) {
+            return Math.max(a, b);
+        });
+        maxCount = maxCount + (maxCount / 10)
+
+        let ctx = document.getElementById('myChart');
+        var mixedChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    label: 'My Vacations',
+                    data: userMonthCount,
+                    backgroundColor: 'rgb(239, 105, 185, 0.6)',
+                    borderColor: 'rgb(239, 105, 185)',
+                    borderWidth: 2,
+                    barPercentage: 0.2
+                }, {
+                    label: 'Company Vacations',
+                    data: monthCount,
+                    type: 'line',
+                    backgroundColor: 'rgb(103, 178, 70, 0.3)',
+                    borderColor: 'rgb(103, 178, 70)',
+                    borderWidth: 2,
+                    spanGaps: true
                 }],
-                yAxes: [{
-                    scaleLabel: {
-                        display:     true,
-                        labelString: 'value'
-                    }
-                }]
+                labels: monthLabel
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    mode: 'x'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMax: maxCount
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            min: firstMonth,
+                            max: lastMonth
+                        }
+                    }]
+                }
             }
-        }
-    });
+        });
+
+    })
+    .catch(error => console.error(error))
 })
 .catch(error => console.error(error))

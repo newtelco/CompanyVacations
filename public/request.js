@@ -18,7 +18,6 @@ $('#managerDropdown').dropdown({
 
 $('#fromCalendar').calendar({
     type: 'date',
-    debug: true,
     endCalendar: $('#toCalendar'),
     popupOptions: {
         position: 'left center',
@@ -30,7 +29,6 @@ $('#fromCalendar').calendar({
 
 $('#toCalendar').calendar({
     type: 'date',
-    debug: true,
     startCalendar: $('#fromCalendar'),
     popupOptions: {
         position: 'right center',

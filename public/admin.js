@@ -707,3 +707,13 @@ $('#addManagerSubmitBtn').on('click', () => {
         })
         .catch(error => console.error(error))
 })
+
+// lazy javascript way because CSS was not doing what I wanted
+let shortCutsTable = document.getElementById('shortcutsTable')
+let descendents = shortCutsTable.getElementsByTagName('*')
+
+descendents.forEach((el) => {
+    el.setAttribute('style','color: #fff !important')
+})
+
+

@@ -403,6 +403,35 @@ app.post('/admin/managers/add', (req, res) => {
     }
 })
 
+app.post('/report/myVacations', (req, res) => {
+    if (req.isAuthenticated()) {
+
+      body = req.body
+      const userMail = body.userMail
+
+      connection.query(`SELECT MONTHNAME(fromDate) MONTH, YEAR(fromDate) YEAR, COUNT(*) COUNT FROM vacations WHERE fromDate > CURRENT_DATE() - INTERVAL 7 MONTH AND fromdate < CURRENT_DATE AND email LIKE '${userMail}' GROUP BY MONTH(fromDate), YEAR(fromDate) ORDER BY  YEAR(fromDate), MONTH(fromDate)`, (error, results, fields) => {
+        if (error) throw error
+        return res.status(202).send(results)
+      })
+    } else {
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
+    }
+})
+
+app.post('/report/allVacations', (req, res) => {
+    if (req.isAuthenticated()) {
+
+      connection.query(`SELECT MONTHNAME(fromDate) MONTH, YEAR(fromDate) YEAR, COUNT(*) COUNT FROM vacations WHERE fromDate > CURRENT_DATE() - INTERVAL 7 MONTH AND fromdate < CURRENT_DATE GROUP BY MONTH(fromDate), YEAR(fromDate) ORDER BY  YEAR(fromDate), MONTH(fromDate)`, (error, results, fields) => {
+        if (error) throw error
+        return res.status(202).send(results)
+      })
+    } else {
+      req.session.returnTo = req.originalUrl
+      return res.status(403).redirect('/')
+    }
+})
+
 app.post('/report/year', (req, res) => {
     if (req.isAuthenticated()) {
 
