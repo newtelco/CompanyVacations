@@ -249,6 +249,7 @@ onSuccess: function(evt, fields) {
 
     var $form = $('#requestForm')
     allFields = $form.form('get values')
+    console.log(allFields)
     console.log(JSON.stringify(allFields))
 
     fetch('/request/submit', {
