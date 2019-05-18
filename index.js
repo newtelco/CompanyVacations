@@ -279,7 +279,7 @@ app.get('/admin/response', (req, res) => {
       connection.query(`UPDATE vacations SET approval_datetime = "${datetimeNow}", approved = "${action}" WHERE approval_hash LIKE "${id}";`, (error, results1, fields) => {
         if (error) throw error
 
-        connection.query(`SELECT name, email, submitted_datetime, toDate, fromDate, approved FROM vacations WHERE approval_hash LIKE "${id}";`, (error, results, fields) => {
+        connection.query(`SELECT name, email, submitted_datetime, toDate, fromDate, approved, approval_datetime, manager FROM vacations WHERE approval_hash LIKE "${id}";`, (error, results, fields) => {
         if (error) throw error
           
           reqUser = results[0]
@@ -289,20 +289,15 @@ app.get('/admin/response', (req, res) => {
           let mailEnd = moment(end).format('DD.MM.YYYY')
           let userMail = reqUser.email
           let userName = reqUser.name
+          let manager = reqUser.manager
+          let approvalDateTime = reqUser.approval_datetime
 
           if(action == '2') {
             ntvacaCal = process.env.GS_CALID
 
             let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format('DD.MM.YYYY HH:mm:ss')
             let summary = userName
-            let desc = `${userName} Vacation
-            
-            From: ${mailStart}
-            To: ${mailEnd}
-            
-            Submitted On: ${reqDateTime}
-            
-            https://vacations.newtelco.de`
+            let desc = `From: ${mailStart}\nTo: ${mailEnd}\n\nSubmitted On: ${reqDateTime}\n\nManager: ${manager}\nApproved On: ${approvalDateTime}\n\nhttps://vacations.newtelco.de`
 
             // end + 1 day hack for google calendar
             end = moment(end).local().add(1,'d').format('YYYY-MM-DD')
