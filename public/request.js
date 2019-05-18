@@ -18,23 +18,55 @@ $('#managerDropdown').dropdown({
 
 $('#fromCalendar').calendar({
     type: 'date',
+    debug: true,
     endCalendar: $('#toCalendar'),
     popupOptions: {
         position: 'left center',
         lastResort: 'bottom center',
         prefer: 'opposite',
         hideOnScroll: false
+    },
+    onChange: function(date) {
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        if (month < 10) {
+            month = '0' + month;
+        }
+        if (day < 10) {
+            day = '0' + day;
+        }
+
+        var $form = $('#requestForm')
+        const fullDate = `${year}-${month}-${day}`
+        $form.form('set values', { fromDate : fullDate})
     }
   });
 
 $('#toCalendar').calendar({
     type: 'date',
+    debug: true,
     startCalendar: $('#fromCalendar'),
     popupOptions: {
         position: 'right center',
         lastResort: 'bottom center',
         prefer: 'opposite',
         hideOnScroll: false
+    },
+    onChange: function(date) {
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        if (month < 10) {
+            month = '0' + month;
+        }
+        if (day < 10) {
+            day = '0' + day;
+        }
+
+        var $form = $('#requestForm')
+        const fullDate = `${year}-${month}-${day}`
+        $form.form('set values', { toDate : fullDate})
     }
   });
 
