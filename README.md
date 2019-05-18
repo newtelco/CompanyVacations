@@ -7,7 +7,6 @@
 
 
 > Built on [node](https://nodejs.org/en/) and [express](https://expressjs.com/)  
-> Process running + monitoring via [pm2](http://pm2.keymetrics.io/)
 
 ## Screenshots
 
@@ -19,11 +18,21 @@
 
 1. Clone this repo  
 2. Run `npm install`  
-3. Visit localhost:7555  
-  3a. Or reverse proxy that port out via nginx   
+3. Run `npm run`  
+4. Visit `http://localhost:7555` or reverse proxy that port out  
+
+> If you would like for this to run in production, I suggest setting up [pm2](https://pm2.io/runtime/) to run / manage / monitor the process. 
+
+## Development
+
+1. Clone this repo
+2. Run `npm install`
+3. Run `npm run start:dev`
+  > This will run `nodemon` - a nice live reloading dev server on port 7666
+4. Visit `http://localhost:7666`
 
 ## Contributing  
 
 - Just clone this repo and don't fuck it up :) 
 
-[MIT Licence](https://opensource.org/licenses/MIT)  
+[AGPLv3 Licence](https://opensource.org/licenses/AGPL-3.0)  

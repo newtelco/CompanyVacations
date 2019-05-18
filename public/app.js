@@ -1,3 +1,9 @@
+/**
+ * @summary NewTelco GmbH Vacation Application
+ * @author Nico Domino <yo@ni.co.de>
+ * @license AGPLv3
+ */
+
 const url = new URL(window.location.href)
 let failedQuery = url.searchParams.get('failed')
 if(failedQuery == 1) {
@@ -6,8 +12,8 @@ if(failedQuery == 1) {
 let responseQuery = url.searchParams.get('response')
 if(responseQuery == 2) {
     $('body').toast({
-            title: 'You must login',
-            message: 'Please login to approve / deny a vacation request!',
+            title: 'Please Login!',
+            message: 'You must login to approve or deny a vacation request',
             class : 'green',
             position: 'bottom center',
             displayTime: 6000,

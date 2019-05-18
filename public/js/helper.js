@@ -1,3 +1,9 @@
+/**
+ * @summary NewTelco GmbH Vacation Application
+ * @author Nico Domino <yo@ni.co.de>
+ * @license AGPLv3
+ */
+
 $('#adminLink').hide()
 $('#adminDivider').hide()
 
@@ -21,7 +27,6 @@ function UserInfo(verb) {
         }
         if(verb == 'set') {
             window.sessionStorage.setItem('user',JSON.stringify(data))
-            console.log(data)
             return data
         } else if (verb == 'get') {
             return data.sAMAccountName

@@ -1,3 +1,9 @@
+/**
+ * @summary NewTelco GmbH Vacation Application
+ * @author Nico Domino <yo@ni.co.de>
+ * @license AGPLv3
+ */
+
 var table;
 var user;
 

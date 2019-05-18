@@ -1,3 +1,9 @@
+/**
+ * @summary NewTelco GmbH Vacation Application
+ * @author Nico Domino <yo@ni.co.de>
+ * @license AGPLv3
+ */
+
 let simpleBar = ''
  
 $(document).ready(() => {
@@ -8,7 +14,6 @@ $(document).ready(() => {
 
 let table;
 let table2;
-// let user;
 
 fetch('/admin/managers', {
     method: 'POST',
@@ -24,8 +29,6 @@ fetch('/admin/managers', {
 
     table5 = new Tabulator("#managerTable", {
         layout: "fitColumns",
-        // pagination:"local",
-        // paginationSize: 5,
         data: data,
         columns: [
             {title: "ID", field:"id", align: 'center', headerSort:false, width: 50},
@@ -36,7 +39,6 @@ fetch('/admin/managers', {
                 .modal({ onApprove: () => {
                     cell.getRow().delete();
                     let cellData = cell.getRow().getData();
-                    // TO DO: fetch to delete from DB
                     fetch('/admin/managers/delete', {
                         method: 'POST',
                         credentials: 'include',
@@ -47,7 +49,7 @@ fetch('/admin/managers', {
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(JSON.stringify(data))
+                        // console.log(JSON.stringify(data))
                         if(data.affectedRows > 0) {
                             $('body').toast({
                                 title: 'Manager Deleted',
@@ -255,7 +257,6 @@ fetch('/admin/listall', {
             selectedVacations.forEach((el) => {
                 delIds.push(el[3])
             })
-            console.log(delIds)
             fetch('/admin/vacations/delete', {
                 method: 'POST',
                 credentials: 'include',
@@ -466,7 +467,6 @@ $('#dlYearlyBtn').on('click', () => {
 
         dateAccessor = function(value, data, type, params, column){
             let newDate = moment.utc(value).local().format('DD.MM.YYYY')
-            console.log(newDate)
             return newDate
         }
 
@@ -671,7 +671,6 @@ $('#addManagerBtn').on('click', () => {
 $('#addManagerSubmitBtn').on('click', () => {
 
     let managerForm = $('.ui.form.addManager').form('get values')
-    console.log(managerForm)
 
         fetch('/admin/managers/add', {
             method: 'POST',
@@ -683,7 +682,7 @@ $('#addManagerSubmitBtn').on('click', () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(JSON.stringify(data))
+            // console.log(JSON.stringify(data))
             $('body').toast({
                 title: 'Manager Added',
                 message: 'Successfully added manager.',

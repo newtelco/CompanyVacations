@@ -1,3 +1,8 @@
+/**
+ * @summary NewTelco GmbH Vacation Application
+ * @author Nico Domino <yo@ni.co.de>
+ * @license AGPLv3
+ */
 
 const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
     autoHide: false
@@ -12,11 +17,25 @@ $('#managerDropdown').dropdown({
   });
 
 $('#fromCalendar').calendar({
-    type: 'date'
+    type: 'date',
+    endCalendar: $('#toCalendar'),
+    popupOptions: {
+        position: 'left center',
+        lastResort: 'bottom center',
+        prefer: 'opposite',
+        hideOnScroll: false
+    }
   });
 
 $('#toCalendar').calendar({
-    type: 'date'
+    type: 'date',
+    startCalendar: $('#fromCalendar'),
+    popupOptions: {
+        position: 'right center',
+        lastResort: 'bottom center',
+        prefer: 'opposite',
+        hideOnScroll: false
+    }
   });
 
 $('#submitBtn').on('click', function(e) {
@@ -292,14 +311,14 @@ $('.go-top').click(function(event) {
 
 $('.ui.accordion').accordion()
 
-$('#monthsInput').on('change', (e) => {
+$('#monthsInput').on('keyup', (e) => {
     let months = $('#monthsInput').val()
     months = Math.abs(Math.floor(26 * (months / 12)))
     months += ' days available'
     $('#monthsResult').text(months)
 })
 
-$('#yearsInput').on('change', (e) => {
+$('#yearsInput').on('keyup', (e) => {
     let years = parseInt($('#yearsInput').val())
     let days = ''
 

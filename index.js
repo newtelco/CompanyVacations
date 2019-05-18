@@ -1,3 +1,9 @@
+/**
+ * @summary NewTelco GmbH Vacation Application
+ * @author Nico Domino <yo@ni.co.de>
+ * @license AGPLv3
+ */
+
 const dotenv = require('dotenv')
 const env = dotenv.config({ path: './config.env' })
 const express = require('express')
@@ -290,12 +296,12 @@ app.get('/admin/response', (req, res) => {
           let userMail = reqUser.email
           let userName = reqUser.name
           let manager = reqUser.manager
-          let approvalDateTime = reqUser.approval_datetime
+          let approvalDateTime = moment(reqUser.approval_datetime).format('DD.MM.YYYY HH:mm')
 
           if(action == '2') {
             ntvacaCal = process.env.GS_CALID
 
-            let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format('DD.MM.YYYY HH:mm:ss')
+            let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format('DD.MM.YYYY HH:mm')
             let summary = userName
             let desc = `From: ${mailStart}\nTo: ${mailEnd}\n\nSubmitted On: ${reqDateTime}\n\nManager: ${manager}\nApproved On: ${approvalDateTime}\n\nhttps://vacations.newtelco.de`
 

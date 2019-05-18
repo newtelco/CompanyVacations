@@ -1,4 +1,10 @@
-/* Newtelco Vacations CSS */
+/* 
+
+@summary NewTelco GmbH Vacation Application
+@author Nico Domino <yo@ni.co.de>
+@license AGPLv3
+
+*/
 
 /* Login Page */
 
@@ -235,10 +241,6 @@ body .fc {
     background-color: rgba(103, 178, 70, 0.2) !important; 
 }
 
-/* .tabulator-row-even + .tabulator-selected {
-    background-color: rgba(103, 178, 70, 0.7) !important; 
-} */
-
 #overviewChartContainer {
     position: relative; 
     height:auto; 
@@ -319,7 +321,7 @@ body .fc {
 }
 
 tr > th, h4 > div {
-    color: #fff !important;
+    color: rgb(93, 93, 93) !important;
 }
 
 .shortcutsTable > .table {
