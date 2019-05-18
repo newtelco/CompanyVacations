@@ -534,8 +534,9 @@ app.post('/request/submit', (req, res) => {
       let approval_hash = uuid()
       approval_hash = approval_hash.replace(/-/g, '')
       const submitted_datetime = DateTime.local().toFormat('kkkk-MM-dd HH:mm:ss')
-      const toDATE = DateTime.fromFormat(newVaca.toDate, 'LLLL d, yyyy').toISODate()
-      const fromDATE = DateTime.fromFormat(newVaca.fromDate, 'LLLL d, yyyy').toISODate()
+      const toDATE = moment(newVaca.toDate).format('YYYY-MM-DD HH:mm:ss')
+      const fromDATE = moment(newVaca.fromDate).format('YYYY-MM-DD HH:mm:ss')
+
 
       newVaca['toDate'] = toDATE
       newVaca['fromDate'] = fromDATE

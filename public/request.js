@@ -25,21 +25,6 @@ $('#fromCalendar').calendar({
         lastResort: 'bottom center',
         prefer: 'opposite',
         hideOnScroll: false
-    },
-    onChange: function(date) {
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        if (month < 10) {
-            month = '0' + month;
-        }
-        if (day < 10) {
-            day = '0' + day;
-        }
-
-        var $form = $('#requestForm')
-        const fullDate = `${year}-${month}-${day}`
-        $form.form('set values', { fromDate : fullDate})
     }
   });
 
@@ -52,21 +37,6 @@ $('#toCalendar').calendar({
         lastResort: 'bottom center',
         prefer: 'opposite',
         hideOnScroll: false
-    },
-    onChange: function(date) {
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        if (month < 10) {
-            month = '0' + month;
-        }
-        if (day < 10) {
-            day = '0' + day;
-        }
-
-        var $form = $('#requestForm')
-        const fullDate = `${year}-${month}-${day}`
-        $form.form('set values', { toDate : fullDate})
     }
   });
 
