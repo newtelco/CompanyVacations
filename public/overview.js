@@ -176,6 +176,7 @@ fetch('/report/allVacations', {
                 labels: monthLabel
             },
             options: {
+                responsive: true,
                 legend: {
                     display: false
                 },
@@ -203,3 +204,11 @@ fetch('/report/allVacations', {
     .catch(error => console.error(error))
 })
 .catch(error => console.error(error))
+
+$(window).on('load', function() {
+  var win = $(this);
+  console.log(`width: ${win.width()}`)
+  if (win.width() < 1000) {
+
+  }
+})

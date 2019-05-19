@@ -6,7 +6,7 @@
 
 const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
     autoHide: false
-});
+})
 
 $('#managerDropdown').dropdown({
     clearable: false,
@@ -14,7 +14,7 @@ $('#managerDropdown').dropdown({
     allowAdditions: true,
     ignoreDiacritics: true,
     forceSelection: true
-  });
+  })
 
 $('#fromCalendar').calendar({
     type: 'date',
@@ -25,7 +25,7 @@ $('#fromCalendar').calendar({
         prefer: 'opposite',
         hideOnScroll: false
     }
-  });
+  })
 
 $('#toCalendar').calendar({
     type: 'date',
@@ -36,7 +36,7 @@ $('#toCalendar').calendar({
         prefer: 'opposite',
         hideOnScroll: false
     }
-  });
+  })
 
 $('#submitBtn').on('click', function(e) {
     e.preventDefault()
@@ -337,4 +337,23 @@ $('#yearsInput').on('keyup', (e) => {
 
     days = days + ' days available'
     $('#yearsResult').text(days)
+})
+
+$(window).on('load', function() {
+  var win = $(this)
+  console.log(`width: ${win.width()}`)
+  if (win.width() < 1000) {
+    console.log(`width2: ${win.width()}`)
+
+    $('#fromCalendar').calendar({
+        popupOptions: {
+            position: 'top center'
+        }
+    })
+    $('#toCalendar').calendar({
+        popupOptions: {
+            position: 'top center'
+        }
+    })
+  } 
 })

@@ -333,3 +333,31 @@ body .fc {
 .tabulator-table > .tabulator-selected{
     background-color: rgba(103, 178, 70, 0.7) !important; 
 }
+
+/* Responsive */
+
+@media only screen and (max-device-width: 1000px) and (orientation : portrait) {
+    .ui.bottom.center.toast-container, 
+    .loginwrapper,
+    .ui.fixed.inverted.menu,
+    .dashboardGrid,
+    #confirmModal,
+    #uiContainerOverview {
+        zoom: 2;
+    }
+    .go-top,
+    #vacaHelper {
+        display: none !important;
+    }
+    #calColumn,
+    #primaryColumn {
+        width: 100% !important;
+    }
+    #calColumn {
+        padding-right: unset !important;
+        margin: 0 5px !important;
+    }
+    .ui.form .field>label {
+        margin: 0 0 1.8571429rem 0;
+    }
+}
