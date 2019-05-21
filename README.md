@@ -16,6 +16,18 @@
 
 ## Setup  
 
+Prerequisites:  
+1. LDAP / AD   
+2. G Suite Service Account  
+    2.1. Domain-Wide Delegation must be enabled, as well as the Gmail API and Calendar API  
+    2.2. You must set the appropriate API scopes in G Suite Admin. 
+        2.2.1. Get you client ID for your service account, and go to "Security" -> "Advanced Settings" -> "Manage API client access" 
+        2.2.2. Enter your client ID and the following scopes: `https://mail.google.com/, https://www.googleapis.com/auth/calendar, https://www.googleapis.com/auth/calendar.events`  
+    2.3. Finally, grant the account you've defined under `GS_USER` in the config.env file **write** rights to the vacation calendar you'd like to have vacations added to.  
+
+
+Once that has been setup, please:  
+
 1. Clone this repo  
 2. Run `npm install`  
 3. Run `npm run`  
