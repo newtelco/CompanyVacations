@@ -97,18 +97,36 @@
               <div id="vacationsTable"></div>
             </div>
           </div>
-          <div class="ui segments overviewSegment2">
-            <div id="allVacaSegment" class="ui segment">
-              <h1 style="display: inline-block" class="ui header overviewHeader">
-                My Vacations vs Company
-              </h1>
-            </div>
-            <div class="ui secondary segment">
-              <!-- Charts! -->
-              <div id="overviewChartContainer">
-                <canvas id="myChart"></canvas>
+          <div class="ui grid">
+            <div class="sixteen wide column">
+            <div style="display: inline-block; float: left; width: 28%; margin-top: 14px; " class="ui segments">
+              <div id="allVacaSegment" class="ui segment">
+                <h1 style="display: inline-block" class="ui header overviewHeader">
+                  My Vacations
+                </h1>
+              </div>
+              <div class="ui secondary segment">
+                <!-- Charts! -->
+                <div id="overviewChartContainer">
+                  <canvas id="donutChart"></canvas>
+                </div>
               </div>
             </div>
+            
+            <div style="display: inline-block; float: right; width: 70%;" class="ui segments overviewSegment2">
+              <div id="allVacaSegment" class="ui segment">
+                <h1 style="display: inline-block" class="ui header overviewHeader">
+                  All Company vs My Vacations
+                </h1>
+              </div>
+              <div class="ui secondary segment">
+                <!-- Charts! -->
+                <div id="overviewChartContainer">
+                  <canvas id="mixedChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
           </div>
         </div>
         <div class="one wide column"></div>

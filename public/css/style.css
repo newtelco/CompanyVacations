@@ -244,7 +244,7 @@ body .fc {
 #overviewChartContainer {
     position: relative; 
     height:auto; 
-    width:80vw;
+    /* width:80vw; */
     margin: 0 auto;
 }
 

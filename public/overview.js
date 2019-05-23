@@ -143,17 +143,24 @@ fetch('/report/allVacations', {
         monthLabel.splice(0,0,'NULL')
 
         // MY VACAS
+        console.log(data1)
+        console.log(data)
         let userMonthCount = []
-        data.forEach(m => { userMonthCount.push(m.COUNT) })
+        
+        data.forEach(n => { userMonthCount.push(n.MONTH) })
+        data.forEach(n => { userMonthCount.push(n.COUNT) })
+        
         userMonthCount.push(0)
         userMonthCount.splice(0,0,0)
+
+        console.log(userMonthCount)
 
         let maxCount = monthCount.reduce(function(a, b) {
             return Math.max(a, b);
         });
         maxCount = maxCount + (maxCount / 10)
 
-        let ctx = document.getElementById('myChart');
+        let ctx = document.getElementById('mixedChart');
         var mixedChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -199,6 +206,54 @@ fetch('/report/allVacations', {
                 }
             }
         });
+
+        var randomScalingFactor = function() {
+			return Math.round(Math.random() * 100);
+		};
+
+        let ctx2 = document.getElementById('donutChart');
+        var donutChart = new Chart(ctx2, {
+			type: 'doughnut',
+			data: {
+				datasets: [{
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+					],
+					// backgroundColor: [
+					// 	window.chartColors.red,
+					// 	window.chartColors.orange,
+					// 	window.chartColors.yellow,
+					// 	window.chartColors.green,
+					// 	window.chartColors.blue,
+					// ],
+					label: 'Dataset 1'
+				}],
+				labels: [
+					'Red',
+					'Orange',
+					'Yellow',
+					'Green',
+					'Blue'
+				]
+			},
+			options: {
+				responsive: true,
+				legend: {
+                    display: false
+				},
+				title: {
+					display: false,
+				},
+				animation: {
+					animateScale: true,
+					animateRotate: true
+				}
+			}
+		})
 
     })
     .catch(error => console.error(error))

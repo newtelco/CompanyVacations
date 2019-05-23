@@ -409,7 +409,7 @@ app.post('/report/myVacations', (req, res) => {
       body = req.body
       const userMail = body.userMail
 
-      connection.query(`SELECT MONTHNAME(fromDate) MONTH, YEAR(fromDate) YEAR, COUNT(*) COUNT FROM vacations WHERE fromDate > CURRENT_DATE() - INTERVAL 7 MONTH AND fromdate < CURRENT_DATE AND email LIKE '${userMail}' GROUP BY MONTH(fromDate), YEAR(fromDate) ORDER BY  YEAR(fromDate), MONTH(fromDate)`, (error, results, fields) => {
+      connection.query(`SELECT MONTHNAME(fromDate) MONTH, YEAR(fromDate) YEAR, COUNT(*) COUNT FROM vacations WHERE fromDate > CURRENT_DATE() - INTERVAL 7 MONTH AND fromdate <= CURRENT_DATE + INTERVAL 1 MONTH AND email LIKE '${userMail}' GROUP BY MONTH(fromDate), YEAR(fromDate) ORDER BY  YEAR(fromDate), MONTH(fromDate)`, (error, results, fields) => {
         if (error) throw error
         return res.status(202).send(results)
       })

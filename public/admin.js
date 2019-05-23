@@ -10,6 +10,23 @@ $(document).ready(() => {
     simpleBar = new SimpleBar(document.getElementById('bodyId'), {
         autoHide: false
     });
+    $('body').toast({
+        title: 'Keyboard Shortcuts',
+        message: 'To view the available keyboard shortcuts, press <br><b>Shift + Q</b>.',
+        class : 'green',
+        position: 'bottom right',
+        showIcon: 'keyboard outline',
+        displayTime: 7000,
+        className: {
+            toast: 'ui message'
+        },
+        transition: {
+            showMethod   : 'fly right',
+            showDuration : 1000,
+            hideMethod   : 'fly left',
+            hideDuration : 1000
+        }
+    });
 })
 
 let table;
