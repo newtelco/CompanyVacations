@@ -209,7 +209,19 @@ fetch('/report/allVacations', {
 
         var randomScalingFactor = function() {
 			return Math.round(Math.random() * 100);
-		};
+        };
+        
+        // console.log(table)
+        const data2 = table.getData()
+        // console.log(data2)
+        let dataLength = data2.length
+        dataLength--
+        // console.log(dataLength)
+        const lastRow = data2[dataLength]
+        console.log(lastRow)
+        const daysAvailable = lastRow.restjahresurlaubInsgesamt 
+        const daysRemaining = lastRow.resturlaubJAHR
+
 
         let ctx2 = document.getElementById('donutChart');
         var donutChart = new Chart(ctx2, {
@@ -217,27 +229,18 @@ fetch('/report/allVacations', {
 			data: {
 				datasets: [{
 					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
+                        daysRemaining,
+                        daysAvailable
 					],
-					// backgroundColor: [
-					// 	window.chartColors.red,
-					// 	window.chartColors.orange,
-					// 	window.chartColors.yellow,
-					// 	window.chartColors.green,
-					// 	window.chartColors.blue,
-					// ],
+					backgroundColor: [
+                        'rgba(244,0,0,0.6)',
+                        'rgba(0,0,0,0.5)'
+					],
 					label: 'Dataset 1'
 				}],
 				labels: [
-					'Red',
-					'Orange',
-					'Yellow',
-					'Green',
-					'Blue'
+					'Remaining',
+					'Available'
 				]
 			},
 			options: {
@@ -251,7 +254,17 @@ fetch('/report/allVacations', {
 				animation: {
 					animateScale: true,
 					animateRotate: true
-				}
+                },
+                layout: {
+                    padding: {
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                        bottom: 20
+                    }
+                },
+                circumference: Math.PI,
+                rotation: -Math.PI 
 			}
 		})
 
@@ -262,7 +275,7 @@ fetch('/report/allVacations', {
 
 $(window).on('load', function() {
   var win = $(this);
-  console.log(`width: ${win.width()}`)
+//   console.log(`width: ${win.width()}`)
   if (win.width() < 1000) {
 
   }
