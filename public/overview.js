@@ -148,7 +148,8 @@ fetch('/report/allVacations', {
         let userMonthCount = []
         
         data.forEach(n => { userMonthCount.push(n.MONTH) })
-        data.forEach(n => { userMonthCount.push(n.COUNT) })
+        // data.forEach(n => { userMonthCount.push(n.COUNT) })
+         
         
         userMonthCount.push(0)
         userMonthCount.splice(0,0,0)
@@ -219,8 +220,9 @@ fetch('/report/allVacations', {
         // console.log(dataLength)
         const lastRow = data2[dataLength]
         console.log(lastRow)
-        const daysAvailable = lastRow.restjahresurlaubInsgesamt 
+        let  daysAvailable = lastRow.restjahresurlaubInsgesamt 
         const daysRemaining = lastRow.resturlaubJAHR
+        daysAvailable = daysAvailable - daysRemaining
 
 
         let ctx2 = document.getElementById('donutChart');
