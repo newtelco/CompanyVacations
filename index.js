@@ -18,6 +18,9 @@ const { DateTime } = require('luxon')
 const uuid = require('uuid/v4')
 let {google} = require('googleapis')
 const google_key = require(process.env.GS_APIKEY)
+const Sentry = require('@sentry/node');
+
+Sentry.init({ dsn: 'SENTRY_DSN' });
 
 
 function addCal(summary, desc, start, end, user, calendarId) {
