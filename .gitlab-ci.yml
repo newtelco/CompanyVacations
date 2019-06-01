@@ -35,7 +35,7 @@ deploy_dev:
     - sed -i "s/LDAP_SEARCHBASE=/LDAP_SEARCHBASE=\"$LDAP_SEARCHBASE\"/" /builds/newtelco/vacation_node/config.env
     - sed -i "s/LDAP_SEARCHFILTER=/LDAP_SEARCHFILTER=\"$LDAP_SEARCHFILTER\"/" /builds/newtelco/vacation_node/config.env
     - sed -i "s/GS_CAL_APIKEY/$GS_CAL_APIKEY/" /builds/newtelco/vacation_node/public/dashboard.js
-    - sed -i "s/SENTRY_DSN/$SENTRY_DSN/" /builds/newtelco/vacation_node/index.js
+    - sed -i "s/SENTRY_DSN/$SENTRY_DSN/g" /builds/newtelco/vacation_node/index.js
     - echo "$PM2_DEV" >> /builds/newtelco/vacation_node/pm2.json
     # PUSH
     - apk add --no-cache rsync openssh
