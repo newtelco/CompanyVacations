@@ -58,15 +58,16 @@ const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
 autoHide: false
 });
 
-const CreateUser = document.querySelector('.loginform')
-CreateUser.addEventListener('submit', (e) => {
+const loginForm = document.querySelector('.loginform')
+loginForm.addEventListener('submit', (e) => {
     e.preventDefault()
-    const username = CreateUser.querySelector('.username').value 
-    const password = CreateUser.querySelector('.password').value 
+    const username = loginForm.querySelector('.username').value 
+    const password = loginForm.querySelector('.password').value 
     post('/login', { username, password })
 }) 
 
 function post(path, data) {
+    console.log(data)
     return window.fetch(path, {
         method: 'POST',
         headers: {
@@ -76,6 +77,15 @@ function post(path, data) {
         body: JSON.stringify(data)
     })
     .then(function(res) {
-        window.location = res.url
+        const reqURL = new URL(res.url)
+        if(reqURL.pathname.includes("/admin/response")) {
+            if (res.status = 200) {
+                window.location = "/responseSuccess.html"
+            } else {
+                window.location = "/responseError.html"
+            }
+        } else {
+            window.location = res.url
+        }
     })
 }

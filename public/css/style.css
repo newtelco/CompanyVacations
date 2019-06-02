@@ -281,8 +281,9 @@ body .fc {
     margin-top: -15px !important;
 }
 
-.userVacaDLBtn > .icon {
-   line-height: 22px; 
+.userVacaDLBtn > .icon,
+.allVacaDLBtn > .icon {
+   line-height: 22px !important; 
 }
 
 .ui.right.labeled.icon.button {

@@ -21,7 +21,7 @@ let {google} = require('googleapis')
 const google_key = require(process.env.GS_APIKEY)
 const Sentry = require('@sentry/node');
 
-Sentry.init({ dsn: 'SENTRY_DSN' });
+// Sentry.init({ dsn: 'SENTRY_DSN' });
 
 
 function addCal(summary, desc, start, end, user, calendarId) {
@@ -40,9 +40,9 @@ function addCal(summary, desc, start, end, user, calendarId) {
       'date': end,
       'timeZone': 'Europe/Berlin'
     },
-    // 'attendees': [
-    //   {'email': user}
-    // ],
+    'attendees': [
+      {'email': user}
+    ],
     'reminders': {
       'useDefault': true
     }
