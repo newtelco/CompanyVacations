@@ -281,6 +281,10 @@ body .fc {
     margin-top: -15px !important;
 }
 
+.userVacaDLBtn > .icon {
+   line-height: 22px; 
+}
+
 .ui.right.labeled.icon.button {
     height: 100%;
     box-shadow: 0 0 0 2px #67B246 inset !important;
@@ -291,9 +295,10 @@ body .fc {
     color: #fff !important;
 }
 
-.ui.right.labeled.icon.button > .icon {
-    line-height: 22px;
-}
+/* .ui.right.labeled.icon.button > .icon {
+    line-height: 16px;
+} */
+
 #managerTable > .tabulator-header > .tabulator-headers .tabulator-col-content {
     height: initial !important;
 }
