@@ -40,9 +40,9 @@ function addCal(summary, desc, start, end, user, calendarId) {
       'date': end,
       'timeZone': 'Europe/Berlin'
     },
-    'attendees': [
-      {'email': user}
-    ],
+    // 'attendees': [
+    //   {'email': user}
+    // ],
     'reminders': {
       'useDefault': true
     }
