@@ -38,7 +38,7 @@ deploy_dev:
     - ls /builds/newtelco/vacation_node
     - echo $SENTRY_DSN
     - grep -n "SENTRY_DSN" /builds/newtelco/vacation_node/index.js
-    - sed -i "s/'SENTRY_DSN'/'$SENTRY_DSN'/" /builds/newtelco/vacation_node/index.js
+    - sed -i "s/\'SENTRY_DSN\'/\'$SENTRY_DSN\'/" /builds/newtelco/vacation_node/index.js
     - echo "$PM2_DEV" >> /builds/newtelco/vacation_node/pm2.json
     # PUSH
     - apk add --no-cache rsync openssh
