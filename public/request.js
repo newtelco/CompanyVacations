@@ -1,5 +1,5 @@
 /**
- * @summary NewTelco GmbH Vacation Application
+ * @summary Company Vacation Application
  * @author Nico Domino <yo@ni.co.de>
  * @license AGPLv3
  */
@@ -85,21 +85,21 @@ $(document).ready(() => {
         const userGroups = user.memberOf
 
         userGroups.forEach((group) => {
-            if(group.includes('CN=Billing')) {
-                select = document.getElementById('managerDropdown')
-                for(var i = 0;i < select.options.length;i++){
-                    if(select.options[i].value == 'oberegovy@newtelco.de' ){
-                        select.options[i].selected = true;
-                    }
-                }
-            } else if(group.includes('CN=Technik')) {
-                select = document.getElementById('managerDropdown')
-                for(var i = 0;i < select.options.length;i++){
-                    if(select.options[i].value == 'jskribek@newtelco.de' ){
-                        select.options[i].selected = true;
-                    }
-                }
-            }
+            // if(group.includes('CN=Billing')) {
+                // select = document.getElementById('managerDropdown')
+                // for(var i = 0;i < select.options.length;i++){
+                    // if(select.options[i].value == 'BILLING_MANAGER@COMPANY.COM' ){
+                        // select.options[i].selected = true;
+                    // }
+                // }
+            // } else if(group.includes('CN=Technik')) {
+                // select = document.getElementById('managerDropdown')
+                // for(var i = 0;i < select.options.length;i++){
+                    // if(select.options[i].value == 'TECHNIK_MANAGER@COMPANY.COM' ){
+                        // select.options[i].selected = true;
+                    // }
+                // }
+            // }
         })
     })
     .catch(error => console.error(error))

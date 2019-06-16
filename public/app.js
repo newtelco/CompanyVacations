@@ -1,10 +1,14 @@
 /**
- * @summary NewTelco GmbH Vacation Application
+ * @summary Company Vacation Application
  * @author Nico Domino <yo@ni.co.de>
  * @license AGPLv3
  */
 
 const url = new URL(window.location.href)
+const hostname = window.location.hostname
+const origin = window.location.origin
+const prodUrl = origin.replace(".dev",".com")
+
 let failedQuery = url.searchParams.get('failed')
 if(failedQuery == 1) {
     $('.loginform').addClass('error')
@@ -27,12 +31,12 @@ if(responseQuery == 2) {
                 hideMethod   : 'fly left',
                 hideDuration : 1000
             }, onClick: () => {
-                window.location.href = "https://vacation.newtelco.de"
+                window.location.href = hostname
             }
     })
 }
 const hostname = url.hostname
-if(hostname.includes('newtelco.dev')){ 
+if(hostname.includes('.dev')){ 
     $('body').toast({
             title: 'Development Server',
             message: 'You have landed on the development server. Please click this message to go to the production version of the page!',
@@ -49,7 +53,7 @@ if(hostname.includes('newtelco.dev')){
                 hideMethod   : 'fly left',
                 hideDuration : 1000
             }, onClick: () => {
-                window.location.href = "https://vacation.newtelco.de"
+                window.location.href = prodUrl
             }
     })
 }

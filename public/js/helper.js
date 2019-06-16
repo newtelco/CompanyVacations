@@ -1,5 +1,5 @@
 /**
- * @summary NewTelco GmbH Vacation Application
+ * @summary Company Vacation Application
  * @author Nico Domino <yo@ni.co.de>
  * @license AGPLv3
  */

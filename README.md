@@ -27,6 +27,11 @@
 
 ## Setup  
 
+General: 
+
+1. Replace your GCal API Key / User Email with the placeholders in `public/dashboard.js` 
+2. Optional: In `public/request.js` lines 88-102, you can uncomment and adjust the `CN=Group` and the associated email address in order to prefill the manager selection based on their OU in AD if you'd like. 
+
 Prerequisites:  
 1. LDAP / AD   
 2. G Suite Service Account  
