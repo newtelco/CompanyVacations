@@ -41,9 +41,10 @@ Once that has been setup, please:
 
 1. Clone this repo  
 2. Run `npm install`  
-3. Create config.env `cp config.template.env config.env` and fill out
-4. Run `npm start`  
-5. Visit `http://localhost:7555` or reverse proxy that port out  
+3. Setup DB `mysql -uUSER -p DB_NAME < createDB.sql`
+4. Create config.env `cp config.template.env config.env` and fill out
+5. Run `npm start`  
+6. Visit `http://localhost:7555` or reverse proxy that port out  
 
 > If you would like for this to run in production, I suggest setting up [pm2](https://pm2.io/runtime/) to run / manage / monitor the process. 
 
@@ -51,10 +52,11 @@ Once that has been setup, please:
 
 1. Clone this repo
 2. Run `npm install`
-3. Create config.env `cp config.template.env config.env` and fill out
-4. Run `npm run start:dev`
+3. Setup DB `mysql -uUSER -p DB_NAME < createDB.sql`
+4. Create config.env `cp config.template.env config.env` and fill out
+5. Run `npm run start:dev`
   > This will run `nodemon` - a nice live reloading dev server on port 7666
-5. Visit `http://localhost:7666`
+6. Visit `http://localhost:7666`
 
 ## Contributing  
 
