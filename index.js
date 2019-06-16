@@ -1,5 +1,5 @@
 /**
- * @summary NewTelco GmbH Vacation Application
+ * @summary Vacation Application
  * @author Nico Domino <yo@ni.co.de>
  * @license AGPLv3
  */
@@ -79,10 +79,13 @@ function sendMsg(userName, userMail, subject, body) {
   (() => {
   "use strict";
 
+  const company = process.env.COMPANY_NAME
+  const gsUser = process.env.GS_USER
+
   subject = `[VACATION] ${subject}`
   const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
   const messageParts = [
-    `From: Newtelco Vacations <device@newtelco.de>`,
+    `From: ${company} Vacations <${gsUser}>`,
     `To: ${userName}  <${userMail}>`,
     // `Cc: ["${ccMail}"]`, 
     `Content-Type: text/html; charset=utf-8`,
@@ -305,10 +308,12 @@ app.get('/admin/response', (req, res) => {
 
           if(action == '2') {
             ntvacaCal = process.env.GS_CALID
+            
+            const baseUrl = process.env.BASE_URL
 
             let reqDateTime = moment.utc(reqUser.submitted_datetime).local().format('DD.MM.YYYY HH:mm')
             let summary = userName
-            let desc = `From: ${mailStart}\nTo: ${mailEnd}\n\nSubmitted On: ${reqDateTime}\n\nManager: ${manager}\nApproved On: ${approvalDateTime}\n\nhttps://vacations.newtelco.de`
+            let desc = `From: ${mailStart}\nTo: ${mailEnd}\n\nSubmitted On: ${reqDateTime}\n\nManager: ${manager}\nApproved On: ${approvalDateTime}\n\n${baseUrl}`
 
             // end + 1 day hack for google calendar
             end = moment(end).local().add(1,'d').format('YYYY-MM-DD')

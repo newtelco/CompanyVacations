@@ -21,6 +21,7 @@ deploy_dev:
     - cp /builds/newtelco/vacation_node/config.template.env /builds/newtelco/vacation_node/config.env
     - sed -i "s/WEB_PORT=/WEB_PORT=7666/" config.env
     - sed -i "s/BASE_URL=/BASE_URL=\"https:\/\/vacation.newtelco.dev\"/" /builds/newtelco/vacation_node/config.env
+    - sed -i "s/COMPANY_NAME=/COMPANY_NAME=\"Newtelco\"/" config.env
     - sed -i "s/GS_APIKEY=/GS_APIKEY=\"\/opt\/vaca_dev\/nt_gsuite_priv.json\"/" /builds/newtelco/vacation_node/config.env
     - sed -i "s/GS_USER=/GS_USER=\"device@newtelco.de\"/" /builds/newtelco/vacation_node/config.env
     - sed -i "s/GS_CALID=/GS_CALID=\"$GS_CALID\"/" /builds/newtelco/vacation_node/config.env

@@ -39,7 +39,7 @@ CREATE TABLE `vacations` (
   `resturlaubJAHR` decimal(8,1) NOT NULL,
   `fromDate` date NOT NULL,
   `toDate` date NOT NULL,
-  `manager` varchar(128) NOT NULL DEFAULT 'nhartmann@newtelco.de',
+  `manager` varchar(128) NOT NULL DEFAULT 'manager@company.com',
   `note` varchar(512) DEFAULT NULL,
   `submitted_datetime` datetime NOT NULL,
   `submitted_by` varchar(64) NOT NULL,

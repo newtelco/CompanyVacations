@@ -1,5 +1,6 @@
 <img src="https://vacation.newtelco.de/nt_vacation.png" width="64" height="64">
-#### Company Vacation Web App  
+
+## Company Vacation Web App  
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ndom91/companyvacations.svg?style=flat-square)
 ![dependencies](https://img.shields.io/david/dev/ndom91/CompanyVacations.svg?style=flat-square)
