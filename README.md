@@ -1,10 +1,9 @@
 <img src="https://vacation.newtelco.de/nt_vacation.png" width="64" height="64">
 <b>Newtelco Vacation Application</b>   
 
-[![newtelco](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg?style=flat-square)](https://vacation.newtelco.de)
-[![Uptime Robot ratio (7 days)](https://img.shields.io/uptimerobot/ratio/7/m782611716-65dcf538faa88508adee4abe.svg?style=flat-square&colorB=brightgreen&label=Uptime)](https://uptime.newtelco.de/)
-[![pipeline status](https://git.newtelco.dev/newtelco/vacation_node/badges/master/pipeline.svg?style=flat-square)](https://git.newtelco.dev/newtelco/vacation_node/commits/master)
-
+![GitHub package.json version](https://img.shields.io/github/package-json/v/ndom91/companyvacations.svg?style=flat-square)
+![dependencies](https://img.shields.io/david/dev/ndom91/CompanyVacations.svg?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues-raw/ndom91/CompanyVacations.svg?style=flat-square)
 
 > Built on [node](https://nodejs.org/en/) and [express](https://expressjs.com/)  
 
@@ -58,4 +57,4 @@ Once that has been setup, please:
 
 - Just clone this repo and run `npm run start:dev` to get the dev env up and running.
 
-[AGPLv3 Licence](https://opensource.org/licenses/AGPL-3.0)  
+![GitHub](https://img.shields.io/github/license/ndom91/companyvacations.svg?style=flat-square)
