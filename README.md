@@ -41,8 +41,7 @@ Prerequisites:
         2.2.2. Enter your client ID and the following scopes: `https://mail.google.com/, https://www.googleapis.com/auth/calendar, https://www.googleapis.com/auth/calendar.events`   
     2.3. Finally, grant the account you've defined under `GS_USER` in the config.env file **write** rights to the vacation calendar you'd like to have vacations added to.   
 
-
-Once that has been setup, please:  
+### Production
 
 1. Clone this repo  
 2. Run `npm install`  
@@ -53,7 +52,7 @@ Once that has been setup, please:
 
 > If you would like for this to run in production, I suggest setting up [pm2](https://pm2.io/runtime/) to run / manage / monitor the process. 
 
-## Development
+### Development
 
 1. Clone this repo
 2. Run `npm install`
@@ -62,6 +61,16 @@ Once that has been setup, please:
 5. Run `npm run start:dev`
   > This will run `nodemon` - a nice live reloading dev server on port 7666
 6. Visit `http://localhost:7666`
+
+## To-Dos
+
+1. I want to make this more "multi-tenant" friendly. If anyone has any experience putting more variables into .html, etc. which can be filled based on a .env config value, or something similar, please let me know!
+
+Many of these things in my specific implementation were swapped out via `sed` commands in my .gitlab-ci.yml build process. But that obviously doesnt exist automatically for all users of this application.. 
+
+2. Language Strings - I know this is currently kind of a mix between German / English. All the important strings / text are in English, but some variable names and such are still in German. This definitely needs to be cleaned up and possibly all strings pulled out into another file so that it can be easily translated.  
+
+3. Rethink database requirement - I think there is so little DB access / requirements that we could get away with running this with a simply SQLite DB. Since I dont have much experience with it though I dont know where the cutoff is to where you should use a legit mysql db and if this application exceeds that limit. It would definitely make setup and management thereof much easier. 
 
 ## Contributing  
 
