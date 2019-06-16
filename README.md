@@ -14,6 +14,17 @@
 <img src="http://i.imgur.com/cWbc0X3.png" width="860" height="546">
 <img src="http://i.imgur.com/Zn7GZg8.png" width="860" height="546">
 
+## Features
+
+- Vacation Management  
+- Login via LDAP  
+- Make Vacation Request  
+- Admin Portal  
+- Request Approval or Denial via Email and/or in Admin Portal  
+- Monthly / Yearly report exports to Excel file  
+- Show shared Google Cal on homepage for user overview  
+- Create Google Cal event on Request Approval
+
 ## Setup  
 
 Prerequisites:  
@@ -30,7 +41,7 @@ Once that has been setup, please:
 
 1. Clone this repo  
 2. Run `npm install`  
-3. Run `npm run`  
+3. Run `npm start`  
 4. Visit `http://localhost:7555` or reverse proxy that port out  
 
 > If you would like for this to run in production, I suggest setting up [pm2](https://pm2.io/runtime/) to run / manage / monitor the process. 
@@ -45,6 +56,6 @@ Once that has been setup, please:
 
 ## Contributing  
 
-- Just clone this repo and don't fuck it up :) 
+- Just clone this repo and run `npm run start:dev` to get the dev env up and running.
 
 [AGPLv3 Licence](https://opensource.org/licenses/AGPL-3.0)  
