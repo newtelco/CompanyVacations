@@ -10,9 +10,9 @@
 
 ## Screenshots
 
-<img src="http://i.imgur.com/fcEAzvM.png" width="860" height="546">
-<img src="http://i.imgur.com/cWbc0X3.png" width="860" height="546">
-<img src="http://i.imgur.com/Zn7GZg8.png" width="860" height="546">
+<img src="https://imgur.com/egNW1Le.png" width="860" height="546">
+<img src="https://imgur.com/fQHe279.png" width="860" height="546">
+<img src="https://imgur.com/17MzvvK.png" width="860" height="546">
 
 ## Features
 
