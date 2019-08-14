@@ -1,7 +1,7 @@
 /**
  * @summary Company Vacation Application
  * @author Nico Domino <yo@ni.co.de>
- * @license AGPLv3
+ * @license MIT
  */
 
 const url = new URL(window.location.href)
