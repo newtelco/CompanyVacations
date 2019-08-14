@@ -4,8 +4,7 @@
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ndom91/companyvacations.svg?style=flat-square)
 ![dependencies](https://img.shields.io/david/dev/ndom91/CompanyVacations.svg?style=flat-square)
-![GitHub issues](https://img.shields.io/github/issues-raw/ndom91/CompanyVacations.svg?style=flat-square)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fndom91%2FCompanyVacations.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fndom91%2FCompanyVacations?ref=badge_shield)
+![GitHub issues](https://img.shields.io/github/issues-raw/ndom91/CompanyVacations.svg?style=flat-square)  
 
 > Built on [node](https://nodejs.org/en/) and [express](https://expressjs.com/)  
 
