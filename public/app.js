@@ -1,9 +1,3 @@
-/**
- * @summary Company Vacation Application
- * @author Nico Domino <yo@ni.co.de>
- * @license MIT
- */
-
 const url = new URL(window.location.href)
 const hostname = window.location.hostname
 const origin = window.location.origin

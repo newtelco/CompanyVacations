@@ -1,9 +1,3 @@
-/**
- * @summary Company Vacation Application
- * @author Nico Domino <yo@ni.co.de>
- * @license MIT
- */
-
 const calEl = document.getElementById('calEl')
 
 let calendar = new FullCalendar.Calendar(calEl, {

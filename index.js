@@ -1,9 +1,3 @@
-/**
- * @summary Vacation Application
- * @author Nico Domino <yo@ni.co.de>
- * @license AGPLv3
- */
-
 const dotenv = require('dotenv')
 const env = dotenv.config({ path: './config.env' })
 const express = require('express')

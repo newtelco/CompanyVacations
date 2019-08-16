@@ -1,9 +1,3 @@
-/**
- * @summary Company Vacation Application
- * @author Nico Domino <yo@ni.co.de>
- * @license MIT
- */
-
 const simpleBar = new SimpleBar(document.getElementById('bodyId'), {
     autoHide: false
 })
