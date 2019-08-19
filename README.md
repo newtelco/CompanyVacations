@@ -1,4 +1,4 @@
-<img src="https://vacation.newtelco.de/nt_vacation.png" width="64" height="64">
+<img align="right" src="https://vacation.newtelco.de/nt_vacation.png" width="190" height="190">
 
 ## Company Vacation Web App  
 
@@ -6,13 +6,7 @@
 ![dependencies](https://img.shields.io/david/dev/ndom91/CompanyVacations.svg?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ndom91/CompanyVacations.svg?style=flat-square)  
 
-> Built on [node](https://nodejs.org/en/) and [express](https://expressjs.com/)  
-
-## Screenshots
-
-<img src="https://imgur.com/egNW1Le.png" width="860" height="546">
-<img src="https://imgur.com/fQHe279.png" width="860" height="546">
-<img src="https://imgur.com/17MzvvK.png" width="860" height="546">
+> Built on [node](https://nodejs.org/en/), [express](https://expressjs.com/), [fomantic-ui](https://fomantic-ui.com), [google apis](https://github.com/googleapis/google-api-nodejs-client), and 💚  
 
 ## Features
 
@@ -62,22 +56,24 @@ Prerequisites:
   > This will run `nodemon` - a nice live reloading dev server on port 7666
 6. Visit `http://localhost:7666`
 
-## To-Dos
+## Screenshots
 
-1. I want to make this more "multi-tenant" friendly. If anyone has any experience putting more variables into .html, etc. which can be filled based on a .env config value, or something similar, please let me know!
+<img src="https://imgur.com/egNW1Le.png" width="860" height="546">
+<img src="https://imgur.com/fQHe279.png" width="860" height="546">
+<img src="https://imgur.com/17MzvvK.png" width="860" height="546">
 
-Many of these things in my specific implementation were swapped out via `sed` commands in my .gitlab-ci.yml build process. But that obviously doesnt exist automatically for all users of this application.. 
+## Todos
 
-2. Language Strings - I know this is currently kind of a mix between German / English. All the important strings / text are in English, but some variable names and such are still in German. This definitely needs to be cleaned up and possibly all strings pulled out into another file so that it can be easily translated.  
+1. I want to make this more **"multi-tenant"** friendly. According to the 12-factor app methodology, we should be putting everything that is adjustable in the environment / a config file. The javascript variables are mostly taken care of, however, I need to template some more of the HTML and make that configurable as well.
 
-3. Rethink database requirement - I think there is so little DB access / requirements that we could get away with running this with a simply SQLite DB. Since I dont have much experience with it though I dont know where the cutoff is to where you should use a legit mysql db and if this application exceeds that limit. It would definitely make setup and management thereof much easier. 
+2. **Language Strings** - Currently the strings in this application an awful mix of German / English. This needs to be standardized on English and the option given for other languages (German, etc.) via extensible strings files.
+
+3. **Rethink database requirement** - Due to the fact that the requirements for persistence / statefulness of this application are relatively low, I've been debating moving to SQLite instead of a full fledged MySQL DB for this application. However, I have only limited exerience with SQLite so I'm not positive where, in terms of size / amount of data, the break point is between SQLite and MySQL databases and how appoproriate SQLite could be for this. SQLite would make the setup, maintenance, and deployment of this application much easier.
 
 ## Contributing  
 
-- Just clone this repo and run `npm run start:dev` to get the dev env up and running.
-
-![GitHub](https://img.shields.io/github/license/ndom91/companyvacations.svg?style=flat-square)
-
+- Just clone this repo, install the dependencies `npm install` and run `npm run start:dev` to get the dev environment up and running.
 
 ## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fndom91%2FCompanyVacations.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fndom91%2FCompanyVacations?ref=badge_large)
+![Github Licence](https://img.shields.io/github/license/ndom91/companyvacations.svg?style=flat-square)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fndom91%2FCompanyVacations.svg?type=small)](https://app.fossa.io/projects/git%2Bgithub.com%2Fndom91%2FCompanyVacations?ref=badge_small)
