@@ -1,12 +1,11 @@
-<img align="right" src="https://vacation.newtelco.de/nt_vacation.png" width="190" height="190">
-
 ## 🌴 Company Vacation Web App  
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ndom91/companyvacations.svg?style=flat-square)
-![dependencies](https://img.shields.io/david/dev/ndom91/CompanyVacations.svg?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ndom91/CompanyVacations.svg?style=flat-square)  
 
 > Built on [node](https://nodejs.org/en/), [express](https://expressjs.com/), [fomantic-ui](https://fomantic-ui.com), [google apis](https://github.com/googleapis/google-api-nodejs-client), and 💚  
+
+**DEPRECATED**: In favor of [newtelco/timeoff](https://github.com/newtelco/timeoff)  
 
 ## 🛠️ Features
 
